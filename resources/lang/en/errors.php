@@ -12,7 +12,8 @@ return [
     'you_dont_have_enough_money_at_wallet'=>'You dont have enough money at wallet to perform this payment',
     'status_exist_select_another'=>'Order status already exist please select another one',
     'already_removed'=>'This item already removed',
-    'order_on_working_mode_you_cant_delete'=>'This request is currently in execution status. You cannot smear it at this time'
+    'order_on_working_mode_you_cant_delete'=>'This request is currently in execution status. You cannot smear it at this time',
+    'order_status_not_accept_to_be_cancelled'=>'The status of the order does not allow you to cancel it, as the order is canceled only if it is pending or under review',
 
 
 ];

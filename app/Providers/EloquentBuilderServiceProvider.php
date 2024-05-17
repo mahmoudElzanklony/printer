@@ -52,6 +52,7 @@ class EloquentBuilderServiceProvider extends ServiceProvider
             if($this->first() == null){
                 return throw new \Exception($error);
             }
+            return $this->first();
 
         });
     }

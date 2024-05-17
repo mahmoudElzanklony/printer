@@ -5,6 +5,7 @@ return [
     'updated_successfully'=>'Update process done successfully',
     'saved_successfully'=>'Save process done successfully',
     'deleted_successfully'=>'Delete process done successfully',
-    'login_successfully'=>'Login successfully'
+    'login_successfully'=>'Login successfully',
+    'operation_done_successfully'=>'Operation done successfully'
 
 ];

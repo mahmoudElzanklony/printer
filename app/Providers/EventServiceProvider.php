@@ -2,7 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\orders;
+use App\Models\orders_items;
+use App\Models\orders_tracking;
 use App\Models\User;
+use App\Observers\OrderItemObserver;
+use App\Observers\OrderObserver;
+use App\Observers\OrderStatusObserver;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -29,6 +35,9 @@ class EventServiceProvider extends ServiceProvider
     {
         //
         User::observe(UserObserver::class);
+        orders_tracking::observe(OrderStatusObserver::class);
+        orders::observe(OrderObserver::class);
+        orders_items::observe(OrderItemObserver::class);
     }
 
     /**

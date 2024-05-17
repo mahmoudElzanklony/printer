@@ -6,4 +6,5 @@ return [
   'saved_successfully'=>'تمت عملية الحفظ بنجاح',
   'deleted_successfully'=>'تمت عملية المسح بنجاح',
   'login_successfully'=>'تم التسجيل بنجاح',
+  'operation_done_successfully'=>'تمت العملية بنجاح'
 ];

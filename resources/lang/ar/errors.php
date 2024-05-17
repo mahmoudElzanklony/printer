@@ -12,5 +12,6 @@ return [
     'you_dont_have_enough_money_at_wallet'=>'لديس لديك ما يكفي من المال في المحفظه للقيام بعملية الشراء',
     'status_exist_select_another'=>'حالة الطلب موجودة مسبقا يرجي اختيار حالة اخري',
     'already_removed'=>'تم مسحة مسبقا',
-    'order_on_working_mode_you_cant_delete'=>'هذا الطلب في حاله التنفيذ الان لا تستطيع مسحة في هذا الوقت'
+    'order_on_working_mode_you_cant_delete'=>'هذا الطلب في حاله التنفيذ الان لا تستطيع مسحة في هذا الوقت',
+    'order_status_not_accept_to_be_cancelled'=>'حالة الطلب لا تسمح لك بالغائه حيث انه يتم الغاء الطلب في حاله ان يكون معلق او يكون تحت المراجعة فقط',
 ];

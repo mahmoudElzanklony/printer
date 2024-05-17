@@ -18,7 +18,7 @@ class RemoveOrderItemBuilder
     }
     public  function init()
     {
-        $allowed = [OrderStatuesEnum::pending,OrderStatuesEnum::review];
+        $allowed = [OrderStatuesEnum::pending->value,OrderStatuesEnum::review->value];
         $this->order_item = orders_items::query()->with(['order'=>function ($e) {
             $e->with('last_status','payment');
         },'properties'])->find($this->data['order_item_id']);
@@ -63,5 +63,10 @@ class RemoveOrderItemBuilder
             'money'=>$this->order_item->order->payment->money - $this->total_price_item
         ]);
         return Messages::success(__('messages.saved_successfully'));
+    }
+
+    public function cancel_order()
+    {
+
     }
 }

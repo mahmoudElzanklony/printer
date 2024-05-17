@@ -39,8 +39,8 @@ class OrderStatusNotification extends Notification
         return [
             'data'=>json_encode(
                 [
-                    'ar'=>'حاله الطلب الخاصه بك رقم '.$this->order->order_id.'تم تحديث حالته الي '.$this->order->status,
-                    'en'=>'Order number'.$this->order->order_id.' changed its status to '.$this->order->status,
+                    'ar'=>'حاله الطلب الخاصه بك رقم '.$this->order->order_id.'تم تحديث حالته الي '.$this->order->status->value,
+                    'en'=>'Order number'.$this->order->order_id.' changed its status to '.$this->order->status->value,
                 ],JSON_UNESCAPED_UNICODE),
         ];
     }
@@ -49,8 +49,8 @@ class OrderStatusNotification extends Notification
      */
     public function toMail(object $notifiable)
     {
-        SendEmail::send('تحديث في طلب خاص بك لدي '.env('APP_NAME'),'حاله الطلب الخاصه بك رقم '.$this->order->order_id.'تم تحديث حالته الي '.$this->order->status,'','',$this->order->order->user->email);
-        SendEmail::send('Update on your order of '.env('APP_NAME'),'Order number'.$this->order->order_id.' changed its status to '.$this->order->status,'','',$this->order->order->user->email);
+        SendEmail::send('تحديث في طلب خاص بك لدي '.env('APP_NAME'),'حاله الطلب الخاصه بك رقم '.$this->order->order_id.'تم تحديث حالته الي '.$this->order->status->value,'','',$this->order->order->user->email);
+        SendEmail::send('Update on your order of '.env('APP_NAME'),'Order number'.$this->order->order_id.' changed its status to '.$this->order->status->value,'','',$this->order->order->user->email);
     }
 
     /**
