@@ -44,7 +44,7 @@
                 </tr>
                 <tr>
                     <td style="text-align:center;">
-                        <img width="240" src="https://printer.first-meeting.net/images/logo.png" title="logo"
+                        <img width="240" src="http://printer.first-meeting.net/images/logo.png" title="logo"
                              alt="logo">
                     </td>
                 </tr>
