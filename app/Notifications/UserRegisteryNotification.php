@@ -38,6 +38,7 @@ class UserRegisteryNotification extends Notification
 
         return [
             'data'=>json_encode(['ar'=>$this->user->username.' قام بالتسجيل بنجاح الي المنصة ','en'=>$this->user->username.' registered in our app'],JSON_UNESCAPED_UNICODE),
+            'sender'=>$this->user->id
         ];
     }
     /**

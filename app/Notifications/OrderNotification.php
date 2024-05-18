@@ -42,6 +42,7 @@ class OrderNotification extends Notification
                     'ar'=>$this->order->user->username.' قام بأنشاء اوردر رقم '.$this->order->id.' بتكلفة تصل الي '.$this->order->payment->money,
                     'en'=>$this->order->user->username.' made an order with id : '.$this->order->id.' and order cost is '.$this->order->payment->money,
                 ],JSON_UNESCAPED_UNICODE),
+            'sender'=>auth()->id()
         ];
     }
     /**

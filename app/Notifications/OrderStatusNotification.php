@@ -39,9 +39,10 @@ class OrderStatusNotification extends Notification
         return [
             'data'=>json_encode(
                 [
-                    'ar'=>'حاله الطلب الخاصه بك رقم '.$this->order->order_id.'تم تحديث حالته الي '.$this->order->status->value,
+                    'ar'=>'حاله الطلب الخاصه بك رقم '.$this->order->order_id.'تم تحديث حالته الي '.__('keywords.'.$this->order->status->value),
                     'en'=>'Order number'.$this->order->order_id.' changed its status to '.$this->order->status->value,
                 ],JSON_UNESCAPED_UNICODE),
+            'sender'=>auth()->id()
         ];
     }
     /**

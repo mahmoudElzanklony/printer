@@ -13,6 +13,7 @@ use App\Http\Controllers\PropertiesControllerResource;
 use App\Http\Controllers\PropertiesHeadingControllerResource;
 use App\Http\Controllers\CouponsControllerResource;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\GeneralServiceController;
 
 /*
@@ -41,12 +42,16 @@ Route::group(['middleware'=>'changeLang'],function (){
     // orders
     Route::group(['prefix'=>'/orders','middleware'=>'auth:sanctum'],function (){
        Route::get('/',[OrdersController::class,'index']);
-        Route::post('/create',[OrdersController::class,'create']);
+       Route::post('/create',[OrdersController::class,'create']);
        Route::post('/update-status',[OrdersController::class,'update_status'])->middleware('admin');
        Route::post('/remove-item',[OrdersController::class,'remove_item']);
        Route::post('/cancel',[OrdersController::class,'cancel']);
-
        Route::post('/validate-coupon',[OrdersController::class,'validate_coupon']);
+    });
+    // notifications
+    Route::group(['prefix'=>'/notifications','middleware'=>'auth:sanctum'],function (){
+        Route::get('/',[NotificationsController::class,'index']);
+        Route::post('/read-at',[NotificationsController::class,'seen']);
     });
     // resources
     Route::resources([

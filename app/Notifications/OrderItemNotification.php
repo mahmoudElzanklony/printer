@@ -42,6 +42,7 @@ class OrderItemNotification extends Notification
                     'ar'=>$this->order->order->user->username.'قام بالغاء خدمه رقم '.$this->order->id.' بنجاح من الاوردر التابع له رقم '.$this->order->order->id,
                     'en'=>$this->order->order->user->username.'cancel service successfully and its id is '.$this->order->id.' from order that id is'.$this->order->order->id,
                 ],JSON_UNESCAPED_UNICODE),
+            'sender'=>auth()->id()
         ];
     }
     /**
