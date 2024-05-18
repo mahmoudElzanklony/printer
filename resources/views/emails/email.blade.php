@@ -44,10 +44,8 @@
                 </tr>
                 <tr>
                     <td style="text-align:center;">
-                        <a href="https://jd.skillar.com/images/logo.png" title="logo" target="_blank">
-                            <img width="240" src="https://jd.skillar.com/images/logo.png" title="logo"
-                                 alt="logo">
-                        </a>
+                        <img width="240" src="{{ asset('/images/logo.png')  }}" title="logo"
+                             alt="logo">
                     </td>
                 </tr>
                 <tr>
@@ -83,7 +81,7 @@
                 <tr>
                     <td style="text-align:center;">
                         <p style="font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;">
-                            &copy; <strong>skillar.com</strong></p>
+                            &copy; <strong>printerServices.com</strong></p>
                     </td>
                 </tr>
                 <tr>
