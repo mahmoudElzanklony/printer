@@ -73,8 +73,9 @@ class WalletChargingNotification extends Notification
         $userLocale = app()->getLocale(); // Example using Laravel's localization
 
         $details = [
-            'subject' => $subject[$userLocale],
-            'message' => $message[$userLocale],
+            'title' => $subject[$userLocale],
+            'body' => $message[$userLocale],
+            'link'=>'','link_msg'=>''
             // Add other details for your custom email content here
         ];
         \Mail::to($this->user->email)->send(new Myemail($details));
