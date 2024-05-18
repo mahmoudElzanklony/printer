@@ -50,8 +50,12 @@ class OrderNotification extends Notification
      */
     public function toMail(object $notifiable)
     {
-        SendEmail::send('تم انشاء طلب جديد في '.env('APP_NAME'),'تم القيام بأنشاء طلب جديد من قبلك و هذه رسالة تأكيدية بذلك و الطلب تحت مراجعه الادارة الان من فضلك راجع اشعارات النظام بشكل مستمر لتحصل علي كل جديد','','',$this->order->user->email);
-        SendEmail::send('New order made successfully at '.env('APP_NAME'),'A new order has been created by you, and this is a confirmation message, and the order is under management review now. Please check the system notifications on an ongoing basis to get everything new.','','',$this->order->user->email);
+        try{
+            SendEmail::send('تم انشاء طلب جديد في '.env('APP_NAME'),'تم القيام بأنشاء طلب جديد من قبلك و هذه رسالة تأكيدية بذلك و الطلب تحت مراجعه الادارة الان من فضلك راجع اشعارات النظام بشكل مستمر لتحصل علي كل جديد','','',$this->order->user->email);
+            SendEmail::send('New order made successfully at '.env('APP_NAME'),'A new order has been created by you, and this is a confirmation message, and the order is under management review now. Please check the system notifications on an ongoing basis to get everything new.','','',$this->order->user->email);
+        }catch (\Throwable $e){
+
+        }
     }
 
     /**

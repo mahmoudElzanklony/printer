@@ -50,8 +50,12 @@ class OrderStatusNotification extends Notification
      */
     public function toMail(object $notifiable)
     {
-        SendEmail::send('تحديث في طلب خاص بك لدي '.env('APP_NAME'),'حاله الطلب الخاصه بك رقم '.$this->order->order_id.'تم تحديث حالته الي '.$this->order->status->value,'','',$this->order->order->user->email);
-        SendEmail::send('Update on your order of '.env('APP_NAME'),'Order number'.$this->order->order_id.' changed its status to '.$this->order->status->value,'','',$this->order->order->user->email);
+        try{
+            SendEmail::send('تحديث في طلب خاص بك لدي '.env('APP_NAME'),'حاله الطلب الخاصه بك رقم '.$this->order->order_id.'تم تحديث حالته الي '.$this->order->status->value,'','',$this->order->order->user->email);
+            SendEmail::send('Update on your order of '.env('APP_NAME'),'Order number'.$this->order->order_id.' changed its status to '.$this->order->status->value,'','',$this->order->order->user->email);
+        }catch (\Throwable $e){
+
+        }
     }
 
     /**
