@@ -5,6 +5,8 @@ namespace App\Observers;
 use App\Models\User;
 use App\Notifications\UserRegisteryNotification;
 use App\Http\Traits\AdminTrait;
+use App\Notifications\WalletChargingNotification;
+
 class UserObserver
 {
     use AdminTrait;
@@ -21,7 +23,11 @@ class UserObserver
      */
     public function updated(User $user): void
     {
-        //
+        if ($user->isDirty('wallet')) {
+            // The "wallet" column has been changed
+            $originalStatus = $user->getOriginal('wallet');
+            $user->notify(new WalletChargingNotification($user,$originalStatus));
+        }
     }
 
     /**
