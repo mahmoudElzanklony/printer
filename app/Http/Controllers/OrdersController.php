@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\OrdersWithAllDataAction;
+use App\Actions\UserVerficationCheck;
 use App\Actions\ValidateCouponAction;
 use App\Filters\EndDateFilter;
 use App\Filters\LimitFilter;
@@ -54,7 +55,11 @@ class OrdersController extends Controller
     }
     public function create(ordersFormRequest $request)
     {
-
+        // check if user acc is verified or not
+        if(!(UserVerficationCheck::check())){
+            return Messages::error(__('errors.account_not_verified'),401);
+        }
+        // get data after validation
         $data =  $request->validated();
         $base_info_order = collect($data)->except('items','coupon_serial','payment');
         $builder = new OrderBuilder($base_info_order,$data['items'],$data['payment'],$data['coupon_serial'] ?? null,$this->payment_obj);
@@ -69,8 +74,6 @@ class OrdersController extends Controller
         }catch (\Throwable $e){
             return Messages::error($e->getMessage());
         }
-        /*$data = $request->validated();
-        return $data;*/
     }
 
     public function update_status(orderStatusFormRequest $request)
