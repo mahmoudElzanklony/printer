@@ -35,7 +35,8 @@ class ForgetPasswordController extends Controller
         if(request()->filled('email')){
             $data['title'] = __('keywords.recovery_password');
         }
-        return $this->messageObj->send($data);
+        $this->messageObj->send($data);
+        return Messages::success(__('messages.operation_done_successfully'));
 
     }
 
