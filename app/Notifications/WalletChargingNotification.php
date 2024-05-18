@@ -55,9 +55,8 @@ class WalletChargingNotification extends Notification
      */
     public function toMail(object $notifiable)
     {
-         (new MailMessage)
-            ->subject('تم شحن رصيد المحفظه في '.env('APP_NAME'))
-            ->view( 'emails.email', ['details' => ['title'=>'تم شحن رصيد المحفظه في '.env('APP_NAME'),'body'=>'تم شحن رصيد المحفظه بقيمه '.$this->user->wallet - $this->old_wallet.' و اصبح الرصيد الحالي هو '.$this->user->wallet,'link'=>'','link_msg'=>'']]);
+
+        SendEmail::send('تم شحن رصيد المحفظه في '.env('APP_NAME'),'تم شحن رصيد المحفظه بقيمه '.$this->user->wallet - $this->old_wallet.' و اصبح الرصيد الحالي هو '.$this->user->wallet,'','',$this->user->email);
         return (new MailMessage)
             ->subject('The wallet balance has been charged at '.env('APP_NAME'))
             ->view( 'emails.email', ['details' => ['title'=>'The wallet balance has been charged at '.env('APP_NAME'),'body'=>'The wallet balance has been charged '.$this->user->wallet - $this->old_wallet.' The current balance becomes '.$this->user->wallet,'link'=>'','link_msg'=>'']]);
