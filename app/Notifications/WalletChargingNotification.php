@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Mail\Myemail;
 use App\Services\SendEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -54,8 +55,31 @@ class WalletChargingNotification extends Notification
      */
     public function toMail(object $notifiable)
     {
-        SendEmail::send('تم شحن رصيد المحفظه في '.env('APP_NAME'),'تم شحن رصيد المحفظه بقيمه '.$this->user->wallet - $this->old_wallet.' و اصبح الرصيد الحالي هو '.$this->user->wallet,'','',$this->user->email);
-        return SendEmail::send('The wallet balance has been charged at '.env('APP_NAME'),'The wallet balance has been charged '.$this->user->wallet - $this->old_wallet.' The current balance becomes '.$this->user->wallet,'','',$this->user->email);
+        $oldWallet = $this->old_wallet; // Access the old wallet value
+        $newWallet = $this->user->wallet; // Access the current wallet value
+        $amountCharged = $newWallet - $oldWallet; // Calculate the charged amount
+
+        $subject = [
+            'en' => 'The wallet balance has been charged at ' . env('APP_NAME'),
+            'ar' => 'تم شحن رصيد المحفظه في ' . env('APP_NAME'),
+        ];
+
+        $message = [
+            'en' => 'The wallet balance has been charged ' . $amountCharged . '. The current balance becomes ' . $newWallet,
+            'ar' => 'تم شحن رصيد المحفظه بقيمه ' . $amountCharged . ' و اصبح الرصيد الحالي هو ' . $newWallet,
+        ];
+
+        // Determine user's preferred language (assuming a mechanism exists)
+        $userLocale = app()->getLocale(); // Example using Laravel's localization
+
+        $details = [
+            'subject' => $subject[$userLocale],
+            'message' => $message[$userLocale],
+            // Add other details for your custom email content here
+        ];
+        \Mail::to($this->user->email)->send(new Myemail($details));
+        //SendEmail::send('تم شحن رصيد المحفظه في '.env('APP_NAME'),'تم شحن رصيد المحفظه بقيمه '.$this->user->wallet - $this->old_wallet.' و اصبح الرصيد الحالي هو '.$this->user->wallet,'','',$this->user->email);
+        //SendEmail::send('The wallet balance has been charged at '.env('APP_NAME'),'The wallet balance has been charged '.$this->user->wallet - $this->old_wallet.' The current balance becomes '.$this->user->wallet,'','',$this->user->email);
     }
 
     /**
