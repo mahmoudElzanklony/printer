@@ -30,7 +30,6 @@ class Myemail extends Mailable
      */
     public function build()
     {
-        dd($this->details);
         return $this->subject($this->details['title'])
             ->view('emails.email')->with('details',$this->details);
     }
