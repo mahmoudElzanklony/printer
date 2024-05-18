@@ -9,6 +9,7 @@ use App\Filters\StartDateFilter;
 use App\Http\Requests\controlWalletFormRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Services\Messages;
 use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
 
@@ -37,5 +38,6 @@ class DashboardController extends Controller
         $user->update([
             'wallet'=>$user->wallet + $data['money']
         ]);
+        return Messages::success(__('messages.operation_done_successfully'));
     }
 }
