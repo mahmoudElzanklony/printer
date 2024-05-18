@@ -59,6 +59,7 @@ class WalletChargingNotification extends Notification
 
         SendEmail::send('تم شحن رصيد المحفظه في '.env('APP_NAME'),'تم شحن رصيد المحفظه بقيمه '.$this->user->wallet - $this->old_wallet.' و اصبح الرصيد الحالي هو '.$this->user->wallet,'','',$this->user->email);
         SendEmail::send('The wallet balance has been charged at '.env('APP_NAME'),'The wallet balance has been charged '.$this->user->wallet - $this->old_wallet.' The current balance becomes '.$this->user->wallet,'','',$this->user->email);
+        return true;
     }
 
     /**
