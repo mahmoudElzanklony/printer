@@ -15,7 +15,7 @@ class SendEmail
             'link'=>$link,
             'link_msg'=>$link_msg,
         ];
-        dd($details);
+
         \Mail::to($to)->send(new Myemail($details));
     }
 }
