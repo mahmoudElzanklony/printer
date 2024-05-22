@@ -20,8 +20,10 @@ class RegisterController extends Controller
 
         DB::beginTransaction();
         $data = $request->validated();
-        $data['role_id'] = roles::query()->where('name','=','client')->first()->id;
+       // $data['role_id'] = roles::query()->where('name','=','client')->first()->id;
         $user = User::query()->create($data);
+        $user->assignRole('client');
+
         $user->createToken($data['email'])->plainTextToken;
         DB::commit();
         return Messages::success(message: __('messages.user_registered_successfully'));

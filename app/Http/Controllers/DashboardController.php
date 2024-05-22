@@ -7,7 +7,9 @@ use App\Filters\EndDateFilter;
 use App\Filters\orders\StatusOrderFilter;
 use App\Filters\StartDateFilter;
 use App\Http\Requests\controlWalletFormRequest;
+use App\Http\Requests\taxFormRequest;
 use App\Http\Resources\UserResource;
+use App\Models\taxes;
 use App\Models\User;
 use App\Services\Messages;
 use Illuminate\Http\Request;
@@ -38,6 +40,15 @@ class DashboardController extends Controller
         $user->update([
             'wallet'=>$user->wallet + $data['money']
         ]);
+        return Messages::success(__('messages.operation_done_successfully'));
+    }
+
+    public function update_tax(taxFormRequest $request)
+    {
+        $data = $request->validated();
+
+        taxes::query()->updateOrCreate($data,$data);
+        //
         return Messages::success(__('messages.operation_done_successfully'));
     }
 }

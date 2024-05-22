@@ -21,12 +21,21 @@ class userFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'email'=>'required|unique:users,id',
-            'username'=>'required',
-            'phone'=>'required',
-            'password'=>'required',
-        ];
+        if(auth()->check()) {
+            return [
+                'email' => 'filled|unique:users,email,' . auth()->id(),
+                'username' => 'filled',
+                'phone' => 'filled|unique:users,phone,'. auth()->id(),
+                'password' => 'filled',
+            ];
+        }else{
+            return [
+                'email' => 'required|unique:users,email',
+                'username' => 'required',
+                'phone' => 'required|unique:users,phone',
+                'password' => 'required',
+            ];
+        }
     }
 
 

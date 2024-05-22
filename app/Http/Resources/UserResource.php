@@ -20,7 +20,7 @@ class UserResource extends JsonResource
           'email'=>$this->email,
           'phone_verified_at'=>$this->phone_verified_at,
           'phone'=>$this->phone,
-          'otp'=>$this->otp,
+          'otp'=>$this->otp_secret,
           'wallet'=>$this->wallet,
           'created_at'=>$this->created_at->format('Y-m-d H:i:s')
         ];

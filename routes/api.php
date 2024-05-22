@@ -14,6 +14,8 @@ use App\Http\Controllers\PropertiesHeadingControllerResource;
 use App\Http\Controllers\CouponsControllerResource;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\RatesController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GeneralServiceController;
 
@@ -49,15 +51,24 @@ Route::group(['middleware'=>'changeLang'],function (){
        Route::post('/cancel',[OrdersController::class,'cancel']);
        Route::post('/validate-coupon',[OrdersController::class,'validate_coupon']);
     });
+    // rates
+    Route::group(['prefix'=>'/rates','middleware'=>'auth:sanctum'],function (){
+        Route::post('/create',[RatesController::class,'create']);
+    });
     // notifications
     Route::group(['prefix'=>'/notifications','middleware'=>'auth:sanctum'],function (){
         Route::get('/',[NotificationsController::class,'index']);
         Route::post('/read-at',[NotificationsController::class,'seen']);
     });
+    // profile
+    Route::group(['prefix'=>'/profile','middleware'=>'auth:sanctum'],function (){
+        Route::post('/update-info',[ProfileController::class,'update_info']);
+    });
     // admin panel
     Route::group(['prefix'=>'/dashboard','middleware'=>'auth:sanctum'],function (){
         Route::get('/users',[DashboardController::class,'users']);
         Route::post('/add-money-to-wallet',[DashboardController::class,'add_money_to_wallet']);
+        Route::post('/update-tax',[DashboardController::class,'update_tax']);
     });
     // resources
     Route::resources([

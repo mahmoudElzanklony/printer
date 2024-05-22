@@ -14,6 +14,12 @@ class OrderRateResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+          'id'=>$this->id,
+          'print_rate'=>$this->print_rate,
+          'delivery_rate'=>$this->delivery_rate,
+          'comment'=>$this->comment,
+          'created_at'=>$this->created_at->format('Y-m-d H:i:s'),
+        ];
     }
 }

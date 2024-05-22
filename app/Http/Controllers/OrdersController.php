@@ -7,6 +7,7 @@ use App\Actions\UserVerficationCheck;
 use App\Actions\ValidateCouponAction;
 use App\Filters\EndDateFilter;
 use App\Filters\LimitFilter;
+use App\Filters\orders\RateOrderFilter;
 use App\Filters\orders\StatusOrderFilter;
 use App\Filters\ServiceIdFilter;
 use App\Filters\StartDateFilter;
@@ -47,7 +48,8 @@ class OrdersController extends Controller
             ->through([
                 StartDateFilter::class,
                 EndDateFilter::class,
-                StatusOrderFilter::class
+                StatusOrderFilter::class,
+                RateOrderFilter::class
             ])
             ->thenReturn()
             ->paginate(10);

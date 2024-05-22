@@ -52,7 +52,7 @@ class RemoveOrderItemBuilder
     {
         // remove this item
         $this->order_item->update([
-            'is_cancelled'=>json_encode(['who'=>auth()->user()->role->name,'reason'=>$this->data['reason']],JSON_UNESCAPED_UNICODE)
+            'is_cancelled'=>json_encode(['who'=>auth()->user()->roleName(),'reason'=>$this->data['reason']],JSON_UNESCAPED_UNICODE)
         ]);
         return $this;
     }

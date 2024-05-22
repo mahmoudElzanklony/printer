@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Http\patterns\strategy\Messages\SMSMessages;
 use App\Models\User;
 use App\Notifications\UserRegisteryNotification;
 use App\Http\Traits\AdminTrait;
@@ -28,6 +29,7 @@ class UserObserver
             $originalStatus = $user->getOriginal('wallet');
             $user->notify(new WalletChargingNotification($user,$originalStatus));
         }
+
     }
 
     /**

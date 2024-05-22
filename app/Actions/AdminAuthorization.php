@@ -8,6 +8,6 @@ class AdminAuthorization
 {
     public static function check()
     {
-        return auth()->user()->role->name != 'client';
+        return auth()->user()->roleName() != 'client';
     }
 }

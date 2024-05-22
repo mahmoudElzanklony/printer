@@ -9,10 +9,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+    use HasRoles;
     use HasApiTokens, HasFactory, Notifiable;
+
+    protected $guard_name = 'sanctum';
+
+
 
     /**
      * The attributes that are mass assignable.
@@ -32,13 +38,17 @@ class User extends Authenticatable
 
     protected $fillable = [
         'username',
-        'role_id',
         'email',
         'password',
         'phone',
         'otp_secret',
         'wallet',
     ];
+
+    public function roleName()
+    {
+        return sizeof($this->getRoleNames()) > 0 ? $this->getRoleNames()[0] : "client";
+    }
 
 
 
@@ -52,17 +62,9 @@ class User extends Authenticatable
         return Attribute::make(set: fn() => rand(1000, 9999));
     }
 
-    public function role_id() : Attribute
-    {
-        return Attribute::make(
-            set: fn($val) => ($val == null ?  : $val)
-        );
-    }
 
-    public function role()
-    {
-        return $this->belongsTo(roles::class,'role_id');
-    }
+
+
 
     public function orders()
     {
@@ -91,7 +93,7 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
-    protected $casts = [
+    /*protected $casts = [
         'phone_verified_at' => 'datetime',
-    ];
+    ];*/
 }

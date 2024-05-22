@@ -8,8 +8,7 @@ trait AdminTrait
 {
     public function currentAdmin()
     {
-        return User::query()->whereHas('role',function($e){
-            $e->where('name','=','admin');
-        })->first();
+        return User::query()->role('admin','sanctum')->first();
+
     }
 }

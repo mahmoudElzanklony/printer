@@ -50,6 +50,11 @@ return [
     // ----------------------end of orders - ---------------------
 
 
+    // -----------------------start of rates------------------------
+    'print_rate'=>'Print rate',
+    'delivery_rate'=>'Delivery rate',
+    'comment'=>'Comment',
+    // -----------------------end of rates------------------------
 
 
     // ----------------------start of templates - ---------------------
