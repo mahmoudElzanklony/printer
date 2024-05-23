@@ -45,7 +45,7 @@ class UserRegisteryNotification extends Notification
     {
         if($this->is_client){
             return [
-                'data' => json_encode(['ar' => 'عملية التسجيل الخاصه بك في '.env('APP_NAME').' تمت بنجاح ورقم التفعيل الخاص بك هو '.$this->user->otp_secret,
+                'data' => json_encode(['ar' => 'تمت عملية التسجيل بنجاح في '.env('APP_NAME').'تمت عملية التسجيل الخاصه بك بنجاح و رقم التفعيل هو '.$this->user->otp_secret,
                     'en' =>  'Register process done successfully at '.env('APP_NAME').' and your otp number is '.$this->user->otp_secret], JSON_UNESCAPED_UNICODE),
                 'sender' => $this->user->id
             ];
@@ -59,7 +59,7 @@ class UserRegisteryNotification extends Notification
 
     public function toMail(object $notifiable)
     {
-        SendEmail::send('عملية التسجيل الخاصه بك في ' . env('APP_NAME'), ' تمت بنجاح ورقم التفعيل الخاص بك هو ' . $this->user->otp_secret, '', '', $this->user->email);
+        SendEmail::send('تمت عملية التسجيل الخاصه بك في ' . env('APP_NAME').' بنجاح ', ' تمت بنجاح ورقم التفعيل الخاص بك هو ' . $this->user->otp_secret, '', '', $this->user->email);
         return (new MailMessage)
             ->subject('Register process done successfully at ' . env('APP_NAME'))
             ->view( 'emails.email', ['details' => ['title'=>'Register process done successfully at ' . env('APP_NAME'),
