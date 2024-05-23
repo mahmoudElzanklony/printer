@@ -84,6 +84,7 @@ class DashboardController extends Controller
               'message'=>$data['content'],
               'user'=>User::query()->find($user)
             ];
+            dd(SendingNotificationEnum::email->value,$data['sending_type']);
             if($data['sending_type'] == SendingNotificationEnum::email->value){
                 $data['title'] = 'اشعار من الادارة';
             }
