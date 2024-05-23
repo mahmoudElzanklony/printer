@@ -18,11 +18,13 @@ class UserRegisteryNotification extends Notification
      */
     private $user;
     private $is_client = false;
-    public function __construct($user,$is_client)
+    private $send_email = false;
+    public function __construct($user,$is_client = false,$send_email = false)
     {
         //
         $this->user = $user;
         $this->is_client = $is_client;
+        $this->send_email = $send_email;
     }
 
     /**
@@ -32,7 +34,10 @@ class UserRegisteryNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database','email'];
+        if($this->send_email){
+            return ['database','email'];
+        }
+        return ['database'];
     }
 
 
@@ -54,14 +59,12 @@ class UserRegisteryNotification extends Notification
 
     public function toMail(object $notifiable)
     {
-        if($this->is_client) {
-            try {
-                SendEmail::send('عملية التسجيل الخاصه بك في ' . env('APP_NAME'), ' تمت بنجاح ورقم التفعيل الخاص بك هو ' . $this->user->otp_secret, '', '', $this->user->email);
-                SendEmail::send('Register process done successfully at ' . env('APP_NAME'), ' and your otp number is ' . $this->user->otp_secret, '', '', $this->user->email);
+        try {
+            SendEmail::send('عملية التسجيل الخاصه بك في ' . env('APP_NAME'), ' تمت بنجاح ورقم التفعيل الخاص بك هو ' . $this->user->otp_secret, '', '', $this->user->email);
+            SendEmail::send('Register process done successfully at ' . env('APP_NAME'), ' and your otp number is ' . $this->user->otp_secret, '', '', $this->user->email);
 
-            } catch (\Throwable $e) {
+        } catch (\Throwable $e) {
 
-            }
         }
     }
     /**
