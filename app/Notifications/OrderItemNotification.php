@@ -50,13 +50,13 @@ class OrderItemNotification extends Notification
      */
     public function toMail(object $notifiable)
     {
-        try{
-            SendEmail::send('تم الغاء الخدمه في  '.env('APP_NAME'),'لقد قمت بالغاء الخدمة رقم  '.$this->order->id.' من الاوردر التابع له رقم '.$this->order->order->id,'','',$this->order->order->user->email);
-            SendEmail::send('Service cancelled successfully at '.env('APP_NAME'),'You cancel service successfully and its id is '.$this->order->id.' from order that id is'.$this->order->order->id,'','',$this->order->order->user->email);
+        SendEmail::send('تم الغاء الخدمه في  '.env('APP_NAME'),'لقد قمت بالغاء الخدمة رقم  '.$this->order->id.' من الاوردر التابع له رقم '.$this->order->order->id,'','',$this->order->order->user->email);
+        return (new MailMessage)
+            ->subject('Service cancelled successfully at '.env('APP_NAME'))
+            ->view( 'emails.email', ['details' => ['title'=>'Service cancelled successfully at '.env('APP_NAME'),
+                'body'=>'You cancel service successfully and its id is '.$this->order->id.' from order that id is'.$this->order->order->id,'link'=>'','link_msg'=>'']]);
 
-        }catch (\Throwable $e){
 
-        }
     }
 
     /**

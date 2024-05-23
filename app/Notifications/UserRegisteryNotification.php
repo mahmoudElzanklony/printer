@@ -59,13 +59,12 @@ class UserRegisteryNotification extends Notification
 
     public function toMail(object $notifiable)
     {
-        try {
-            SendEmail::send('عملية التسجيل الخاصه بك في ' . env('APP_NAME'), ' تمت بنجاح ورقم التفعيل الخاص بك هو ' . $this->user->otp_secret, '', '', $this->user->email);
-            SendEmail::send('Register process done successfully at ' . env('APP_NAME'), ' and your otp number is ' . $this->user->otp_secret, '', '', $this->user->email);
+        SendEmail::send('عملية التسجيل الخاصه بك في ' . env('APP_NAME'), ' تمت بنجاح ورقم التفعيل الخاص بك هو ' . $this->user->otp_secret, '', '', $this->user->email);
+        return (new MailMessage)
+            ->subject('Register process done successfully at ' . env('APP_NAME'))
+            ->view( 'emails.email', ['details' => ['title'=>'Register process done successfully at ' . env('APP_NAME'),
+                'body'=>' Register process done successfully and your otp number is '.$this->user->otp_secret,'link'=>'','link_msg'=>'']]);
 
-        } catch (\Throwable $e) {
-
-        }
     }
     /**
      * Get the mail representation of the notification.
