@@ -69,6 +69,9 @@ Route::group(['middleware'=>'changeLang'],function (){
         Route::get('/users',[DashboardController::class,'users']);
         Route::post('/add-money-to-wallet',[DashboardController::class,'add_money_to_wallet']);
         Route::post('/update-tax',[DashboardController::class,'update_tax']);
+        Route::group(['prefix'=>'/notifications-schedule','middleware'=>'auth:sanctum'],function (){
+            Route::post('/save',[DashboardController::class,'create_notification_content']);
+        });
     });
     // resources
     Route::resources([
