@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\User;
+use App\Services\SendEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -31,7 +32,7 @@ class UserRegisteryNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database','email'];
     }
 
 
@@ -39,8 +40,8 @@ class UserRegisteryNotification extends Notification
     {
         if($this->is_client){
             return [
-                'data' => json_encode(['ar' => 'عملية التسجيل الخاصه بك في '.env('PrinterServices').' تمت بنجاح ورقم التفعيل الخاص بك هو '.$this->user->otp_secret,
-                    'en' =>  'Register process done successfully at '.env('PrinterServices').' and your otp number is '.$this->user->otp_secret], JSON_UNESCAPED_UNICODE),
+                'data' => json_encode(['ar' => 'عملية التسجيل الخاصه بك في '.env('APP_NAME').' تمت بنجاح ورقم التفعيل الخاص بك هو '.$this->user->otp_secret,
+                    'en' =>  'Register process done successfully at '.env('APP_NAME').' and your otp number is '.$this->user->otp_secret], JSON_UNESCAPED_UNICODE),
                 'sender' => $this->user->id
             ];
         }else {
@@ -48,6 +49,19 @@ class UserRegisteryNotification extends Notification
                 'data' => json_encode(['ar' => $this->user->username . ' قام بالتسجيل بنجاح الي المنصة ', 'en' => $this->user->username . ' registered in our app'], JSON_UNESCAPED_UNICODE),
                 'sender' => $this->user->id
             ];
+        }
+    }
+
+    public function toMail(object $notifiable)
+    {
+        if($this->is_client) {
+            try {
+                SendEmail::send('عملية التسجيل الخاصه بك في ' . env('APP_NAME'), ' تمت بنجاح ورقم التفعيل الخاص بك هو ' . $this->user->otp_secret, '', '', $this->user->email);
+                SendEmail::send('Register process done successfully at ' . env('APP_NAME'), ' and your otp number is ' . $this->user->otp_secret, '', '', $this->user->email);
+
+            } catch (\Throwable $e) {
+
+            }
         }
     }
     /**
