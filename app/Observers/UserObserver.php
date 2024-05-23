@@ -16,7 +16,7 @@ class UserObserver
      */
     public function created(User $user): void
     {
-         $this->currentAdmin()->notify(new UserRegisteryNotification($user,false));
+         // $this->currentAdmin()->notify(new UserRegisteryNotification($user,false));
          $user->notify(new UserRegisteryNotification($user,true,true));
     }
 
