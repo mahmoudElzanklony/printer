@@ -34,7 +34,10 @@ class UserRegisteryNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database','email'];
+        if($this->send_email){
+            return ['database','mail'];
+        }
+        return ['database'];
     }
 
 
