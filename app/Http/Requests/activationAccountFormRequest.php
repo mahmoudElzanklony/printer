@@ -23,7 +23,8 @@ class activationAccountFormRequest extends FormRequest
     {
         return [
             'otp_secret'=>'required|digits:4',
-            'phone'=>'required',
+            'phone'=>'filled',
+            'email'=>'filled',
         ];
     }
 
