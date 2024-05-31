@@ -21,4 +21,10 @@ class LoginController extends Controller
             return Messages::error(__('errors.email_or_password_is_not_correct'));
         }
     }
+
+    public function logout()
+    {
+        auth()->logout();
+        return Messages::success(__('messages.logout_successfully'));
+    }
 }
