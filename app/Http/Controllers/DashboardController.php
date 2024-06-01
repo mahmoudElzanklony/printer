@@ -39,7 +39,7 @@ class DashboardController extends Controller
                 UserNameFilter::class
             ])
             ->thenReturn()
-            ->paginate(10);
+            ->paginate(request('limit') ?? 10);
         return UserResource::collection($output);
     }
 

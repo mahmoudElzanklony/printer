@@ -15,9 +15,9 @@ class NotificationsController extends Controller
         if(request()->filled('type')){
             $method = request('type').'Notifications';
 
-            return NotificationResource::collection(auth()->user()->$method()->paginate(10));
+            return NotificationResource::collection(auth()->user()->$method()->paginate(request('limit') ?? 10));
         }
-        return NotificationResource::collection(auth()->user()->Notifications()->paginate(10));
+        return NotificationResource::collection(auth()->user()->Notifications()->paginate(request('limit') ?? 10));
     }
 
     public function seen()

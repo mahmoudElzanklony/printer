@@ -52,7 +52,7 @@ class OrdersController extends Controller
                 RateOrderFilter::class
             ])
             ->thenReturn()
-            ->paginate(10);
+            ->paginate(request('limit') ?? 10);
         return OrderResource::collection($output);
     }
     public function create(ordersFormRequest $request)

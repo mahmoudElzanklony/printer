@@ -26,7 +26,8 @@ class CouponsControllerResource extends Controller
     }
     public function index()
     {
-        $data = coupons::query()->orderBy('id','DESC')->orderBy('id','DESC')->paginate(10);
+        $data = coupons::query()->orderBy('id','DESC')->orderBy('id','DESC')
+            ->paginate(request('limit') ?? 10);
         return CouponResource::collection($data);
     }
 
