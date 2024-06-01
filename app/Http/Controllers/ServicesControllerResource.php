@@ -26,7 +26,8 @@ class ServicesControllerResource extends Controller
     }
     public function index()
     {
-        $data = services::query()->with('category')->orderBy('id','DESC')->get();
+        $data = services::query()->with('category')->orderBy('id','DESC')
+            ->orderBy('id','DESC')->paginate(request('limit') ?? 10);
         return ServiceResource::collection($data);
     }
 
