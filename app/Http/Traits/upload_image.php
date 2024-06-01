@@ -26,7 +26,7 @@ trait upload_image
     public  function check_upload_image($image,$folder_name,$model_id ,$model_name)
     {
         if($image != null){
-            $name = $this->upload($image,$folder_name);
+            $name = $folder_name.'/'.$this->upload($image,$folder_name);
         }else{
             $name = $folder_name.'/default.png';
         }
