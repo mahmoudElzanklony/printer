@@ -14,15 +14,20 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-          'id'=>$this->id,
-          'username'=>$this->username,
-          'email'=>$this->email,
-          'phone_verified_at'=>$this->phone_verified_at,
-          'phone'=>$this->phone,
-          'otp'=>$this->otp_secret,
-          'wallet'=>$this->wallet,
-          'created_at'=>$this->created_at->format('Y-m-d H:i:s')
+        $data = [
+            'id'=>$this->id,
+            'username'=>$this->username,
+            'email'=>$this->email,
+            'phone_verified_at'=>$this->phone_verified_at,
+            'phone'=>$this->phone,
+            'otp'=>$this->otp_secret,
+            'wallet'=>$this->wallet,
+            'role'=>$this->roles->pluck('name')[0],
+            'created_at'=>$this->created_at->format('Y-m-d H:i:s')
         ];
+        if(isset($this->token)){
+            $data['token'] = $this->token;
+        }
+        return $data;
     }
 }

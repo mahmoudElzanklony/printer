@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\Messages;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class LoginController extends Controller
         if(auth()->attempt($data)){
             $user = User::query()->where('email',$data['email'])->first();
             $user['token'] = $user->createToken($data['email'])->plainTextToken;
-            return Messages::success(__('messages.login_successfully'),$user);
+            return Messages::success(__('messages.login_successfully'),UserResource::make($user));
         }else{
             return Messages::error(__('errors.email_or_password_is_not_correct'));
         }

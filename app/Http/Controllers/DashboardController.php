@@ -8,6 +8,7 @@ use App\Filters\orders\StatusOrderFilter;
 use App\Filters\StartDateFilter;
 use App\Filters\users\UserNameFilter;
 use App\Filters\users\WalletFilter;
+use App\Http\Enum\OrderStatuesEnum;
 use App\Http\Enum\SendingNotificationEnum;
 use App\Http\patterns\strategy\Messages\MessagesInterface;
 use App\Http\Requests\controlWalletFormRequest;
@@ -16,6 +17,7 @@ use App\Http\Requests\taxFormRequest;
 use App\Http\Resources\UserResource;
 use App\Models\notifications_data_schedule;
 use App\Models\notifications_data_schedule_users;
+use App\Models\orders;
 use App\Models\taxes;
 use App\Models\User;
 use App\Services\Messages;
@@ -41,6 +43,19 @@ class DashboardController extends Controller
             ->thenReturn()
             ->paginate(request('limit') ?? 10);
         return UserResource::collection($output);
+    }
+
+    public function orders()
+    {
+        $data = [
+          'pending'=>orders::query()->whereHas('last_status',fn($e)=> $e->where('status',OrderStatuesEnum::pending))->count(),
+          'delivery'=>orders::query()->whereHas('last_status',fn($e)=> $e->where('status',OrderStatuesEnum::delivery))->count(),
+          'cancelled'=>orders::query()->whereHas('last_status',fn($e)=> $e->where('status',OrderStatuesEnum::cancelled))->count(),
+          'review'=>orders::query()->whereHas('last_status',fn($e)=> $e->where('status',OrderStatuesEnum::review))->count(),
+          'completed'=>orders::query()->whereHas('last_status',fn($e)=> $e->where('status',OrderStatuesEnum::completed))->count(),
+          'printing'=>orders::query()->whereHas('last_status',fn($e)=> $e->where('status',OrderStatuesEnum::printing))->count(),
+        ];
+        return Messages::success('',$data);
     }
 
     public function add_money_to_wallet(controlWalletFormRequest $request)
