@@ -89,7 +89,7 @@ class DashboardController extends Controller
     {
         $data = $request->validated();
 
-        taxes::query()->updateOrCreate($data,$data);
+        taxes::query()->update($data,$data);
         //
         return Messages::success(__('messages.operation_done_successfully'));
     }
