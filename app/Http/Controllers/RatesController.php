@@ -17,8 +17,9 @@ class RatesController extends Controller
     //
     public function index()
     {
-        return auth()->user()->can('facility-facility-settings');
         $this->authorize('index', TestPolicy::class);
+        return auth()->user()->can('facility-facility-settings');
+
     }
 
     public function create(rateFormRequest $request)

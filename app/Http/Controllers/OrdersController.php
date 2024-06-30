@@ -63,6 +63,7 @@ class OrdersController extends Controller
         }
         // get data after validation
         $data =  $request->validated();
+
         $base_info_order = collect($data)->except('items','coupon_serial','payment');
         $builder = new OrderBuilder($base_info_order,$data['items'],$data['payment'],$data['coupon_serial'] ?? null,$this->payment_obj);
 

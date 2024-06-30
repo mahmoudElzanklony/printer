@@ -30,6 +30,8 @@ use App\Http\Controllers\GeneralServiceController;
 |
 */
 
+
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -68,9 +70,11 @@ Route::group(['middleware'=>'changeLang'],function (){
     // admin panel
     Route::group(['prefix'=>'/dashboard','middleware'=>'auth:sanctum'],function (){
         Route::get('/users',[DashboardController::class,'users']);
-        Route::get('/orders-statistics',[DashboardController::class,'orders']);
+        Route::post('/orders-statistics',[DashboardController::class,'orders']);
+        Route::get('/orders-summary',[DashboardController::class,'orders_summary']);
         Route::post('/add-money-to-wallet',[DashboardController::class,'add_money_to_wallet']);
         Route::post('/update-tax',[DashboardController::class,'update_tax']);
+        Route::get('/get-tax',[DashboardController::class,'get_tax']);
         Route::group(['prefix'=>'/notifications-schedule','middleware'=>'auth:sanctum'],function (){
             Route::post('/save',[DashboardController::class,'create_notification_content']);
         });

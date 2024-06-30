@@ -18,9 +18,11 @@ use App\Http\Resources\UserResource;
 use App\Models\notifications_data_schedule;
 use App\Models\notifications_data_schedule_users;
 use App\Models\orders;
+use App\Models\payments;
 use App\Models\taxes;
 use App\Models\User;
 use App\Services\Messages;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\DB;
@@ -58,6 +60,20 @@ class DashboardController extends Controller
         return Messages::success('',$data);
     }
 
+    public function orders_summary()
+    {
+        $output = [];
+        for($i = 0; $i < 12; $i++) {
+            $month = Carbon::parse( (request('year') ?? date('Y')).'-'.($i+1).'-01')->firstOfMonth()->addDay();
+            $value = payments::query()->where('paymentable_type','=','App\Models\orders')
+                ->whereMonth('created_at',intval($i+1))
+              //  ->whereYear('created_at',request('year') ?? date('Y'))
+                ->sum('money');
+            $output[$i] = ['placeholder'=>$month , 'value'=> floatval($value)];
+        }
+        return $output;
+    }
+
     public function add_money_to_wallet(controlWalletFormRequest $request)
     {
         $data = $request->validated();
@@ -76,6 +92,14 @@ class DashboardController extends Controller
         taxes::query()->updateOrCreate($data,$data);
         //
         return Messages::success(__('messages.operation_done_successfully'));
+    }
+
+    public function get_tax()
+    {
+
+        $data = taxes::query()->first();
+        //
+        return $data;
     }
 
     public function create_notification_content(notificationsScheduleFormRequest $request , MessagesInterface $messageObj)

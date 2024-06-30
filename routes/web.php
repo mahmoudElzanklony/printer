@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Employees\CreateController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Employees\IndexController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,5 +18,11 @@ use App\Http\Controllers\HomeController;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+
+Route::group(['prefix'=>'/employees'],function (){
+   Route::get('/', IndexController::class);
+   Route::post('/create', CreateController::class);
 });
 
