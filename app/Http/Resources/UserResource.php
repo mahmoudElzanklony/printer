@@ -22,7 +22,7 @@ class UserResource extends JsonResource
             'phone'=>$this->phone,
             'otp'=>$this->otp_secret,
             'wallet'=>$this->wallet,
-            'role'=>$this->roles->pluck('name'),
+            'role'=>$this->roles->pluck('name')[0],
             'created_at'=>$this->created_at->format('Y-m-d H:i:s')
         ];
         if(isset($this->token)){
