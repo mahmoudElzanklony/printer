@@ -70,7 +70,7 @@ Route::group(['middleware'=>'changeLang'],function (){
     // admin panel
     Route::group(['prefix'=>'/dashboard','middleware'=>'auth:sanctum'],function (){
         Route::get('/users',[DashboardController::class,'users']);
-        Route::post('/orders-statistics',[DashboardController::class,'orders']);
+        Route::get('/orders-statistics',[DashboardController::class,'orders']);
         Route::get('/orders-summary',[DashboardController::class,'orders_summary']);
         Route::post('/add-money-to-wallet',[DashboardController::class,'add_money_to_wallet']);
         Route::post('/update-tax',[DashboardController::class,'update_tax']);
