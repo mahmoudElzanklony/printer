@@ -20,6 +20,7 @@ class ServiceResource extends JsonResource
             'id'=>$this->id,
             'image'=>ImageResource::make($this->image),
             'category'=>CategoryResource::make($this->whenLoaded('category')),
+            'price'=>$this->price,
             'created_at'=>$this->created_at->format('Y-m-d H:i:s'),
         ];
         if(request()->hasHeader('AllLangs')){
