@@ -23,6 +23,7 @@ class CouponResource extends JsonResource
             'expiration_at'=>$this->expiration_at,
             'serial'=>$this->serial,
             'max_number_of_users'=>$this->max_number_of_users,
+            'max_usage_per_user'=>$this->max_usage_per_user,
             'type'=>$this->type,
             'value'=>$this->value,
             'max_value'=>$this->max_value,
