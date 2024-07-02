@@ -22,7 +22,7 @@ class CouponsControllerResource extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->except('index');
+        $this->middleware('auth:sanctum')->except('index','show');
     }
     public function index()
     {
@@ -63,6 +63,9 @@ class CouponsControllerResource extends Controller
     public function show(string $id)
     {
         //
+        $data = coupons::query()->where('id', $id)
+            ->FailIfNotFound(__('errors.not_found_data'));
+        return CouponResource::make($data);
     }
 
     /**
