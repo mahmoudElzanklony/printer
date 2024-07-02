@@ -61,6 +61,9 @@ class PropertiesHeadingControllerResource extends Controller
     public function show(string $id)
     {
         //
+        $data = properties_heading::query()
+            ->where('id', $id)->FailIfNotFound(__('errors.not_found_data'));
+        return PropertyHeadingResource::make($data);
     }
 
     /**

@@ -66,7 +66,7 @@ class PropertiesControllerResource extends Controller
     {
         //
         $data = properties::query()->with('heading')
-            ->where('id', $id)->firstOrFailWithCustomError(__('errors.not_found_data'));
+            ->where('id', $id)->FailIfNotFound(__('errors.not_found_data'));
         return PropertyResource::make($data);
     }
 
