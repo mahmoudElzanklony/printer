@@ -67,6 +67,9 @@ class ServicesControllerResource extends Controller
     public function show(string $id)
     {
         //
+        $data = services::query()->with('category')
+            ->where('id', $id)->firstOrFailWithCustomError(__('errors.not_found_data'));
+        return ServiceResource::make($data);
     }
 
     /**
