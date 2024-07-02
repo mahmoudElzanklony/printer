@@ -68,7 +68,7 @@ class CategoriesControllerResource extends Controller
     public function show(string $id)
     {
         //
-        categories::query()->where('id', $id)->FailIfNotFound(__('errors.not_found_data'));
+        $cat  = categories::query()->where('id', $id)->FailIfNotFound(__('errors.not_found_data'));
 
 
         // i want to groupBy heading
@@ -83,8 +83,7 @@ class CategoriesControllerResource extends Controller
         $bad_way = properties_heading::query()->whereIn('id',$headings_ids)->with('properties',function($e) use ($properties_ids){
             $e->whereIn('id',$properties_ids);
         })->get();
-
-        return PropertyHeadingResource::collection($bad_way);
+        return Messages::success('',['category-info'=>PropertyHeadingResource::collection($bad_way),'category'=>$cat]);
         ///////////////////////////////////////////// bad way
     }
 
