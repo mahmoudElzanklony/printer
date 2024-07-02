@@ -16,7 +16,7 @@ class PropertiesHeadingControllerResource extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->except('index');
+        $this->middleware('auth:sanctum')->except('index','show');
     }
     /**
      * Display a listing of the resource.
