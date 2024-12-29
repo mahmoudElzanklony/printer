@@ -121,6 +121,10 @@ class OrdersController extends Controller
                 orders_tracking::query()->create($request->all());
                 // return refund to client
                 WalletUserService::add_money_to_user_acc($order->payment->money);
+
+                // cancel current order
+                $order->status = OrderStatuesEnum::cancelled;
+                $order->save();
                 // return success message
                 DB::commit();
                 return Messages::success(__('messages.operation_done_successfully'));
