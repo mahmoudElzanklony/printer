@@ -123,7 +123,7 @@ class OrdersController extends Controller
                 WalletUserService::add_money_to_user_acc($order->payment->money);
 
                 // cancel current order
-                $order->status = OrderStatuesEnum::cancelled;
+                $order->status = OrderStatuesEnum::cancelled->value;
                 $order->save();
                 // return success message
                 DB::commit();
