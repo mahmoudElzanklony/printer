@@ -108,7 +108,9 @@ class OrdersController extends Controller
         if(request()->filled('order_id')){
             // get order info
             $order = OrdersWithAllDataAction::get()
-                ->where('user_id','=',auth()->id())
+                ->when(auth()->user()->roleName() == 'client',
+                    fn($e)=> $e->where('user_id','=',auth()->id())
+                )
                 ->where('id','=',request('order_id'))
                 ->with('last_status')
                 ->FailIfNotFound(__('errors.not_found_data'));
