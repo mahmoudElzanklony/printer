@@ -23,10 +23,11 @@ class EloquentBuilderServiceProvider extends ServiceProvider
     {
         //
         Builder::macro('firstOrFailWithCustomError',function ($error){
-            if($this->first() == null){
-                return Messages::error($error);
+            $obj = $this->first();
+            if($obj == null){
+                abort(Messages::error($error));
             }
-            return $this->first();
+            return $obj;
         });
         // fail when found a result
         Builder::macro('failWhenFoundResult',function ($error){

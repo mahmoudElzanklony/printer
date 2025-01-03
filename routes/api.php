@@ -18,6 +18,7 @@ use App\Http\Controllers\RatesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GeneralServiceController;
+use App\Http\Controllers\VerificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['middleware'=>'changeLang'],function (){
     // auth module
     Route::group(['prefix'=>'/auth'],function (){
+        Route::post('/send-verification',[VerificationController::class,'send_verification']);
+        Route::post('/verify',[VerificationController::class,'verify']);
         Route::post('/login',[LoginController::class,'login']);
         Route::post('/activate-account',[ActivationAccountController::class,'index']);
         Route::post('/register',[RegisterController::class,'register']);

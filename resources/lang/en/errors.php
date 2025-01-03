@@ -15,5 +15,6 @@ return [
     'order_on_working_mode_you_cant_delete'=>'This request is currently in execution status. You cannot smear it at this time',
     'order_status_not_accept_to_be_cancelled'=>'The status of the order does not allow you to cancel it, as the order is canceled only if it is pending or under review',
     'account_not_verified'=>'Account not verified please verify it firstly',
+    'user_found'=>'This user if already exist',
 
 ];

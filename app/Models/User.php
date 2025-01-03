@@ -26,15 +26,13 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $attributes = [
+        'username'=>'',
+        'email'=>'',
+        'password'=>'',
+        'phone'=>'',
         'otp_secret' => null,
     ];
 
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->attributes['otp_secret'] = rand(1000, 9999);
-    }
 
     protected $fillable = [
         'username',
@@ -75,6 +73,8 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(orders_items::class,orders::class,'user_id','order_id');
     }
+
+
 
 
 

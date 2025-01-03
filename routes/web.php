@@ -21,8 +21,10 @@ Route::get('/', function () {
 });
 
 
+
+
 Route::group(['prefix'=>'/employees'],function (){
    Route::get('/', IndexController::class);
-   Route::post('/create', CreateController::class);
+   Route::post('/create/', CreateController::class)->name('employee.create');
 });
 

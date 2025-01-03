@@ -34,7 +34,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        User::observe(UserObserver::class);
+        //User::observe(UserObserver::class);
         orders_tracking::observe(OrderStatusObserver::class);
         orders::observe(OrderObserver::class);
         orders_items::observe(OrderItemObserver::class);

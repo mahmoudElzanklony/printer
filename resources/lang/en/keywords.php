@@ -4,6 +4,7 @@ return [
     'otp_secret'=>'رقم التفعيل',
     'your_otp'=>'Your code is',
     'recovery_password'=>'Recovery password',
+    'inside'=>'inside',
 
     // -------------------------end of auth inputs -------------------
 

@@ -9,6 +9,9 @@ use App\Http\patterns\strategy\Messages\SMSMessages;
 use App\Http\patterns\strategy\payment\PaymentInterface;
 use App\Http\patterns\strategy\payment\VisaPayment;
 use App\Http\patterns\strategy\payment\WalletPayment;
+use App\Http\patterns\strategy\Register\PhoneVerification;
+use App\Http\patterns\strategy\Register\SocialMedialVerification;
+use App\Http\patterns\strategy\Register\VerificationInterface;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use function PHPUnit\Framework\matches;
@@ -20,6 +23,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // binding verify and register interface
+        $this->app->bind(VerificationInterface::class,function ($app){
+            return match(request('sending_type')) {
+                'email' => new SocialMedialVerification(),
+                default => new PhoneVerification()
+            };
+        });
         // binding messages interface
         $this->app->bind(MessagesInterface::class,function ($app){
             return match(request('sending_type')) {

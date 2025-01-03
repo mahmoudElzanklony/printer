@@ -25,4 +25,5 @@ class NotificationsController extends Controller
         auth()->user()->unreadNotifications->markAsRead();
         return Messages::success(__('messages.operation_done_successfully'));
     }
+
 }
