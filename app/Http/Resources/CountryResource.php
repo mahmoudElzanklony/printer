@@ -7,7 +7,7 @@ use App\Services\FormRequestHandleInputs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CityResource extends JsonResource
+class CountryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,9 +20,7 @@ class CityResource extends JsonResource
         $init = [
             'id'=>$this->id,
             'user_id'=>$this->user_id,
-            'country_id'=>$this->country_id,
             'user'=>UserResource::make($this->whenLoaded('user')),
-            'country'=>CountryResource::make($this->whenLoaded('country')),
             'created_at'=>$this->created_at->format('Y-m-d H:i:s'),
         ];
         if(request()->hasHeader('AllLangs')){

@@ -29,6 +29,9 @@ class OrderStatusNotification extends Notification
      */
     public function via(object $notifiable): array
     {
+        if(env('MAIL_STATUS') == 'local'){
+            return ['database'];
+        }
         return ['database','mail'];
     }
 
@@ -40,7 +43,7 @@ class OrderStatusNotification extends Notification
             'data'=>json_encode(
                 [
                     'ar'=>'حاله الطلب الخاصه بك رقم '.$this->order->order_id.'تم تحديث حالته الي '.__('keywords.'.$this->order->status->value),
-                    'en'=>'Order number'.$this->order->order_id.' changed its status to '.$this->order->status->value,
+                    'en'=>'Order number '.$this->order->order_id.' changed its status to '.$this->order->status->value,
                 ],JSON_UNESCAPED_UNICODE),
             'sender'=>auth()->id()
         ];

@@ -7,7 +7,7 @@ use App\Services\FormRequestHandleInputs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CityResource extends JsonResource
+class ShipmentPriceResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,19 +20,20 @@ class CityResource extends JsonResource
         $init = [
             'id'=>$this->id,
             'user_id'=>$this->user_id,
-            'country_id'=>$this->country_id,
+            'city_id'=>$this->city_id,
+            'price'=>$this->price,
             'user'=>UserResource::make($this->whenLoaded('user')),
-            'country'=>CountryResource::make($this->whenLoaded('country')),
+            'city'=>CityResource::make($this->whenLoaded('city')),
             'created_at'=>$this->created_at->format('Y-m-d H:i:s'),
         ];
         if(request()->hasHeader('AllLangs')){
             $langs = languages::query()->select('prefix')->get();
             // data
-            $name = FormRequestHandleInputs::handle_output_column_for_all_lang('name',$this->name,$langs);
+            $name = FormRequestHandleInputs::handle_output_column_for_all_lang('area',$this->area,$langs);
             return array_merge($init,$name);
         }else{
             $data = [
-                'name'=>FormRequestHandleInputs::handle_output_column($this->name),
+                'area'=>FormRequestHandleInputs::handle_output_column($this->area),
             ];
             return array_merge($init,$data);
         }

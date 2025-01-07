@@ -29,6 +29,9 @@ class OrderItemNotification extends Notification
      */
     public function via(object $notifiable): array
     {
+        if(env('MAIL_STATUS') == 'local'){
+            return ['database'];
+        }
         return ['database','mail'];
     }
 

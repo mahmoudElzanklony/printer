@@ -57,6 +57,7 @@ class OrdersController extends Controller
     }
     public function create(ordersFormRequest $request)
     {
+
         // check if user acc is verified or not
         if(!(UserVerficationCheck::check())){
             return Messages::error(__('errors.account_not_verified'),401);
@@ -66,24 +67,23 @@ class OrdersController extends Controller
 
         $base_info_order = collect($data)->except('items','coupon_serial','payment');
         $builder = new OrderBuilder($base_info_order,$data['items'],$data['payment'],$data['coupon_serial'] ?? null,$this->payment_obj);
+        $order_action = $builder->initOrder()
+            ->prepare_status()
+            ->save_items()
+            ->validate_coupon()
+            ->save_payment();
 
-        try {
-            $order_action = $builder->initOrder()
-                                    ->prepare_status()
-                                    ->save_items()
-                                    ->validate_coupon()
-                                    ->save_payment();
-            return $order_action;
-        }catch (\Throwable $e){
-            return Messages::error($e->getMessage());
-        }
+        return $order_action;
     }
 
     public function update_status(orderStatusFormRequest $request)
     {
         $data = $request->validated();
         // check order doesn't have status before
-        $check = orders_tracking::query()->where('status','=',$data['status'])->failWhenFoundResult(__('errors.status_exist_select_another'));
+        $check = orders_tracking::query()
+            ->where('order_id',$data['order_id'])
+            ->where('status','=',$data['status'])
+            ->failWhenFoundResult(__('errors.status_exist_select_another'));
         if(is_bool($check)) {
             $status = orders_tracking::query()->create($data);
             return Messages::success(__('messages.saved_successfully'), OrderStatusResource::make($status));
@@ -98,7 +98,7 @@ class OrdersController extends Controller
         if(is_bool($obj->init())){
             return $obj->detect_full_cost()->cancel_item()->handle_payment();
         }
-        return $obj->init($data);
+        return $obj->init();
     }
 
     public function cancel(Request $request)
@@ -123,7 +123,7 @@ class OrdersController extends Controller
                 WalletUserService::add_money_to_user_acc($order->payment->money);
 
                 // cancel current order
-                $order->status = 'cancelled';
+                $order->status = OrderStatuesEnum::cancelled;
                 $order->save();
                 // return success message
                 DB::commit();

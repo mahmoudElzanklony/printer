@@ -27,7 +27,7 @@ class RemoveOrderItemBuilder
             return Messages::error(__('errors.already_removed'));
         }
         // check that order in pending mode or review mode
-        if(!(in_array($this->order_item->order->last_status->status,$allowed))){
+        if(!(in_array($this->order_item->order->last_status->status->value,$allowed))){
             return Messages::error(__('errors.order_on_working_mode_you_cant_delete'));
         }
 

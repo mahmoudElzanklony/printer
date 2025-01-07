@@ -2,12 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Actions\AdminAuthorization;
-use App\Services\FormRequestHandleInputs;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
 
-class categoriesFormRequest extends FormRequest
+class savedPropertiesFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,22 +14,20 @@ class categoriesFormRequest extends FormRequest
         return true;
     }
 
-
-
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules():array
+    public function rules(): array
     {
-        $arr = [
-            'id'=>'filled',
-            'parent_id'=>'filled',
-            'image'=>'filled|image|mimes:png,jpg,jpeg,gif,svg',
+        return [
+            'id'=>'filled|integer',
+            'name'=>'required|string',
+            'category_id'=>'required|integer|exists:categories,id',
+            'properties'=>'required|array',
+            'properties.*.id'=>'filled|integer',
+            'properties.*.property_id'=>'required|integer|exists:properties,id',
         ];
-        $arr = FormRequestHandleInputs::handle($arr,['name','info:filled']);
-        return $arr;
-
     }
 }

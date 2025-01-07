@@ -17,7 +17,10 @@ use App\Http\Controllers\Employees\IndexController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    /*app()->setLocale('ar');
+    return view('invoice', [
+        'order' => \App\Models\orders::query()->first()->with(['items','payment','user'])->first(),
+    ]);*/
 });
 
 

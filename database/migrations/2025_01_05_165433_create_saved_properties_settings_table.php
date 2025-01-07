@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('saved_properties_settings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('location_id')->constrained('saved_locations')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('house_number');
-            $table->string('status')->default('working'); // maybe wait_client_reply in case item of order removed and wait client to accept  this change
-            $table->text('note')->nullable();
-            $table->softDeletes();
+            $table->foreignId('category_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('saved_properties_settings');
     }
 };

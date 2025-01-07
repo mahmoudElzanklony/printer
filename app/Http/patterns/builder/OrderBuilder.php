@@ -2,6 +2,7 @@
 
 namespace App\Http\patterns\builder;
 
+use App\Actions\AddFirstPageToPdfAction;
 use App\Actions\ImageModalSave;
 use App\Actions\PaymentModalSave;
 use App\Actions\ValidateCouponAction;
@@ -31,6 +32,8 @@ class OrderBuilder
     private $total_price_order = 0;
     private $payment_strategy;
 
+    private $files_uploaded = [];
+
     public function __construct($base_order_info , $items , $payment , $coupon_number = null , $payment_strategy)
     {
         $this->base_order_info = collect($base_order_info)->toArray();
@@ -47,7 +50,7 @@ class OrderBuilder
             $this->base_order_info['note'] = json_encode(['system_refund'=>'','client'=>$this->base_order_info['note']],JSON_UNESCAPED_UNICODE);
         }
         // create new order
-        $this->base_order_info['user_id'] = auth()->id();
+
         $this->order = orders::query()->create($this->base_order_info);
         return $this;
     }
@@ -58,12 +61,14 @@ class OrderBuilder
             'order_id'=>$this->order->id,
             'status'=>OrderStatuesEnum::pending
         ]);
+
         return $this;
     }
     public function save_items()
     {
         foreach($this->items as $item){
             $file = $this->check_upload_file($item['file']);
+            array_push($this->files_uploaded,$file);
             $item['order_id'] = $this->order->id;
             $items_data = $this->prepare_order_item($item,$file);
             $order_item = orders_items::query()->create($items_data);
@@ -76,6 +81,7 @@ class OrderBuilder
             }
             $this->total_price_order += ($total_properties_price + $order_item->price) * $order_item->paper_number * $order_item->copies_number;
         }
+
         return $this;
     }
 
@@ -109,10 +115,13 @@ class OrderBuilder
         if($validate_payment === true) {
             PaymentModalSave::make($this->order->id, 'orders', $this->total_price_order, $this->payment['type']);
             DB::commit();
+
+            $this->order->load('location');
             $this->order->load('items');
             $this->order->load('user');
             $this->order->load('payment');
             $this->order->load('coupon_info');
+            $this->merge_files($this->files_uploaded,$this->order);
             return Messages::success(__('messages.saved_successfully'),OrderResource::make($this->order));
         }else{
             return $validate_payment;
@@ -145,5 +154,21 @@ class OrderBuilder
             'price'=>$property_item->price,
         ]);
         return $property_obj;
+    }
+
+    public function merge_files($files,$info)
+    {
+        foreach ($files as $file) {
+            if($file){
+                $existingPdfPath = public_path('orders_files/'.$file);
+
+                // Your custom HTML content for the first page
+                $newPageHtml = view('invoice', [
+                    'order' => $info,
+                ])->render();
+
+                AddFirstPageToPdfAction::addFirstPageToPdf($existingPdfPath, $newPageHtml,$file);
+            }
+        }
     }
 }

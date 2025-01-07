@@ -51,7 +51,8 @@ class EloquentBuilderServiceProvider extends ServiceProvider
 
         Builder::macro('FailIfNotFound',function ($error){
             if($this->first() == null){
-                return throw new \Exception($error);
+                abort(Messages::error($error));
+
             }
             return $this->first();
 

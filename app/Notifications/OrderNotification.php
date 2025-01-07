@@ -29,6 +29,9 @@ class OrderNotification extends Notification
      */
     public function via(object $notifiable): array
     {
+        if(env('MAIL_STATUS') == 'local'){
+            return ['database'];
+        }
         return ['database','mail'];
     }
 
@@ -39,8 +42,8 @@ class OrderNotification extends Notification
         return [
             'data'=>json_encode(
                 [
-                    'ar'=>$this->order->user->username.' قام بأنشاء اوردر رقم '.$this->order->id.' بتكلفة تصل الي '.$this->order->payment->money,
-                    'en'=>$this->order->user->username.' made an order with id : '.$this->order->id.' and order cost is '.$this->order->payment->money,
+                    'ar'=>$this->order->user->username.' قام بأنشاء اوردر رقم '.$this->order->id.' في عنوان '.$this->order->location->address,
+                    'en'=>$this->order->user->username.' made an order with id : '.$this->order->id.' and order address is '.$this->order->location?->address,
                 ],JSON_UNESCAPED_UNICODE),
             'sender'=>auth()->id()
         ];

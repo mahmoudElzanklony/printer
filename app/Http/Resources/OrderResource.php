@@ -16,13 +16,9 @@ class OrderResource extends JsonResource
     {
         return [
           'id'=>$this->id,
-          'city'=>$this->city,
-          'region'=>$this->region,
-          'street'=>$this->street,
-          'address'=>$this->address,
+          'location'=>SavedLocationResource::make($this->whenLoaded('location')),
           'house_number'=>$this->house_number,
-          'coordinates'=>$this->coordinates,
-          'status'=>$this->status,
+          'status'=>$this->status ?? 'working',
           'note'=>$this->note != null ? (auth()->user()->roleName() == 'client' ? json_decode($this->note,true)['client']:json_decode($this->note,true)) :$this->note,
           'user'=>UserResource::make($this->whenLoaded('user')),
           'rate'=>OrderRateResource::make($this->whenLoaded('rate')),

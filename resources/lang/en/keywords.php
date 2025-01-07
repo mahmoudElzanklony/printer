@@ -48,6 +48,16 @@ return [
     'printing'=>'Under Working',
     'delivery'=>'On my way to you',
     'completed'=>'Completed',
+    'bill_no'=>'Bill Number',
+    'tax_no'=>'Tax Number',
+    'address'=>'Address',
+    'client_info'=>'Client Info',
+    'client_name'=>'Client Name',
+    'order_no'=>'Order Number',
+    'order_date'=>'Order Date',
+    'order_status'=>'Order Status',
+    'total_money'=>'Total Money',
+    'order_info'=>'Order Information',
     // ----------------------end of orders - ---------------------
 
 

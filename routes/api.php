@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\CountriesControllerResource;
+use App\Http\Controllers\CitiesControllerResource;
+use App\Http\Controllers\SavedLocationsControllerResource;
+use App\Http\Controllers\ShipmentPricesControllerResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +23,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GeneralServiceController;
 use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\SavedPropertiesSettingControllerResource;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +57,8 @@ Route::group(['middleware'=>'changeLang'],function (){
     Route::group(['prefix'=>'/orders','middleware'=>'auth:sanctum'],function (){
        Route::get('/',[OrdersController::class,'index']);
        Route::post('/create',[OrdersController::class,'create']);
-       Route::post('/update-status',[OrdersController::class,'update_status'])->middleware('admin');
+       Route::post('/update-status',[OrdersController::class,'update_status'])
+           ->middleware('admin');
        Route::post('/remove-item',[OrdersController::class,'remove_item']);
        Route::post('/cancel',[OrdersController::class,'cancel']);
        Route::post('/validate-coupon',[OrdersController::class,'validate_coupon']);
@@ -89,6 +95,12 @@ Route::group(['middleware'=>'changeLang'],function (){
         'properties'=>PropertiesControllerResource::class,
         'services'=>ServicesControllerResource::class,
         'coupons'=>CouponsControllerResource::class,
+        'countries'=>CountriesControllerResource::class,
+        'cities'=>CitiesControllerResource::class,
+        'shipment-prices'=>ShipmentPricesControllerResource::class,
+        'saved-locations'=>SavedLocationsControllerResource::class,
+        'saved-properties'=>SavedPropertiesSettingControllerResource::class,
+
     ]);
 
     Route::post('/deleteitem',[GeneralServiceController::class,'delete_item']);

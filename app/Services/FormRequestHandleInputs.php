@@ -43,8 +43,10 @@ class FormRequestHandleInputs
             $exist_inner_arr = 0;
             foreach ($langs as $lang) {
                 if (Str::contains($name, $lang)) {
-                    $input_name = Str::replace($lang,'',$name);
+                    $input_name = Str::replaceFirst($lang,'',$name);
+
                     $input_name = substr($input_name, 1);
+
                     $output[$input_name][$lang] = $value;
                     $exist_inner_arr = 1;
                 }

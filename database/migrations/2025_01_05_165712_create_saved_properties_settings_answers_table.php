@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications_data_schedule_users', function (Blueprint $table) {
+        Schema::create('saved_properties_settings_answers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->unsignedBigInteger('notification_data_schedule_id');
-            $table->foreign('notification_data_schedule_id', 'fk_notification_schedule')
+            $table->unsignedBigInteger('saved_properties_settings_id');
+            $table->foreign('saved_properties_settings_id', 'fk_saved_properties')
                 ->references('id')
-                ->on('notifications_data_schedules')
+                ->on('saved_properties_settings')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-
+            $table->foreignId('property_id')->constrained('properties')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications_data_schedule_users');
+        Schema::dropIfExists('saved_properties_settings_answers');
     }
 };

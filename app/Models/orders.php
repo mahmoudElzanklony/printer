@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Enum\OrderStatuesEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,12 +14,25 @@ class orders extends Model
     use HasFactory;
     // status ==> make it default okay
     // status ==> maybe wait_client_reply in case item of order removed and wait client to accept  this change
-    // note make it json {client:"",system_refund:""} so if order is refund money wallet or anything happen put at refund admin or client
-    protected $fillable = ['user_id','city','region','address','street','house_number','coordinates','status','note'];
+    // note make it json {client:"",system_refund:""} so if order is refund money wallet
+    // or anything happen put at refund admin or client
+    protected $fillable = ['user_id','location_id','house_number','status','note'];
 
-    public function status():Attribute
+    public static function boot(){
+        parent::boot();
+        static::saving(function(Model $model){
+            if(auth()->check() && !($model->isDirty('user_id'))){
+                $model->user_id = auth()->id();
+            }
+        });
+    }
+    /*public function status():Attribute
     {
-        return Attribute::make(set: fn()  => 'okay');
+        return Attribute::make(set: fn()  => 'working');
+    }*/
+    public function location()
+    {
+        return $this->belongsTo(saved_locations::class,'location_id')->withTrashed();
     }
     public function scopeActiveMode(Builder $query)
     {

@@ -7,7 +7,7 @@ use App\Services\FormRequestHandleInputs;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
-class categoriesFormRequest extends FormRequest
+class countriesFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,10 +28,8 @@ class categoriesFormRequest extends FormRequest
     {
         $arr = [
             'id'=>'filled',
-            'parent_id'=>'filled',
-            'image'=>'filled|image|mimes:png,jpg,jpeg,gif,svg',
         ];
-        $arr = FormRequestHandleInputs::handle($arr,['name','info:filled']);
+        $arr = FormRequestHandleInputs::handle($arr,['name']);
         return $arr;
 
     }

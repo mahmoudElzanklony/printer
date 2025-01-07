@@ -17,7 +17,7 @@ class Admin
     public function handle(Request $request, Closure $next)
     {
 
-        if(auth()->user()->role->name == 'client'){
+        if(auth()->user()->roleName() == 'client'){
             return Messages::error('Unauthorized',401);
         }
         /* if(!(request()->hasHeader('api_key') && request()->header('api_key') == env('api_key','skillar2023'))){
