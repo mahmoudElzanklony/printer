@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\categories;
+use App\Models\saved_locations;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,6 +27,15 @@ class UserResource extends JsonResource
             'role'=>$this->roles->pluck('name')[0],
             'created_at'=>$this->created_at->format('Y-m-d H:i:s')
         ];
+        if(isset($this->default_location)){
+            $data['saved_location'] = SavedLocationResource::make($this->default_location);
+        }
+        if(isset($this->default_category_id)){
+            $data['default_category_id'] = $this->default_category_id;
+        }
+        if(isset($this->default_service_id)){
+            $data['default_service_id'] = $this->default_service_id;
+        }
         if(isset($this->token)){
             $data['token'] = $this->token;
         }

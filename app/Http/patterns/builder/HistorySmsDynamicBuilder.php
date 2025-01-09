@@ -5,6 +5,7 @@ namespace App\Http\patterns\builder;
 use App\Http\patterns\strategy\Messages\SMSMessages;
 use App\Models\orders;
 use App\Models\sms_history;
+use App\Services\FormRequestHandleInputs;
 
 class HistorySmsDynamicBuilder
 {
@@ -33,7 +34,8 @@ class HistorySmsDynamicBuilder
     }
 
     public function save_DB(){
-        $result = sms_history::query()->create($this->basic_info);
+        $data =  FormRequestHandleInputs::handle_inputs_langs($this->basic_info,['name','message']);
+        $result = sms_history::query()->create($data);
         $result->load('user');
         return $result;
     }

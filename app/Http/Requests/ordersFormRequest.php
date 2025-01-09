@@ -23,8 +23,8 @@ class ordersFormRequest extends FormRequest
     {
         return [
             'id'=>'filled',
-            'location_id'=>'required|exists:saved_locations,id',
-            'house_number'=>'required',
+            'location_id'=>'nullable|exists:saved_locations,id',
+            'phone_number'=>'required',
             'note'=>'nullable',
             'payment.type'=>'required',
             'coupon_serial'=>'filled',

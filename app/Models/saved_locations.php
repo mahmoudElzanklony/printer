@@ -19,4 +19,13 @@ class saved_locations extends Model
         return $this->belongsTo(shipment_prices::class)->withTrashed();
     }
 
+    public function scopeActiveLocation($query)
+    {
+        return $query->where('is_default',1);
+    }
+    public function scopeActiveUser($query)
+    {
+        return $query->where('user_id',auth()->id());
+    }
+
 }

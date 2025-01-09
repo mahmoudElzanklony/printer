@@ -49,6 +49,14 @@ class CategoriesControllerResource extends Controller
         if(!(array_key_exists('id',$data)) || (array_key_exists('id',$data) && $image != null)){
             $this->check_upload_image($image,'categories',$category->id,'categories');
         }
+        // save properties
+        // Fetch the prices for the properties
+        $properties = properties::whereIn('id', $data['properties'])->get();
+
+        foreach ($properties as $property) {
+            $propertiesWithPrices[$property->id] = ['price' => $property->price];
+        }
+        $category->properties()->sync($propertiesWithPrices);
         // Load the category with the associated image
         $category->load('image');
 

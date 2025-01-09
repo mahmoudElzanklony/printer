@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\DefaultInfoWithUser;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\categories;
 use App\Models\User;
 use App\Services\Messages;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -27,6 +30,8 @@ class LoginController extends Controller
         }
         if($user){
             $user['token'] = $user->createToken($data['email'] ?? $data['phone'])->plainTextToken;
+
+            array_merge($user->toArray(),DefaultInfoWithUser::execute($user)->toArray());
             return Messages::success(__('messages.login_successfully'),UserResource::make($user));
         }else{
             return Messages::error(__('errors.email_or_password_is_not_correct'));
@@ -38,4 +43,25 @@ class LoginController extends Controller
         auth()->logout();
         return Messages::success(__('messages.logout_successfully'));
     }
+
+    public function get_user_by_token(){
+        if(request()->hasHeader('Authorization')) {
+            $token = request()->header('Authorization');
+            if ($token) {
+                [$id, $user_token] = explode('|', $token, 2);
+                $token_data = DB::table('personal_access_tokens')->where('token', hash('sha256', $user_token))->first();
+                if($token_data) {
+                    $user_id = $token_data->tokenable_id; // !!!THIS ID WE CAN USE TO GET DATA OF YOUR USER!!!
+                    $user = User::query()->find($user_id);
+                    $user['token'] = request()->header('Authorization');
+                    array_merge($user->toArray(),DefaultInfoWithUser::execute($user)->toArray());
+                    return Messages::success('', UserResource::make($user));
+                }
+            }
+            return Messages::error('not valid token');
+
+
+        }
+    }
+
 }

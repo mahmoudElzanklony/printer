@@ -24,6 +24,7 @@ use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderStatusResource;
 use App\Models\orders;
 use App\Models\orders_tracking;
+use App\Models\saved_locations;
 use App\Services\Messages;
 use App\Services\OrderStatuesService;
 use App\Services\WalletUserService;
@@ -57,13 +58,20 @@ class OrdersController extends Controller
     }
     public function create(ordersFormRequest $request)
     {
+        // get data after validation
+        $data =  $request->validated();
 
         // check if user acc is verified or not
         if(!(UserVerficationCheck::check())){
             return Messages::error(__('errors.account_not_verified'),401);
         }
-        // get data after validation
-        $data =  $request->validated();
+        // check if location_id is sent or not
+        if(!(isset($data['location_id']))){
+            $saved = saved_locations::activeLocation()->activeUser()
+                ->firstOrFailWithCustomError(__('errors.not_found_location'));
+            $data['location_id'] = $saved->id;
+        }
+
 
         $base_info_order = collect($data)->except('items','coupon_serial','payment');
         $builder = new OrderBuilder($base_info_order,$data['items'],$data['payment'],$data['coupon_serial'] ?? null,$this->payment_obj);

@@ -16,7 +16,7 @@ class orders extends Model
     // status ==> maybe wait_client_reply in case item of order removed and wait client to accept  this change
     // note make it json {client:"",system_refund:""} so if order is refund money wallet
     // or anything happen put at refund admin or client
-    protected $fillable = ['user_id','location_id','house_number','status','note'];
+    protected $fillable = ['user_id','location_id','phone_number','status','note'];
 
     public static function boot(){
         parent::boot();

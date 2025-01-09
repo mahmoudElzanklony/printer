@@ -29,7 +29,8 @@ class categories extends Model
     }
     public function properties()
     {
-        return $this->belongsToMany(properties::class,categories_properties::class,'category_id','property_id');
+        return $this->belongsToMany(properties::class,categories_properties::class,
+            'category_id','property_id');
     }
 
     public function headings()

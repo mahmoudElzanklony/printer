@@ -16,5 +16,6 @@ return [
     'order_status_not_accept_to_be_cancelled'=>'The status of the order does not allow you to cancel it, as the order is canceled only if it is pending or under review',
     'account_not_verified'=>'Account not verified please verify it firstly',
     'user_found'=>'This user if already exist',
+    'not_found_location'=>'Please you should select a location before make and order',
 
 ];
