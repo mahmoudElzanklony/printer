@@ -28,6 +28,7 @@ class citiesFormRequest extends FormRequest
     {
         $arr = [
             'id'=>'filled',
+            'is_active'=>'filled',
             'country_id'=>'required|exists:countries,id',
         ];
         $arr = FormRequestHandleInputs::handle($arr,['name']);

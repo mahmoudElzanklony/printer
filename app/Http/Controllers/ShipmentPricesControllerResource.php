@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CheckForUploadImage;
+use App\Filters\CityIdFilter;
+use App\Filters\CountryIdFilter;
+use App\Filters\EndDateFilter;
+use App\Filters\StartDateFilter;
 use App\Http\Requests\categoriesFormRequest;
 use App\Http\Requests\citiesFormRequest;
 use App\Http\Requests\countriesFormRequest;
@@ -23,6 +27,7 @@ use App\Services\FormRequestHandleInputs;
 use App\Services\Messages;
 use Illuminate\Http\Request;
 use App\Http\Traits\upload_image;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\DB;
 
 class ShipmentPricesControllerResource extends Controller
@@ -37,8 +42,20 @@ class ShipmentPricesControllerResource extends Controller
     }
     public function index()
     {
-        $data = shipment_prices::query()->with(['user','city'])->orderBy('id','DESC')->get();
-        return ShipmentPriceResource::collection($data);
+        $data = shipment_prices::query()->with(['user','city'])->orderBy('id','DESC');
+
+        $output  = app(Pipeline::class)
+            ->send($data)
+            ->through([
+                StartDateFilter::class,
+                EndDateFilter::class,
+                CityIdFilter::class,
+            ])
+            ->thenReturn()
+            ->get();
+
+
+        return ShipmentPriceResource::collection($output);
     }
 
     /**

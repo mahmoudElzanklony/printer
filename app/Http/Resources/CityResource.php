@@ -21,6 +21,7 @@ class CityResource extends JsonResource
             'id'=>$this->id,
             'user_id'=>$this->user_id,
             'country_id'=>$this->country_id,
+            'is_active'=>$this->is_active,
             'user'=>UserResource::make($this->whenLoaded('user')),
             'country'=>CountryResource::make($this->whenLoaded('country')),
             'created_at'=>$this->created_at->format('Y-m-d H:i:s'),

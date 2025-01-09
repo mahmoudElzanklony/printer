@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CheckForUploadImage;
+use App\Filters\CountryIdFilter;
+use App\Filters\EndDateFilter;
+use App\Filters\StartDateFilter;
+use App\Filters\users\UserNameFilter;
+use App\Filters\users\WalletFilter;
 use App\Http\Requests\categoriesFormRequest;
 use App\Http\Requests\citiesFormRequest;
 use App\Http\Requests\countriesFormRequest;
@@ -20,6 +25,7 @@ use App\Services\FormRequestHandleInputs;
 use App\Services\Messages;
 use Illuminate\Http\Request;
 use App\Http\Traits\upload_image;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\DB;
 
 class CitiesControllerResource extends Controller
@@ -34,8 +40,21 @@ class CitiesControllerResource extends Controller
     }
     public function index()
     {
-        $data = cities::query()->with('user')->orderBy('id','DESC')->get();
-        return CityResource::collection($data);
+        $data = cities::query()->with('user')
+            ->orderBy('id','DESC');
+
+        $output  = app(Pipeline::class)
+            ->send($data)
+            ->through([
+                StartDateFilter::class,
+                EndDateFilter::class,
+                CountryIdFilter::class,
+            ])
+            ->thenReturn()
+            ->get();
+
+
+        return CityResource::collection($output);
     }
 
     /**
