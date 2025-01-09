@@ -24,6 +24,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GeneralServiceController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\SavedPropertiesSettingControllerResource;
+use App\Http\Controllers\AdsControllerResource;
+use App\Http\Controllers\SmsHistoryControllerResource;
 
 /*
 |--------------------------------------------------------------------------
@@ -100,6 +102,8 @@ Route::group(['middleware'=>'changeLang'],function (){
         'shipment-prices'=>ShipmentPricesControllerResource::class,
         'saved-locations'=>SavedLocationsControllerResource::class,
         'saved-properties'=>SavedPropertiesSettingControllerResource::class,
+        'ads'=>AdsControllerResource::class,
+        'dynamic-sms'=>SmsHistoryControllerResource::class,
 
     ]);
 
