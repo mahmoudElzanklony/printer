@@ -32,7 +32,7 @@ class CategoriesControllerResource extends Controller
     }
     public function index()
     {
-        VerifyAccess::execute('permission:pi-sitemap|/categories|read');
+        VerifyAccess::execute('pi-sitemap|/categories|read');
         $data = categories::query()->orderBy('id','DESC')->get();
         return CategoryResource::collection($data);
     }
