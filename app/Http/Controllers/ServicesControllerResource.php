@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\VerifyAccess;
 use App\Http\Requests\categoriesFormRequest;
 use App\Http\Requests\servicesFormRequest;
 use App\Http\Resources\CategoryResource;
@@ -23,9 +24,12 @@ class ServicesControllerResource extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum')->except('index','show');
+        $this->middleware('optional_auth')->only('index','show');
+
     }
     public function index()
     {
+        VerifyAccess::execute('pi-cogpi-cog|/services|read');
         $data = services::query()->with('category')->orderBy('id','DESC')
             ->orderBy('id','DESC')->paginate(request('limit') ?? 10);
         return ServiceResource::collection($data);
@@ -36,6 +40,7 @@ class ServicesControllerResource extends Controller
      */
     public function save($data , $image)
     {
+
         DB::beginTransaction();
         // prepare data to be created or updated
         $data['user_id'] = auth()->id();
@@ -58,6 +63,8 @@ class ServicesControllerResource extends Controller
 
     public function store(servicesFormRequest $request)
     {
+        VerifyAccess::execute('pi-cogpi-cog|/services|create');
+
         return $this->save($request->validated(),request()->file('image'));
     }
 
@@ -78,6 +85,8 @@ class ServicesControllerResource extends Controller
      */
     public function update(categoriesFormRequest $request , $id)
     {
+        VerifyAccess::execute('pi-cogpi-cog|/services|update');
+
         $data = $request->validated();
         $data['id'] = $id;
         return $this->save($data,request()->file('image'));

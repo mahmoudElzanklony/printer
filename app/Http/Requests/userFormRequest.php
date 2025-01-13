@@ -22,11 +22,20 @@ class userFormRequest extends FormRequest
     public function rules(): array
     {
         if(auth()->check()) {
+            if(auth()->user()->roleName() != 'client') {
+                return [
+                    'email' => 'filled|unique:users,email,' . auth()->id(),
+                    'username' => 'filled',
+                    'phone' => 'filled|unique:users,phone,'. auth()->id(),
+                    'password' => 'filled|confirmed|min:6',
+                ];
+            }
             return [
-                'email' => 'filled|unique:users,email,' . auth()->id(),
+                //'email' => 'filled|unique:users,email,' . auth()->id(),
                 'username' => 'filled',
-                'phone' => 'filled|unique:users,phone,'. auth()->id(),
-                'password' => 'filled',
+                //'phone' => 'filled|unique:users,phone,'. auth()->id(),
+                'password' => 'filled|confirmed|min:6',
+                'old_password' => 'filled',
             ];
         }else{
             return [

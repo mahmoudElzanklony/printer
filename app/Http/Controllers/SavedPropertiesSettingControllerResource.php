@@ -49,6 +49,8 @@ class SavedPropertiesSettingControllerResource extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum');
+        $this->middleware('optional_auth')->only('index','show');
+
     }
     public function index()
     {

@@ -28,6 +28,7 @@ use App\Http\Controllers\SavedPropertiesSettingControllerResource;
 use App\Http\Controllers\AdsControllerResource;
 use App\Http\Controllers\SmsHistoryControllerResource;
 use App\Http\Controllers\PermissionsController;
+use App\Http\Controllers\ContactsControllerResource;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,6 +94,7 @@ Route::group(['middleware'=>'changeLang'],function (){
         Route::get('/orders-statistics',[DashboardController::class,'orders']);
         Route::get('/orders-summary',[DashboardController::class,'orders_summary']);
         Route::post('/add-money-to-wallet',[DashboardController::class,'add_money_to_wallet']);
+        Route::post('/take-money-from-wallet',[DashboardController::class,'take_money_from_wallet']);
         Route::post('/update-tax',[DashboardController::class,'update_tax']);
         Route::get('/get-tax',[DashboardController::class,'get_tax']);
         Route::group(['prefix'=>'/notifications-schedule','middleware'=>'auth:sanctum'],function (){
@@ -114,6 +116,7 @@ Route::group(['middleware'=>'changeLang'],function (){
         'ads'=>AdsControllerResource::class,
         'dynamic-sms'=>SmsHistoryControllerResource::class,
         'roles'=>RolesControllerResource::class,
+        'contacts'=>ContactsControllerResource::class,
 
     ]);
 

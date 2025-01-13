@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CheckForUploadImage;
+use App\Actions\VerifyAccess;
 use App\Http\Requests\categoriesFormRequest;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\PropertyHeadingResource;
@@ -26,13 +27,12 @@ class CategoriesControllerResource extends Controller
     {
 
         $this->middleware('auth:sanctum')->except('index','show');
-        $this->middleware('permission:pi-sitemap|/categories|read')->only('index','show');
-        $this->middleware('permission:pi-sitemap|/categories|create')->only('store');
-        $this->middleware('permission:pi-sitemap|/categories|update')->only('update');
+        $this->middleware('optional_auth')->only('index','show');
+
     }
     public function index()
     {
-
+        VerifyAccess::execute('permission:pi-sitemap|/categories|read');
         $data = categories::query()->orderBy('id','DESC')->get();
         return CategoryResource::collection($data);
     }
@@ -72,6 +72,7 @@ class CategoriesControllerResource extends Controller
 
     public function store(categoriesFormRequest $request)
     {
+        VerifyAccess::execute('permission:pi-sitemap|/categories|create');
         return $this->save($request->validated(),request()->file('image'));
     }
 
@@ -105,6 +106,8 @@ class CategoriesControllerResource extends Controller
      */
     public function update(categoriesFormRequest $request , $id)
     {
+        VerifyAccess::execute('permission:pi-sitemap|/categories|update');
+        return 123;
         $data = $request->validated();
         $data['id'] = $id;
         return $this->save($data,request()->file('image'));

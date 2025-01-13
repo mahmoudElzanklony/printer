@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\VerifyAccess;
 use App\Http\Requests\propertiesDataFormRequest;
 use App\Http\Resources\PropertyHeadingResource;
 use App\Http\Resources\PropertyResource;
@@ -17,6 +18,8 @@ class PropertiesControllerResource extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum')->except('index','show');
+        $this->middleware('optional_auth')->only('index','show');
+
     }
     /**
      * Display a listing of the resource.
@@ -25,6 +28,7 @@ class PropertiesControllerResource extends Controller
     public function index()
     {
         //
+        VerifyAccess::execute('pi-wrench|/properties|read');
         $data = properties::query()->with('heading')->orderBy('id','DESC')->get();
         return PropertyResource::collection($data);
     }
@@ -54,6 +58,7 @@ class PropertiesControllerResource extends Controller
     public function store(propertiesDataFormRequest $request)
     {
         //
+        VerifyAccess::execute('pi-wrench|/properties|create');
         $data = $request->validated();
         return $this->save($data);
 
@@ -76,6 +81,7 @@ class PropertiesControllerResource extends Controller
     public function update(propertiesDataFormRequest $request, string $id)
     {
         //
+        VerifyAccess::execute('pi-wrench|/properties|update');
         properties::query()->where('id', $id)->FailIfNotFound(__('errors.not_found_data'));
         $data = $request->validated();
         $data['id'] = $id;

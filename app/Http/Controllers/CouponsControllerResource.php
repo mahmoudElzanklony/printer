@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\VerifyAccess;
 use App\Http\Requests\categoriesFormRequest;
 use App\Http\Requests\couponFormRequest;
 use App\Http\Resources\CategoryResource;
@@ -23,9 +24,13 @@ class CouponsControllerResource extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum')->except('index','show');
+        $this->middleware('optional_auth')->only('index','show');
+
     }
     public function index()
     {
+        VerifyAccess::execute('pi-bookmark-fill|/coupons|read');
+
         $data = coupons::query()->orderBy('id','DESC')->orderBy('id','DESC')
             ->paginate(request('limit') ?? 10);
         return CouponResource::collection($data);
@@ -54,6 +59,8 @@ class CouponsControllerResource extends Controller
 
     public function store(couponFormRequest $request)
     {
+        VerifyAccess::execute('pi-bookmark-fill|/coupons|create');
+
         return $this->save($request->validated());
     }
 
@@ -73,6 +80,7 @@ class CouponsControllerResource extends Controller
      */
     public function update(couponFormRequest $request , $id)
     {
+        VerifyAccess::execute('pi-bookmark-fill|/coupons|update');
         $data = $request->validated();
         $data['id'] = $id;
         return $this->save($data);

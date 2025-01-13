@@ -1,5 +1,7 @@
 <?php
 
+
+
 namespace App\Http\Controllers;
 
 use App\Actions\ChangeDefaultLocationToNonAction;
@@ -13,13 +15,16 @@ use App\Filters\users\WalletFilter;
 use App\Http\patterns\builder\SavedPropertySettingBuilder;
 
 use App\Http\Requests\adFormRequest;
+use App\Http\Requests\contactFormReqest;
 use App\Http\Requests\savedPropertiesFormRequest;
 
 use App\Http\Resources\AdResource;
+use App\Http\Resources\ContactResource;
 use App\Http\Resources\SavedPropertiesSettingResource;
 
 
 use App\Models\ads;
+use App\Models\contacts;
 use App\Services\FormRequestHandleInputs;
 use App\Services\Messages;
 use Illuminate\Http\Request;
@@ -27,24 +32,24 @@ use App\Http\Traits\upload_image;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\DB;
 
-class AdsControllerResource extends Controller
+class ContactsControllerResource extends Controller
 {
     use upload_image;
+
     /**
      * Display a listing of the resource.
      */
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->only('store','update');
-        $this->middleware('optional_auth')->only('index','show');
-
+        $this->middleware('optional_auth')->only('index', 'show');
     }
+
     public function index()
     {
-        $data = ads::query()
+        $data = contacts::query()
             ->get();
 
-        return AdResource::collection($data);
+        return ContactResource::collection($data);
     }
 
 
@@ -54,16 +59,16 @@ class AdsControllerResource extends Controller
     public function save($data)
     {
         DB::beginTransaction();
-        $data =  FormRequestHandleInputs::handle_inputs_langs($data,['name','info']);
-        $result = ads::query()->updateOrCreate(['id' => $data['id'] ?? null], $data);
+
+        $result = contacts::query()->updateOrCreate(['id' => $data['id'] ?? null], $data);
 
         DB::commit();
         // return response
         return Messages::success(__('messages.saved_successfully'),
-            AdResource::make($result));
+            ContactResource::make($result));
     }
 
-    public function store(adFormRequest $request)
+    public function store(contactFormReqest $request)
     {
         return $this->save($request->validated());
     }
@@ -74,18 +79,18 @@ class AdsControllerResource extends Controller
     public function show(string $id)
     {
         //
-        $data = ads::query()
+        $data = contacts::query()
             ->where('id', $id)
             ->firstOrFailWithCustomError(__('errors.not_found_data'));
 
-        return AdResource::make($data);
+        return ContactResource::make($data);
 
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(adFormRequest $request , $id)
+    public function update(contactFormReqest $request, $id)
     {
         $data = $request->validated();
         $data['id'] = $id;

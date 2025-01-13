@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\OrdersWithAllDataAction;
+use App\Actions\VerifyAccess;
 use App\Filters\EndDateFilter;
 use App\Filters\orders\StatusOrderFilter;
 use App\Filters\StartDateFilter;
@@ -33,6 +34,7 @@ class DashboardController extends Controller
 
     public function users()
     {
+        VerifyAccess::execute('pi-users|/users|read');
         $data = User::query()->orderBy('id','DESC');
         $output  = app(Pipeline::class)
             ->send($data)
@@ -74,19 +76,38 @@ class DashboardController extends Controller
         return $output;
     }
 
+    public function money_wallet($data,$type = 'plus')
+    {
+        VerifyAccess::execute('pi-users|/users|update');
+        $user = User::query()->find($data['user_id']);
+        // add wallet to user
+        if($type == 'plus'){
+            $user->update([
+                'wallet' => $user->wallet + $data['money']
+            ]);
+        }else {
+            $user->update([
+                'wallet' => $user->wallet - $data['money']
+            ]);
+        }
+        return Messages::success(__('messages.operation_done_successfully'));
+    }
+
+    public function take_money_from_wallet(controlWalletFormRequest $request)
+    {
+
+        $data = $request->validated();
+        return $this->money_wallet($data,'min');
+    }
     public function add_money_to_wallet(controlWalletFormRequest $request)
     {
         $data = $request->validated();
-        $user = User::query()->find($data['user_id']);
-        // add wallet to user
-        $user->update([
-            'wallet'=>$user->wallet + $data['money']
-        ]);
-        return Messages::success(__('messages.operation_done_successfully'));
+        return $this->money_wallet($data,'plus');
     }
 
     public function update_tax(taxFormRequest $request)
     {
+        VerifyAccess::execute('pi-money-bill|/tax-value|update');
         $data = $request->validated();
 
         taxes::query()->update($data,$data);
@@ -96,6 +117,7 @@ class DashboardController extends Controller
 
     public function get_tax()
     {
+        VerifyAccess::execute('pi-money-bill|/tax-value|read');
 
         $data = taxes::query()->first();
         //

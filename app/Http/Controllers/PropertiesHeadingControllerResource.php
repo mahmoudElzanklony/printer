@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\VerifyAccess;
 use App\Http\Requests\propertiesHeadingFormRequest;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\PropertyHeadingResource;
@@ -17,6 +18,8 @@ class PropertiesHeadingControllerResource extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum')->except('index','show');
+        $this->middleware('optional_auth')->only('index','show');
+
     }
     /**
      * Display a listing of the resource.
@@ -25,6 +28,7 @@ class PropertiesHeadingControllerResource extends Controller
     public function index()
     {
         //
+        VerifyAccess::execute('pi-palette|/properties-headings|read');
         $data = properties_heading::query()->orderBy('id','DESC')->get();
         return PropertyHeadingResource::collection($data);
     }
@@ -51,6 +55,7 @@ class PropertiesHeadingControllerResource extends Controller
     public function store(propertiesHeadingFormRequest $request)
     {
         //
+        VerifyAccess::execute('pi-palette|/properties-headings|create');
         $data = $request->validated();
         return $this->save($data);
     }
@@ -71,7 +76,7 @@ class PropertiesHeadingControllerResource extends Controller
      */
     public function update(propertiesHeadingFormRequest $request , string $id)
     {
-
+        VerifyAccess::execute('pi-palette|/properties-headings|update');
         properties_heading::query()->where('id', $id)->FailIfNotFound(__('errors.not_found_data'));
         $data = $request->validated();
         $data['id'] = $id;
