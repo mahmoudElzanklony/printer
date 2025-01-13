@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CountriesControllerResource;
 use App\Http\Controllers\CitiesControllerResource;
+use App\Http\Controllers\RolesControllerResource;
 use App\Http\Controllers\SavedLocationsControllerResource;
 use App\Http\Controllers\ShipmentPricesControllerResource;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\SavedPropertiesSettingControllerResource;
 use App\Http\Controllers\AdsControllerResource;
 use App\Http\Controllers\SmsHistoryControllerResource;
+use App\Http\Controllers\PermissionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,7 +70,9 @@ Route::group(['middleware'=>'changeLang'],function (){
     });
     // rates
     Route::group(['prefix'=>'/rates','middleware'=>'auth:sanctum'],function (){
+        Route::get('/',[RatesController::class,'index']);
         Route::post('/create',[RatesController::class,'create']);
+
     });
     // notifications
     Route::group(['prefix'=>'/notifications','middleware'=>'auth:sanctum'],function (){
@@ -78,6 +82,10 @@ Route::group(['middleware'=>'changeLang'],function (){
     // profile
     Route::group(['prefix'=>'/profile','middleware'=>'auth:sanctum'],function (){
         Route::post('/update-info',[ProfileController::class,'update_info']);
+    });
+    // permissions
+    Route::group(['prefix'=>'/permissions','middleware'=>'auth:sanctum'],function (){
+        Route::get('/',PermissionsController::class);
     });
     // admin panel
     Route::group(['prefix'=>'/dashboard','middleware'=>'auth:sanctum'],function (){
@@ -105,6 +113,7 @@ Route::group(['middleware'=>'changeLang'],function (){
         'saved-properties'=>SavedPropertiesSettingControllerResource::class,
         'ads'=>AdsControllerResource::class,
         'dynamic-sms'=>SmsHistoryControllerResource::class,
+        'roles'=>RolesControllerResource::class,
 
     ]);
 

@@ -4,14 +4,15 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class newPasswordFormRequest extends FormRequest
+class roleFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+
+        return auth()->check() && auth()->user()->hasRole('admin');
     }
 
     /**
@@ -21,19 +22,12 @@ class newPasswordFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-            'phone'=>'filled',
-            'email'=>'filled',
-            'password'=>'required|confirmed|min:6',
-            'otp_secret'=>'required',
-        ];
-    }
 
-    public function attributes()
-    {
         return [
-            'password'=>__('keywords.password')
+            'id'=>'filled',
+            'name' => 'required|unique:roles,name,'.request()->segment(3),
+            'permissions' => 'required|array',
+            'permissions.*' => 'required|exists:permissions,id'
         ];
     }
 }

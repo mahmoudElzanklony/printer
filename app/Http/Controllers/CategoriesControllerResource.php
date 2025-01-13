@@ -24,10 +24,15 @@ class CategoriesControllerResource extends Controller
      */
     public function __construct()
     {
+
         $this->middleware('auth:sanctum')->except('index','show');
+        $this->middleware('permission:pi-sitemap|/categories|read')->only('index','show');
+        $this->middleware('permission:pi-sitemap|/categories|create')->only('store');
+        $this->middleware('permission:pi-sitemap|/categories|update')->only('update');
     }
     public function index()
     {
+
         $data = categories::query()->orderBy('id','DESC')->get();
         return CategoryResource::collection($data);
     }

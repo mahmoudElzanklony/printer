@@ -45,7 +45,9 @@ class ForgetPasswordController extends Controller
         if(key_exists('email',$data)){
             $user = User::query()->where('email','=',$data['email'])->firstOrFailWithCustomError(__('errors.not_found_user_with_this_email'));
         }else if(key_exists('phone',$data)){
-            $user = User::query()->where('phone','=',$data['phone'])->firstOrFailWithCustomError(__('errors.not_found_user_with_this_phone'));
+            $user = User::query()->where('phone','=',$data['phone'])
+                ->where('otp_secret','=',$data['otp_secret'])
+                ->firstOrFailWithCustomError(__('errors.not_found_user_with_this_phone'));
         }
         return $user;
     }
@@ -64,7 +66,7 @@ class ForgetPasswordController extends Controller
             $user->save();
             return Messages::success(__('messages.saved_successfully'));
         }else{
-            return Messages::error('email or phone must be sent in this request');
+            return Messages::error('error at phone or OTP');
         }
     }
 }

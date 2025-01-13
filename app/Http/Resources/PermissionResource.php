@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderRateResource extends JsonResource
+class PermissionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,11 @@ class OrderRateResource extends JsonResource
     {
         return [
           'id'=>$this->id,
-          'print_rate'=>$this->print_rate,
-          'delivery_rate'=>$this->delivery_rate,
-          'comment'=>$this->comment,
-          'order'=>OrderResource::make($this->whenLoaded('order')),
-          'created_at'=>$this->created_at->format('Y-m-d H:i:s'),
+          //'name'=>$this->name,
+          'icon'=>explode('|',$this->name)[0] ?? null,
+          'route'=>explode('|',$this->name)[1] ?? null,
+          'action'=>explode('|',$this->name)[2] ?? null,
+          'created_at'=>$this->created_at->format('Y-m-d H:m:s'),
         ];
     }
 }
