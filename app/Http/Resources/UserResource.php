@@ -41,9 +41,19 @@ class UserResource extends JsonResource
         }
         if(isset($this->token)){
             $data['token'] = $this->token;
-        }if(($data['role'] == 'admin' || $data['role'] == 'client')){
-            $data['permissions'] = PermissionResource::collection($this->getAllPermissions());
-    }
+        }
+        if(!($data['role'] == 'admin' || $data['role'] == 'client')){
+            $groupedPermissions = $this->getAllPermissions()->groupBy(function ($permission) {
+                // Extract the icon prefix (before "|/|")
+                return explode('|/|', $permission->name)[0];
+            });
+            $data['pages'] = $groupedPermissions->map(function ($permissions, $icon) {
+                return [
+                    'icon' => $icon,
+                    'permissions' => PermissionResource::collection($permissions),
+                ];
+            })->values();
+        }
         return $data;
     }
 }
