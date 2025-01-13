@@ -11,6 +11,7 @@ class VerifyAccess
 
 
         if(auth()->check() && auth()->user()->roleName() != 'client') {
+            dd(auth()->user(),auth()->user()->roleName(),auth()->user()->can($name));
             if(!(auth()->user()->can($name))){
                 abort(Messages::error('You do not have permission to do this action.'));
             }

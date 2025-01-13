@@ -39,6 +39,11 @@ class UserResource extends JsonResource
         if(isset($this->token)){
             $data['token'] = $this->token;
         }
+        if(isset($this->token)){
+            $data['token'] = $this->token;
+        }if(($data['role'] == 'admin' || $data['role'] == 'client')){
+           // $data['permissions'] = PermissionResource::collection($this->role);
+    }
         return $data;
     }
 }
