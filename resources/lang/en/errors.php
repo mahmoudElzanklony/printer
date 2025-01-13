@@ -17,5 +17,6 @@ return [
     'account_not_verified'=>'Account not verified please verify it firstly',
     'user_found'=>'This user if already exist',
     'not_found_location'=>'Please you should select a location before make and order',
+    'phone_or_otp_error'=>'Error at phone number or otp',
 
 ];
