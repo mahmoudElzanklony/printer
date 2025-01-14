@@ -11,7 +11,7 @@ class LoginByPhoneOrEmailAction
         $user = User::query()
             ->whereRaw('(phone = "'.$search.'" OR email = "'.$search.'")')
             ->firstOrFailWithCustomError(__('errors.not_found_data'));
-        auth()->login($user);
+        auth('web')->login($user);
         $user['token'] = $user->createToken($user->email != '' ? $user->email : $user->phone)->plainTextToken;
         return $user;
     }
