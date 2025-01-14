@@ -42,7 +42,7 @@ class CitiesControllerResource extends Controller
     }
     public function index()
     {
-        $data = cities::query()->with('user','city')
+        $data = cities::query()->with(['user','country'])
             ->orderBy('id','DESC');
 
         $output  = app(Pipeline::class)
