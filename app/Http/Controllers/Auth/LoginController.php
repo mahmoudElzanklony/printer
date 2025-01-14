@@ -55,6 +55,7 @@ class LoginController extends Controller
                         $user_id = $token_data->tokenable_id; // !!!THIS ID WE CAN USE TO GET DATA OF YOUR USER!!!
                         $user = User::query()->find($user_id);
                         $user['token'] = request()->header('Authorization');
+                        $user['token'] =  str_replace('Bearer ', '', $user['token']);
                         array_merge($user->toArray(),DefaultInfoWithUser::execute($user)->toArray());
                         return Messages::success('', UserResource::make($user));
                     }
