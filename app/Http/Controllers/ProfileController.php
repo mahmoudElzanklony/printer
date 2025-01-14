@@ -24,9 +24,9 @@ class ProfileController extends Controller
             }
         }
 
-        if(auth()->user()->getAuthPassword() != null){
+        if(auth()->user()->getAuthPassword() != null && isset($data['old_password'])){
 
-            if(!(isset($data['old_password'])) || !(Hash::check($data['old_password'],auth()->user()->password))){
+            if(!(Hash::check($data['old_password'],auth()->user()->password))){
                 return Messages::error(__('errors.err_old_password'));
             }
         }
