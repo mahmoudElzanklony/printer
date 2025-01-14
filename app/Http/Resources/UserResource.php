@@ -23,6 +23,7 @@ class UserResource extends JsonResource
             'verified_at'=>$this->phone_verified_at,
             'phone'=>$this->phone,
             'otp'=>$this->otp_secret,
+            'has_password'=>auth()->user()->password != '' ? true : false,
             'wallet'=>$this->wallet,
             'role'=>$this->roles->pluck('name')[0] ?? 'client',
             'created_at'=>$this->created_at->format('Y-m-d H:i:s')
