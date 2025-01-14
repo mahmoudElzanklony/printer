@@ -60,7 +60,7 @@ class LoginController extends Controller
                         return Messages::success('', UserResource::make($user));
                     }
                 }catch (\Exception $e){
-                    return Messages::error('not valid token');
+                    return Messages::error('not valid token',401);
                 }
             }
             return Messages::error('not valid token');
