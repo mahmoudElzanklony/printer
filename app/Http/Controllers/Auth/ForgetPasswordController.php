@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\DefaultInfoWithUser;
 use App\Http\Controllers\Controller;
 use App\Http\patterns\strategy\Messages\MessagesInterface;
 use App\Http\Requests\messageFormRequest;
@@ -65,6 +66,7 @@ class ForgetPasswordController extends Controller
             $user = $this->get_user($request->validated());
             $user->password = request('password');
             $user->save();
+            array_merge($user->toArray(),DefaultInfoWithUser::execute($user)->toArray());
             return Messages::success(__('messages.saved_successfully'),UserResource::make($user));
         }else{
             return Messages::error('error at phone or email');
