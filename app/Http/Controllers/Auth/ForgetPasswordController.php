@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\patterns\strategy\Messages\MessagesInterface;
 use App\Http\Requests\messageFormRequest;
 use App\Http\Requests\newPasswordFormRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\Messages;
 use Illuminate\Http\Request;
@@ -64,7 +65,7 @@ class ForgetPasswordController extends Controller
             $user = $this->get_user($request->validated());
             $user->password = request('password');
             $user->save();
-            return Messages::success(__('messages.saved_successfully'));
+            return Messages::success(__('messages.saved_successfully'),UserResource::make($user));
         }else{
             return Messages::error('error at phone or email');
         }
