@@ -88,7 +88,7 @@ class SmsHistoryControllerResource extends Controller
             ->where('id', $id)
             ->firstOrFailWithCustomError(__('errors.not_found_data'));
 
-        return AdResource::make($data);
+        return SmsHistoryResource::make($data);
 
     }
 
