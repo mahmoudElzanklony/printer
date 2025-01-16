@@ -46,7 +46,7 @@ class UserResource extends JsonResource
         if(!($data['role'] == 'admin' || $data['role'] == 'client')){
             $groupedPermissions = $this->getAllPermissions()->groupBy(function ($permission) {
                 // Extract the icon prefix (before "|/|")
-                return explode('|/|', $permission->name)[0];
+                return explode('|', $permission->name)[0];
             });
             $data['pages'] = $groupedPermissions->map(function ($permissions, $icon) {
                 return [

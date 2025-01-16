@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Models\categories;
+use App\Models\countries;
 use App\Models\saved_locations;
 use App\Models\services;
 
@@ -12,6 +13,7 @@ class DefaultInfoWithUser
     {
         $user['default_category_id'] = categories::query()->first()->id;
         $user['default_service_id'] = services::query()->first()->id;
+        $user['default_country_id'] = countries::query()->first()->id;
         $user['default_location'] = saved_locations::query()
             ->where("user_id", $user["id"])
             ->where("is_default", 1)

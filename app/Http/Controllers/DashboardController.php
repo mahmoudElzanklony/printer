@@ -32,6 +32,7 @@ class DashboardController extends Controller
 {
     //
 
+
     public function users()
     {
         VerifyAccess::execute('pi-users|/users|read');
@@ -117,7 +118,8 @@ class DashboardController extends Controller
 
     public function get_tax()
     {
-        VerifyAccess::execute('pi-money-bill|/tax-value|read');
+
+         VerifyAccess::execute('pi-money-bill|/tax-value|read');
 
         $data = taxes::query()->first();
         //

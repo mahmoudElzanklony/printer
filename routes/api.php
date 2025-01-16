@@ -97,6 +97,7 @@ Route::group(['middleware'=>'changeLang'],function (){
         Route::post('/take-money-from-wallet',[DashboardController::class,'take_money_from_wallet']);
         Route::post('/update-tax',[DashboardController::class,'update_tax']);
         Route::get('/get-tax',[DashboardController::class,'get_tax']);
+           // ->middleware('role_or_permission:pi-money-bill|/tax-value|read');
         Route::group(['prefix'=>'/notifications-schedule','middleware'=>'auth:sanctum'],function (){
             Route::post('/save',[DashboardController::class,'create_notification_content']);
         });

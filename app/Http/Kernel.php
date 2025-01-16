@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -68,6 +69,8 @@ class Kernel extends HttpKernel
         'changeLang' => \App\Http\Middleware\changeLang::class,
         'admin' => \App\Http\Middleware\Admin::class,
         'optional_auth' => \App\Http\Middleware\optional_auth::class,
+        'role_or_permission' => RoleOrPermissionMiddleware::class
+
 
     ];
 }

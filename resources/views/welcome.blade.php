@@ -137,4 +137,92 @@
             </div>
         </div>
     </body>
+    <script>
+        let obj = {
+            // label: 'Home',
+            items: [
+                {
+                    label: this.translate.instant('Dashboard'),
+                    icon: 'pi pi-fw pi-home',
+                    routerLink: ['/admin'],
+                },
+                {
+                    label: this.translate.instant('Users'),
+                    icon: 'pi pi-users',
+                    routerLink: ['/admin/users'],
+                },
+                {
+                    label: this.translate.instant('Categories'),
+                    icon: 'pi pi-sitemap',
+                    routerLink: ['/admin/categories'],
+                },
+                {
+                    label: this.translate.instant('Properties headings'),
+                    icon: 'pi pi-palette',
+                    routerLink: ['/admin/properties-headings'],
+                },
+                {
+                    label: this.translate.instant('Properties'),
+                    icon: 'pi pi-wrench',
+                    routerLink: ['/admin/properties'],
+                },
+                {
+                    label: this.translate.instant('Orders'),
+                    icon: 'pi pi-cart-plus',
+                    routerLink: ['/admin/orders'],
+                },
+                {
+                    label: this.translate.instant('Coupons'),
+                    icon: 'pi pi-bookmark-fill',
+                    routerLink: ['/admin/coupons'],
+                },
+                {
+                    label: this.translate.instant('Services'),
+                    icon: 'pi pi-cog',
+                    routerLink: ['/admin/services'],
+                },
+                {
+                    label: this.translate.instant('Tax Value'),
+                    icon: 'pi pi-money-bill',
+                    routerLink: ['/admin/tax-value'],
+                },
+                {
+                    label: this.translate.instant('Shipment'),
+                    icon: 'fa-solid fa-truck-fast',
+                    items: [
+                        {
+                            label: this.translate.instant('Countries'),
+                            icon: 'fa-solid fa-earth-americas',
+                            routerLink: ['/admin/shipment/countries'],
+                        },
+                        {
+                            label: this.translate.instant('Cities'),
+                            icon: 'fa-solid fa-city',
+                            routerLink: ['/admin/shipment/cities'],
+                        },
+                        {
+                            label: this.translate.instant('Shipment Prices'),
+                            icon: 'fa-solid fa-hand-holding-dollar',
+                            routerLink: ['/admin/shipment'],
+                        },
+                    ],
+                },
+                {
+                    label: this.translate.instant('Ads'),
+                    icon: 'pi pi-megaphone',
+                    routerLink: ['/admin/ads'],
+                },
+                {
+                    label: this.translate.instant('Dynamic SMS'),
+                    icon: 'fa-solid fa-comment-sms',
+                    routerLink: ['/admin/dynamic-sms'],
+                },
+                {
+                    label: this.translate.instant('Contact Messages'),
+                    icon: 'pi pi-send',
+                    routerLink: ['/admin/contacts'],
+                },
+            ],
+        }
+    </script>
 </html>
