@@ -39,7 +39,7 @@ class SmsHistoryControllerResource extends Controller
     }
     public function index()
     {
-        $data = sms_history::query()
+        $data = sms_history::query()->with('user')
             ->orderBy('id','DESC');
 
         $output  = app(Pipeline::class)
@@ -84,7 +84,7 @@ class SmsHistoryControllerResource extends Controller
     public function show(string $id)
     {
         //
-        $data = sms_history::query()
+        $data = sms_history::query()->with('user')
             ->where('id', $id)
             ->firstOrFailWithCustomError(__('errors.not_found_data'));
 
