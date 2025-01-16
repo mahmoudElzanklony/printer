@@ -37,6 +37,9 @@ class UserResource extends JsonResource
         if(isset($this->default_service_id)){
             $data['default_service_id'] = $this->default_service_id;
         }
+        if(isset($this->default_country_id)){
+            $data['default_country_id'] = $this->default_country_id;
+        }
         if(isset($this->token)){
             $data['token'] = $this->token;
         }
