@@ -26,7 +26,11 @@ class LoginController extends Controller
             $user = User::query()
                 ->where('phone',$data['phone'])
                 ->first();
-            if(!Hash::check($data['password'],$user->password)){
+            if($user){
+                if(!Hash::check($data['password'],$user->password)){
+                    return Messages::error(__('errors.phone_or_password_is_not_correct'));
+                }
+            }else{
                 return Messages::error(__('errors.phone_or_password_is_not_correct'));
             }
 
