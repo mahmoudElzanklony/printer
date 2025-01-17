@@ -21,13 +21,13 @@ class LoginController extends Controller
             $user = User::query()->where('email',$data['email'])->first();
         }else if(request()->filled('phone') && request()->filled('password')){
             $data = ['phone'=>request('phone') , 'password'=>request('password')];
-            $check = auth('web')->attempt($data);
+            $check = auth()->attempt($data);
             if($check){
                 $user = auth()->user();
             }else{
                 $user = null;
             }
-            return $data;
+            return $user;
         }
         if($user){
             $user['token'] = $user->createToken($data['email'] ?? $data['phone'])->plainTextToken;
