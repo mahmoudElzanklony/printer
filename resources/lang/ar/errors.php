@@ -2,6 +2,7 @@
 return [
     'otp_not_correct'=>'رقم التفعيل غير صحيح',
     'email_or_password_is_not_correct'=>'البريد الالكتروني او كلمة المرور غير صحيحة',
+    'phone_or_password_is_not_correct'=>'الهاتف المحمول او كلمة المرور غير صحيحة',
     'not_found_user_with_this_email'=>'لا يوجد مستخدم بهذا البريد الالكتروني',
     'not_found_user_with_this_phone'=>'لا يوجد مستخدم يمتلك هذا الرقم',
     'not_found_data'=>'لا يوجد بيانات من فضلك تأكد من البيانات الذي ترسلها مرة اخري',

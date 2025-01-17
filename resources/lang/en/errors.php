@@ -2,6 +2,7 @@
 return [
     'otp_not_correct'=>'OTP number is not correct',
     'email_or_password_is_not_correct'=>'Email or password is not correct',
+    'phone_or_password_is_not_correct'=>'Phone or password is not correct',
     'not_found_user_with_this_email'=>'Not found user that use this email',
     'not_found_user_with_this_phone'=>'Not found user that use this phone',
     'not_found_data'=>'Not found data please check from your data sending in this request',
