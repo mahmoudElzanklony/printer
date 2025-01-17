@@ -21,7 +21,6 @@ class LoginController extends Controller
             $user = User::query()->where('email',$data['email'])->first();
         }else if(request()->filled('phone') && request()->filled('password')){
             $data = ['phone'=>request('phone') , 'password'=>request('password')];
-            dd(auth('web')->attempt($data));
             $check = auth('web')->attempt($data);
 
             if($check){
@@ -29,7 +28,7 @@ class LoginController extends Controller
             }else{
                 $user = null;
             }
-
+            return $user;
         }
         if($user){
             $user['token'] = $user->createToken($data['email'] ?? $data['phone'])->plainTextToken;
