@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\Messages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -20,15 +21,18 @@ class LoginController extends Controller
             $data = ['email'=>request('email')];
             $user = User::query()->where('email',$data['email'])->first();
         }else if(request()->filled('phone') && request()->filled('password')){
-            $data = ['phone'=>request('phone') , 'password'=>request('password')];
-            $check = auth('web')->attempt($data);
 
-            if($check){
-                $user = auth()->user();
-            }else{
-                $user = null;
+            $data = ['phone'=>request('phone') , 'password'=>request('password')];
+            $user = User::query()
+                ->where('phone',$data['phone'])
+                ->first();
+            if(!Hash::check($data['password'],$user->password)){
+                return Messages::error(__('errors.phone_or_password_is_not_correct'));
             }
 
+
+        }else{
+            $user = null;
         }
         if($user){
             $user['token'] = $user->createToken($data['email'] ?? $data['phone'])->plainTextToken;
