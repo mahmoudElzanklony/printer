@@ -33,7 +33,7 @@ class PropertiesControllerResource extends Controller
     {
         //
         VerifyAccess::execute('pi pi-wrench|/properties|read');
-        $data = properties::query()->with('heading')->orderBy('id','DESC')->get();
+        $data = properties::query()->with(['heading','icon_info'])->orderBy('id','DESC')->get();
         return PropertyResource::collection($data);
     }
 
@@ -97,7 +97,7 @@ class PropertiesControllerResource extends Controller
     public function show(string $id)
     {
         //
-        $data = properties::query()->with('heading')
+        $data = properties::query()->with(['heading','icon_info'])
             ->where('id', $id)->FailIfNotFound(__('errors.not_found_data'));
         return PropertyResource::make($data);
     }

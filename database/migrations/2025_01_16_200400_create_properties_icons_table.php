@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('properties_icons', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('property_id')->constrained('properties')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('property_id')->constrained('properties')
+                ->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('label');
             $table->string('icon');
             $table->timestamps();
