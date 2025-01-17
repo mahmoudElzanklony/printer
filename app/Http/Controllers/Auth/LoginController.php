@@ -21,6 +21,7 @@ class LoginController extends Controller
             $user = User::query()->where('email',$data['email'])->first();
         }else if(request()->filled('phone') && request()->filled('password')){
             $data = ['phone'=>request('phone') , 'password'=>request('password')];
+            return User::query()->where('phone',$data['phone'])->first();
             $check = auth('web')->attempt($data);
             if($check){
                 $user = auth()->user();
