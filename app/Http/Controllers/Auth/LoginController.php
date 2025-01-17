@@ -22,12 +22,12 @@ class LoginController extends Controller
         }else if(request()->filled('phone') && request()->filled('password')){
             $data = ['phone'=>request('phone') , 'password'=>request('password')];
             $check = auth('web')->attempt($data);
-            return $check;
             if($check){
                 $user = auth()->user();
             }else{
                 $user = null;
             }
+            return $user;
         }
         if($user){
             $user['token'] = $user->createToken($data['email'] ?? $data['phone'])->plainTextToken;
