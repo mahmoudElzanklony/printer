@@ -27,7 +27,7 @@ class LoginController extends Controller
             }else{
                 $user = null;
             }
-            return $user;
+            return $data;
         }
         if($user){
             $user['token'] = $user->createToken($data['email'] ?? $data['phone'])->plainTextToken;
