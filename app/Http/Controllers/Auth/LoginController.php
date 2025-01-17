@@ -22,6 +22,7 @@ class LoginController extends Controller
         }else if(request()->filled('phone') && request()->filled('password')){
             $data = ['phone'=>request('phone') , 'password'=>request('password')];
             $check = auth('web')->attempt($data);
+            return $check;
             if($check){
                 $user = auth()->user();
             }else{
