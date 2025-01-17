@@ -15,11 +15,13 @@ use App\Http\patterns\strategy\Messages\MessagesInterface;
 use App\Http\Requests\controlWalletFormRequest;
 use App\Http\Requests\notificationsScheduleFormRequest;
 use App\Http\Requests\taxFormRequest;
+use App\Http\Requests\userFormRequest;
 use App\Http\Resources\UserResource;
 use App\Models\notifications_data_schedule;
 use App\Models\notifications_data_schedule_users;
 use App\Models\orders;
 use App\Models\payments;
+use App\Models\roles;
 use App\Models\taxes;
 use App\Models\User;
 use App\Services\Messages;
@@ -35,7 +37,7 @@ class DashboardController extends Controller
 
     public function users()
     {
-        VerifyAccess::execute('pi-users|/users|read');
+        VerifyAccess::execute('pi pi-users|/users|read');
         $data = User::query()->orderBy('id','DESC');
         $output  = app(Pipeline::class)
             ->send($data)
@@ -79,7 +81,7 @@ class DashboardController extends Controller
 
     public function money_wallet($data,$type = 'plus')
     {
-        VerifyAccess::execute('pi-users|/users|update');
+        VerifyAccess::execute('pi pi-users|/users|update');
         $user = User::query()->find($data['user_id']);
         // add wallet to user
         if($type == 'plus'){
@@ -108,7 +110,7 @@ class DashboardController extends Controller
 
     public function update_tax(taxFormRequest $request)
     {
-        VerifyAccess::execute('pi-money-bill|/tax-value|update');
+        VerifyAccess::execute('pi pi-money-bill|/tax-value|update');
         $data = $request->validated();
 
         taxes::query()->update($data,$data);
@@ -119,7 +121,7 @@ class DashboardController extends Controller
     public function get_tax()
     {
 
-         VerifyAccess::execute('pi-money-bill|/tax-value|read');
+         VerifyAccess::execute('pi pi-money-bill|/tax-value|read');
 
         $data = taxes::query()->first();
         //
@@ -156,4 +158,21 @@ class DashboardController extends Controller
 
         return Messages::success(__('messages.operation_done_successfully'));
     }
+
+    public function add_employee(userFormRequest $request)
+    {
+        if(auth()->user()->roleName() == 'admin'){
+            DB::beginTransaction();
+            $data = $request->validated();
+            $data['otp_secret'] = rand(1000, 9999);
+            $user = User::query()->create($data);
+            $user->assignRole(roles::query()->find($data['role_id'])->name);
+
+            $user->createToken($data['email'])->plainTextToken;
+            DB::commit();
+            return Messages::success(__('messages.operation_done_successfully'));
+        }
+        abort(Messages::error('You do not have permission to do this action.'));
+    }
+
 }

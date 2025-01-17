@@ -29,7 +29,7 @@ class CouponsControllerResource extends Controller
     }
     public function index()
     {
-        VerifyAccess::execute('pi-bookmark-fill|/coupons|read');
+        VerifyAccess::execute('pi pi-bookmark-fill|/coupons|read');
 
         $data = coupons::query()->orderBy('id','DESC')->orderBy('id','DESC')
             ->paginate(request('limit') ?? 10);
@@ -59,7 +59,7 @@ class CouponsControllerResource extends Controller
 
     public function store(couponFormRequest $request)
     {
-        VerifyAccess::execute('pi-bookmark-fill|/coupons|create');
+        VerifyAccess::execute('pi pi-bookmark-fill|/coupons|create');
 
         return $this->save($request->validated());
     }
@@ -80,7 +80,7 @@ class CouponsControllerResource extends Controller
      */
     public function update(couponFormRequest $request , $id)
     {
-        VerifyAccess::execute('pi-bookmark-fill|/coupons|update');
+        VerifyAccess::execute('pi pi-bookmark-fill|/coupons|update');
         $data = $request->validated();
         $data['id'] = $id;
         return $this->save($data);

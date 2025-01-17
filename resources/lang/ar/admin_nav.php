@@ -65,7 +65,7 @@ return [
         ]
     ],
     'fa-solid fa-hand-holding-dollar'=>[
-        'label'=>'الشحن',
+        'label'=>'المناطق',
         'url'=> '/shipment',
         'parent'=>[
             'icon'=>'fa-solid fa-truck-fast',

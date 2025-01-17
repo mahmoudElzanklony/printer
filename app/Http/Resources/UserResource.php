@@ -54,6 +54,8 @@ class UserResource extends JsonResource
             $data['pages'] = $groupedPermissions->map(function ($permissions, $icon) {
                 return [
                     'icon' => $icon,
+                    'label'=>__('admin_nav.'.$icon)['label'],
+                    'parent'=>__('admin_nav.'.$icon)['parent'] ?? null,
                     'permissions' => PermissionResource::collection($permissions),
                 ];
             })->values();

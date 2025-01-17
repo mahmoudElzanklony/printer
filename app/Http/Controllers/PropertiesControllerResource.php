@@ -8,13 +8,17 @@ use App\Http\Resources\PropertyHeadingResource;
 use App\Http\Resources\PropertyResource;
 use App\Models\properties;
 use App\Models\properties_heading;
+use App\Models\properties_icons;
 use App\Services\FormRequestHandleInputs;
 use App\Services\Messages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Traits\upload_image;
 
 class PropertiesControllerResource extends Controller
 {
+
+    use upload_image;
     public function __construct()
     {
         $this->middleware('auth:sanctum')->except('index','show');
@@ -28,28 +32,51 @@ class PropertiesControllerResource extends Controller
     public function index()
     {
         //
-        VerifyAccess::execute('pi-wrench|/properties|read');
+        VerifyAccess::execute('pi pi-wrench|/properties|read');
         $data = properties::query()->with('heading')->orderBy('id','DESC')->get();
         return PropertyResource::collection($data);
+    }
+
+    public function save_icon($data,$property_data)
+    {
+        if(isset($data['icon_name']) && isset($data['icon_label'])){
+            properties_icons::query()->updateOrCreate([
+                'property_id'=>$property_data->id
+            ],[
+                'label'=>$data['icon_label'],
+                'icon'=>$data['icon_name'],
+            ]);
+        }
     }
 
 
     /**
      * Store a newly created resource in storage.
      */
-    public function save($data)
+    public function save($data,$image)
     {
         DB::beginTransaction();
         // prepare data to be created or updated
         $data['user_id'] = auth()->id();
         $data =  FormRequestHandleInputs::handle_inputs_langs($data,['name']);
+
         // start save category data
         $property_data = properties::query()->updateOrCreate([
             'id'=>$data['id'] ?? null
         ],$data);
 
+        // check if there is any image related to this category and save it
+        if($image != null && !(array_key_exists('id',$data)) || (array_key_exists('id',$data) && $image != null)){
+            $this->check_upload_image($image,'properties',$property_data->id,'properties');
+        }
+
+        // save icon
+        $this->save_icon($data,$property_data);
+
+
 
         $property_data->load('heading');
+        $property_data->load('icon_info');
 
         DB::commit();
         // return response
@@ -58,9 +85,9 @@ class PropertiesControllerResource extends Controller
     public function store(propertiesDataFormRequest $request)
     {
         //
-        VerifyAccess::execute('pi-wrench|/properties|create');
+        VerifyAccess::execute('pi pi-wrench|/properties|create');
         $data = $request->validated();
-        return $this->save($data);
+        return $this->save($data,request()->file('image'));
 
     }
 
@@ -81,11 +108,11 @@ class PropertiesControllerResource extends Controller
     public function update(propertiesDataFormRequest $request, string $id)
     {
         //
-        VerifyAccess::execute('pi-wrench|/properties|update');
+        VerifyAccess::execute('pi pi-wrench|/properties|update');
         properties::query()->where('id', $id)->FailIfNotFound(__('errors.not_found_data'));
         $data = $request->validated();
         $data['id'] = $id;
-        return $this->save($data);
+        return $this->save($data,request()->file('image'));
     }
 
     /**

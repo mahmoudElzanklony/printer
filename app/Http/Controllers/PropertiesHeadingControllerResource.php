@@ -28,7 +28,7 @@ class PropertiesHeadingControllerResource extends Controller
     public function index()
     {
         //
-        VerifyAccess::execute('pi-palette|/properties-headings|read');
+        VerifyAccess::execute('pi pi-palette|/properties-headings|read');
         $data = properties_heading::query()->orderBy('id','DESC')->get();
         return PropertyHeadingResource::collection($data);
     }
@@ -55,7 +55,7 @@ class PropertiesHeadingControllerResource extends Controller
     public function store(propertiesHeadingFormRequest $request)
     {
         //
-        VerifyAccess::execute('pi-palette|/properties-headings|create');
+        VerifyAccess::execute('pi pi-palette|/properties-headings|create');
         $data = $request->validated();
         return $this->save($data);
     }
@@ -76,7 +76,7 @@ class PropertiesHeadingControllerResource extends Controller
      */
     public function update(propertiesHeadingFormRequest $request , string $id)
     {
-        VerifyAccess::execute('pi-palette|/properties-headings|update');
+        VerifyAccess::execute('pi pi-palette|/properties-headings|update');
         properties_heading::query()->where('id', $id)->FailIfNotFound(__('errors.not_found_data'));
         $data = $request->validated();
         $data['id'] = $id;

@@ -17,4 +17,8 @@ class properties extends Model
     {
         return $this->belongsTo(properties_heading::class,'property_id_heading');
     }
+
+    public function icon_info(){
+        return $this->hasOne(properties_icons::class,'property_id');
+    }
 }

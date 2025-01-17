@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CheckForUploadImage;
+use App\Actions\VerifyAccess;
 use App\Filters\CityIdFilter;
 use App\Filters\CountryIdFilter;
 use App\Filters\EndDateFilter;
@@ -44,6 +45,8 @@ class ShipmentPricesControllerResource extends Controller
     }
     public function index()
     {
+        VerifyAccess::execute('fa-solid fa-hand-holding-dollar|/shipment|read');
+
         $data = shipment_prices::query()->with(['user','city'])->orderBy('id','DESC');
 
         $output  = app(Pipeline::class)
@@ -84,6 +87,8 @@ class ShipmentPricesControllerResource extends Controller
 
     public function store(shipmentFormRequest $request)
     {
+        VerifyAccess::execute('fa-solid fa-hand-holding-dollar|/shipment|create');
+
         return $this->save($request->validated());
     }
 
@@ -98,7 +103,7 @@ class ShipmentPricesControllerResource extends Controller
             ->firstOrFailWithCustomError(__('errors.not_found_data'));
 
 
-        return shipment_prices::make($obj);
+        return ShipmentPriceResource::make($obj);
     }
 
     /**
@@ -106,6 +111,8 @@ class ShipmentPricesControllerResource extends Controller
      */
     public function update(shipmentFormRequest $request , $id)
     {
+        VerifyAccess::execute('fa-solid fa-hand-holding-dollar|/shipment|update');
+
         $data = $request->validated();
         $data['id'] = $id;
         return $this->save($data);

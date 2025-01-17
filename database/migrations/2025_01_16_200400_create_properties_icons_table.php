@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('images', function (Blueprint $table) {
+        Schema::create('properties_icons', function (Blueprint $table) {
             $table->id();
-            $table->string('imageable_id');
-            $table->string('imageable_type');
-            $table->string('name');
-            $table->string('type')->default('image');
+            $table->foreignId('property_id')->constrained('properties')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('label');
+            $table->string('icon');
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('properties_icons');
     }
 };

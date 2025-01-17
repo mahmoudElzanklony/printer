@@ -29,7 +29,7 @@ class ServicesControllerResource extends Controller
     }
     public function index()
     {
-        VerifyAccess::execute('pi-cogpi-cog|/services|read');
+        VerifyAccess::execute('pi pi-cogpi-cog|/services|read');
         $data = services::query()->with('category')->orderBy('id','DESC')
             ->orderBy('id','DESC')->paginate(request('limit') ?? 10);
         return ServiceResource::collection($data);
@@ -63,7 +63,7 @@ class ServicesControllerResource extends Controller
 
     public function store(servicesFormRequest $request)
     {
-        VerifyAccess::execute('pi-cogpi-cog|/services|create');
+        VerifyAccess::execute('pi pi-cogpi-cog|/services|create');
 
         return $this->save($request->validated(),request()->file('image'));
     }
@@ -85,7 +85,7 @@ class ServicesControllerResource extends Controller
      */
     public function update(categoriesFormRequest $request , $id)
     {
-        VerifyAccess::execute('pi-cogpi-cog|/services|update');
+        VerifyAccess::execute('pi pi-cogpi-cog|/services|update');
 
         $data = $request->validated();
         $data['id'] = $id;

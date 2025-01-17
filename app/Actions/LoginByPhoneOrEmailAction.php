@@ -8,6 +8,7 @@ class LoginByPhoneOrEmailAction
 {
     public static function login($search)
     {
+
         $user = User::query()
             ->whereRaw('(phone = "'.$search.'" OR email = "'.$search.'")')
             ->firstOrFailWithCustomError(__('errors.not_found_data'));

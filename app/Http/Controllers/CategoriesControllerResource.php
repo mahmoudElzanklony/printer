@@ -32,7 +32,7 @@ class CategoriesControllerResource extends Controller
     }
     public function index()
     {
-        VerifyAccess::execute('pi-sitemap|/categories|read');
+        VerifyAccess::execute('pi pi-sitemap|/categories|read');
         $data = categories::query()->orderBy('id','DESC')->get();
         return CategoryResource::collection($data);
     }
@@ -72,7 +72,7 @@ class CategoriesControllerResource extends Controller
 
     public function store(categoriesFormRequest $request)
     {
-        VerifyAccess::execute('permission:pi-sitemap|/categories|create');
+        VerifyAccess::execute('pi pi-sitemap|/categories|create');
         return $this->save($request->validated(),request()->file('image'));
     }
 
@@ -106,7 +106,7 @@ class CategoriesControllerResource extends Controller
      */
     public function update(categoriesFormRequest $request , $id)
     {
-        VerifyAccess::execute('permission:pi-sitemap|/categories|update');
+        VerifyAccess::execute('pi pi-sitemap|/categories|update');
         return 123;
         $data = $request->validated();
         $data['id'] = $id;

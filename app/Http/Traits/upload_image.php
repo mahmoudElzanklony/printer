@@ -23,7 +23,7 @@ trait upload_image
         }
     }
 
-    public  function check_upload_image($image,$folder_name,$model_id ,$model_name)
+    public  function check_upload_image($image,$folder_name,$model_id ,$model_name , $type = 'image')
     {
         if($image != null){
             $name = $folder_name.'/'.$this->upload($image,$folder_name);
@@ -32,8 +32,10 @@ trait upload_image
         }
         images::query()
             ->where('imageable_id','=',$model_id)
-            ->where('imageable_type','=','App\Models\\'.$model_name)->delete();
-        ImageModalSave::make($model_id,$model_name,$name);
+            ->where('imageable_type','=','App\Models\\'.$model_name)
+            ->where('type','=',$type)
+            ->delete();
+        ImageModalSave::make($model_id,$model_name,$name,$type);
     }
 
 

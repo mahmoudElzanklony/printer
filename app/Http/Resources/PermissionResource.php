@@ -17,8 +17,8 @@ class PermissionResource extends JsonResource
         return [
           'id'=>$this->id,
           //'name'=>$this->name,
-          'icon'=>explode('|',$this->name)[0] ?? null,
-          'route'=>explode('|',$this->name)[1] ?? null,
+          /*'icon'=>explode('|',$this->name)[0] ?? null,
+          'route'=>explode('|',$this->name)[1] ?? null,*/
           'action'=>explode('|',$this->name)[2] ?? null,
           'created_at'=>$this->created_at->format('Y-m-d H:m:s'),
         ];

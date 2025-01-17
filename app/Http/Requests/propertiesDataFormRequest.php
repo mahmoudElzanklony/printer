@@ -27,6 +27,9 @@ class propertiesDataFormRequest extends FormRequest
             'id'=>'filled',
             'property_id_heading'=>'required',
             'price'=>'required',
+            'image'=>'filled|mimes:jpeg,jpg,png',
+            'icon_name'=>'filled|string|max:191',
+            'icon_label'=>'filled|string|max:191',
         ];
         $arr = FormRequestHandleInputs::handle($arr,['name']);
         return $arr;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CheckForUploadImage;
+use App\Actions\VerifyAccess;
 use App\Filters\CountryIdFilter;
 use App\Filters\EndDateFilter;
 use App\Filters\StartDateFilter;
@@ -42,6 +43,8 @@ class CitiesControllerResource extends Controller
     }
     public function index()
     {
+        VerifyAccess::execute('fa-solid fa-city|/cities|read');
+
         $data = cities::query()->with(['user','country'])
             ->orderBy('id','DESC');
 
@@ -82,6 +85,8 @@ class CitiesControllerResource extends Controller
 
     public function store(citiesFormRequest $request)
     {
+        VerifyAccess::execute('fa-solid fa-city|/cities|create');
+
         return $this->save($request->validated());
     }
 
@@ -91,6 +96,8 @@ class CitiesControllerResource extends Controller
     public function show(string $id)
     {
         //
+        VerifyAccess::execute('fa-solid fa-city|/cities|read');
+
         $obj  = cities::query()->where('id',$id)
             ->with(['user','country'])
             ->firstOrFailWithCustomError(__('errors.not_found_data'));
@@ -104,6 +111,8 @@ class CitiesControllerResource extends Controller
      */
     public function update(citiesFormRequest $request , $id)
     {
+        VerifyAccess::execute('fa-solid fa-city|/cities|update');
+
         $data = $request->validated();
         $data['id'] = $id;
         return $this->save($data);

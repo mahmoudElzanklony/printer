@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CheckForUploadImage;
+use App\Actions\VerifyAccess;
 use App\Http\Requests\categoriesFormRequest;
 use App\Http\Requests\countriesFormRequest;
 use App\Http\Resources\CategoryResource;
@@ -33,6 +34,7 @@ class CountriesControllerResource extends Controller
     }
     public function index()
     {
+        VerifyAccess::execute('fa-solid fa-earth-americas|/countries|read');
         $data = countries::query()->with('user')->orderBy('id','DESC')->get();
         return CountryResource::collection($data);
     }
@@ -60,6 +62,7 @@ class CountriesControllerResource extends Controller
 
     public function store(countriesFormRequest $request)
     {
+        VerifyAccess::execute('fa-solid fa-earth-americas|/countries|create');
         return $this->save($request->validated());
     }
 
@@ -81,6 +84,7 @@ class CountriesControllerResource extends Controller
      */
     public function update(countriesFormRequest $request , $id)
     {
+        VerifyAccess::execute('fa-solid fa-earth-americas|/countries|update');
         $data = $request->validated();
         $data['id'] = $id;
         return $this->save($data);

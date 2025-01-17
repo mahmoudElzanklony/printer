@@ -22,6 +22,7 @@ class PropertyResource extends JsonResource
             'property_heading'=>PropertyHeadingResource::make($this->whenLoaded('heading')),
             'property_heading_id'=>$this->property_id_heading,
             'price'=>$this->price,
+            'icon_info'=>PropertyIconInfo::make($this->whenLoaded('icon_info')),
             'created_at'=>$this->created_at->format('Y-m-d H:i:s'),
         ];
         if(request()->hasHeader('AllLangs')){
