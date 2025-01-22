@@ -101,7 +101,7 @@ class SavedLocationsControllerResource extends Controller
             // change default one to non default
             ChangeDefaultLocationToNonAction::execute();
         }
-        return $data;
+
         $obj = saved_locations::query()->updateOrCreate([
             'id'=>$data['id'] ?? null
         ],$data);
