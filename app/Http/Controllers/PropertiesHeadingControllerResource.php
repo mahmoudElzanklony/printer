@@ -29,7 +29,7 @@ class PropertiesHeadingControllerResource extends Controller
     {
         //
         VerifyAccess::execute('pi pi-palette|/properties-headings|read');
-        $data = properties_heading::query()->orderBy('id','DESC')->get();
+        $data = properties_heading::query()->with('properties')->orderBy('id','DESC')->get();
         return PropertyHeadingResource::collection($data);
     }
 
