@@ -10,7 +10,7 @@ class saved_locations extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['user_id','area_id','address','latitude','longitude','is_default'];
+    protected $fillable = ['user_id','name','area_id','address','latitude','longitude','is_default'];
 
     public function user(){
         return $this->belongsTo(User::class)->withTrashed();

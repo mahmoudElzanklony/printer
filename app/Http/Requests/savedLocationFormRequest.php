@@ -23,6 +23,7 @@ class savedLocationFormRequest extends FormRequest
     {
         return [
            'id'=>'filled',
+           'name'=>'required',
            'country_id'=>'filled|exists:countries,id',
            'city_id'=>'filled|exists:cities,id',
            'area_id'=>'required|exists:shipment_prices,id',
