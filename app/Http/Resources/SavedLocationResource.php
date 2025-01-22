@@ -21,6 +21,7 @@ class SavedLocationResource extends JsonResource
             'id'=>$this->id,
             'user_id'=>$this->user_id,
             'area_id'=>$this->area_id,
+            'name'=>$this->name,
             'latitude'=>$this->latitude,
             'longitude'=>$this->longitude,
             'address'=>$this->address,
