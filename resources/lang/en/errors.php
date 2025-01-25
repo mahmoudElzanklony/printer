@@ -20,5 +20,7 @@ return [
     'not_found_location'=>'Please you should select a location before make and order',
     'phone_or_otp_error'=>'Error at phone number or otp',
     'err_old_password'=>'Error at old password',
+    'max_value'=>'You have reached the maximum possible value. You cannot add anything anymore. You may need to delete one to be able to add something new.'
+
 
 ];

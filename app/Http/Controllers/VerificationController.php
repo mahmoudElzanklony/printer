@@ -15,6 +15,7 @@ class VerificationController extends Controller
     public function __construct(protected VerificationInterface $verification){}
     public function send_verification()
     {
+
         if(request()->filled('verifiable')){
             $code = $this->verification->verify(request()->verifiable,request('continue_process') ?? false);
             return Messages::success(__('messages.sending_verification'), ['code' => $code]);

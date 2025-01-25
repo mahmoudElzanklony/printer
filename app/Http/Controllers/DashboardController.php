@@ -71,6 +71,7 @@ class DashboardController extends Controller
         for($i = 0; $i < 12; $i++) {
             $month = Carbon::parse( (request('year') ?? date('Y')).'-'.($i+1).'-01')->firstOfMonth()->addDay();
             $value = payments::query()->where('paymentable_type','=','App\Models\orders')
+
                 ->whereMonth('created_at',intval($i+1))
               //  ->whereYear('created_at',request('year') ?? date('Y'))
                 ->sum('money');

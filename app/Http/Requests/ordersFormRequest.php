@@ -26,7 +26,7 @@ class ordersFormRequest extends FormRequest
             'location_id'=>'nullable|exists:saved_locations,id',
             'phone_number'=>'required',
             'note'=>'nullable',
-            'payment.type'=>'required',
+            'payment.type'=>'filled',
             'coupon_serial'=>'filled',
             'items'=>'required|array',
             'items.*.service_id'=>'required|exists:services,id',

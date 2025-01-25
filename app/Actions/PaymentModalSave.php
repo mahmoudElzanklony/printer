@@ -7,8 +7,10 @@ use App\Models\taxes;
 
 class PaymentModalSave
 {
-    public static function make($id,$model_name,$money,$type = 'visa'){
-        payments::query()->create([
+    public static function make($id,$model_name,$money,$type = 'visa',$updated_id = null){
+        payments::query()->updateOrCreate([
+            'id'=>$updated_id,
+        ],[
             'paymentable_id'=>$id,
             'paymentable_type'=>'App\Models\\'.$model_name,
             'money'=>$money,

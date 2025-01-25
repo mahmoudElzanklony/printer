@@ -17,6 +17,7 @@ class ads extends Model
                 $model->user_id = auth()->id();
             }
         });
+        
     }
 
     protected $fillable = ['user_id','name','info'];

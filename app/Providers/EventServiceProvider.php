@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\ProceedCartEvent;
+use App\Listeners\ValidatePriceEvent;
 use App\Models\orders;
 use App\Models\orders_items;
 use App\Models\orders_tracking;
@@ -26,6 +28,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        ProceedCartEvent::class => [
+            ValidatePriceEvent::class
+        ]
     ];
 
     /**

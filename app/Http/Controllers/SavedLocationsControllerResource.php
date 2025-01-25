@@ -29,6 +29,7 @@ use App\Models\properties;
 use App\Models\properties_heading;
 use App\Models\saved_locations;
 use App\Models\User;
+use App\Services\CheckMaxBeforeSaveService;
 use App\Services\FormRequestHandleInputs;
 use App\Services\Messages;
 use Illuminate\Http\Request;
@@ -92,6 +93,8 @@ class SavedLocationsControllerResource extends Controller
      */
     public function save($data)
     {
+        CheckMaxBeforeSaveService::execute_saved_locations();
+
         DB::beginTransaction();
         $data = $this->create_new_one($data);
 

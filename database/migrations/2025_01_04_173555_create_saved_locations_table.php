@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('address');
             $table->string('longitude');
             $table->string('latitude');
+            $table->string('name');
             $table->tinyInteger('is_default')->default(0);
             $table->softDeletes();
             $table->timestamps();

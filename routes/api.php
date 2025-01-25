@@ -29,6 +29,8 @@ use App\Http\Controllers\AdsControllerResource;
 use App\Http\Controllers\SmsHistoryControllerResource;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ContactsControllerResource;
+use App\Http\Controllers\CartController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +73,13 @@ Route::group(['middleware'=>'changeLang'],function (){
        Route::post('/cancel',[OrdersController::class,'cancel']);
        Route::post('/validate-coupon',[OrdersController::class,'validate_coupon']);
     });
+    // cart
+    Route::group(['prefix'=>'/cart','middleware'=>'auth:sanctum'],function (){
+        Route::get('/',[CartController::class,'get_all_data']);
+        Route::post('/',[CartController::class,'store']);
+        Route::post('/update-item',[CartController::class,'update_item']);
+        Route::post('/proceed-cart',[CartController::class,'proceed_cart']);
+    });
     // rates
     Route::group(['prefix'=>'/rates','middleware'=>'auth:sanctum'],function (){
         Route::get('/',[RatesController::class,'index']);
@@ -90,6 +99,7 @@ Route::group(['middleware'=>'changeLang'],function (){
     Route::group(['prefix'=>'/permissions','middleware'=>'auth:sanctum'],function (){
         Route::get('/',PermissionsController::class);
     });
+
     // admin panel
     Route::group(['prefix'=>'/dashboard','middleware'=>'auth:sanctum'],function (){
         Route::get('/users',[DashboardController::class,'users']);

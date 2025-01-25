@@ -33,6 +33,7 @@ use App\Models\properties_heading;
 use App\Models\saved_locations;
 use App\Models\saved_properties_settings;
 use App\Models\User;
+use App\Services\CheckMaxBeforeSaveService;
 use App\Services\FormRequestHandleInputs;
 use App\Services\Messages;
 use Illuminate\Http\Request;
@@ -69,6 +70,7 @@ class SavedPropertiesSettingControllerResource extends Controller
     public function save($basic_info,$properties)
     {
         DB::beginTransaction();
+        CheckMaxBeforeSaveService::execute_saved_properties();
 
         $obj = new SavedPropertySettingBuilder();
         $obj->build_main_setting($basic_info)->build_answers_setting($properties);

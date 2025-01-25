@@ -16,7 +16,7 @@ class orders_items extends Model
 
     public function order()
     {
-        return $this->belongsTo(orders::class,'order_id');
+        return $this->belongsTo(orders::class,'order_id')->withTrashed();
     }
 
     public function service()

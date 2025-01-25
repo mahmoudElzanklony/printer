@@ -42,10 +42,10 @@ class OrdersController extends Controller
         $this->payment_obj = $payment;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         VerifyAccess::execute('pi pi-cart-plus|/orders|read');
-        $data = OrdersWithAllDataAction::get();
+        $data = OrdersWithAllDataAction::get(!request()->filled('cart'));
         $output  = app(Pipeline::class)
             ->send($data)
             ->through([
@@ -58,8 +58,9 @@ class OrdersController extends Controller
             ->paginate(request('limit') ?? 10);
         return OrderResource::collection($output);
     }
-    public function create(ordersFormRequest $request)
+    public function create(ordersFormRequest $request , $type = 'order')
     {
+
         // get data after validation
         $data =  $request->validated();
 
@@ -77,11 +78,11 @@ class OrdersController extends Controller
 
         $base_info_order = collect($data)->except('items','coupon_serial','payment');
         $builder = new OrderBuilder($base_info_order,$data['items'],$data['payment'],$data['coupon_serial'] ?? null,$this->payment_obj);
-        $order_action = $builder->initOrder()
+        $order_action = $builder->initOrder($type)
             ->prepare_status()
             ->save_items()
-            ->validate_coupon()
-            ->save_payment();
+            ->validate_coupon($type)
+            ->save_payment($type);
 
         return $order_action;
     }

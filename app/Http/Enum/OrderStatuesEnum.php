@@ -11,4 +11,6 @@ enum OrderStatuesEnum : string
     case completed = 'completed';
     case cancelled = 'cancelled';
 
+    case cart = 'cart';
+
 }

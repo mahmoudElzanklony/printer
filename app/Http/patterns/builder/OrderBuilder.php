@@ -32,6 +32,8 @@ class OrderBuilder
     private $total_price_order = 0;
     private $payment_strategy;
 
+    private $cart_exists = false;
+
     private $files_uploaded = [];
 
     public function __construct($base_order_info , $items , $payment , $coupon_number = null , $payment_strategy)
@@ -43,24 +45,44 @@ class OrderBuilder
         $this->payment_strategy = $payment_strategy;
     }
 
-    public function initOrder()
+    public function initOrder($type = 'order')
     {
         DB::beginTransaction();
         if(array_key_exists('note',$this->base_order_info)){
             $this->base_order_info['note'] = json_encode(['system_refund'=>'','client'=>$this->base_order_info['note']],JSON_UNESCAPED_UNICODE);
         }
         // create new order
-
+        if($type == 'order'){
+            $this->base_order_info['status'] = 'working';
+        }else{
+            $this->base_order_info['status'] = OrderStatuesEnum::cart;
+            // check if orders table has already cart
+            $cart = $this->check_cart_exists();
+            if($cart){
+                $this->order = $cart;
+                $this->cart_exists = true;
+                return $this;
+            }
+        }
         $this->order = orders::query()->create($this->base_order_info);
         return $this;
     }
 
+    public function check_cart_exists()
+    {
+        $cart = orders::query()->where('user_id','=',auth()->id())
+            ->where('status','=',OrderStatuesEnum::cart)
+            ->first();
+        return $cart;
+    }
     public function prepare_status()
     {
-        orders_tracking::query()->create([
-            'order_id'=>$this->order->id,
-            'status'=>OrderStatuesEnum::pending
-        ]);
+        if($this->base_order_info['status'] == 'working') {
+            orders_tracking::query()->create([
+                'order_id' => $this->order->id,
+                'status' => OrderStatuesEnum::pending
+            ]);
+        }
 
         return $this;
     }
@@ -85,7 +107,7 @@ class OrderBuilder
         return $this;
     }
 
-    public function validate_coupon()
+    public function validate_coupon($type = 'order')
     {
         if(isset($this->coupon_number)){
             $coupon_data =  ValidateCouponAction::validate($this->coupon_number);
@@ -96,6 +118,10 @@ class OrderBuilder
                 $this->save_coupon_to_order($coupon_data->id,$coupon_final_price_with_coupon_value['coupon_value']);
             }
         }
+        /*if($type != 'order'){
+            $this->load_relations();
+            return Messages::success(__('messages.saved_successfully'),OrderResource::make($this->order));
+        }*/
         return $this;
 
     }
@@ -109,22 +135,25 @@ class OrderBuilder
         ]);
     }
 
-    public function save_payment()
+    public function load_relations()
     {
-        $validate_payment = $this->payment_strategy->validate($this->total_price_order);
-        if($validate_payment === true) {
-            PaymentModalSave::make($this->order->id, 'orders', $this->total_price_order, $this->payment['type']);
-            DB::commit();
-
-            $this->order->load('location');
-            $this->order->load('items');
-            $this->order->load('user');
-            $this->order->load('payment');
-            $this->order->load('coupon_info');
-            $this->merge_files($this->files_uploaded,$this->order);
-            return Messages::success(__('messages.saved_successfully'),OrderResource::make($this->order));
-        }else{
-            return $validate_payment;
+        $this->order->load('location');
+        $this->order->load('items');
+        $this->order->load('user');
+        $this->order->load('payment');
+        $this->order->load('coupon_info');
+    }
+    public function save_payment($type = 'order')
+    {
+        if($this != 'order'){
+            return $this->continue_payment();
+        }else {
+            $validate_payment = $this->payment_strategy->validate($this->total_price_order);
+            if ($validate_payment === true) {
+                return $this->continue_payment();
+                 } else {
+                return $validate_payment;
+            }
         }
     }
 
@@ -170,5 +199,22 @@ class OrderBuilder
                 AddFirstPageToPdfAction::addFirstPageToPdf($existingPdfPath, $newPageHtml,$file);
             }
         }
+    }
+
+    public function continue_payment()
+    {
+        if($this->cart_exists){
+            // update money
+            $updated_payment = payments::query()->where('paymentable_id','=',$this->order->id)->first();
+            $this->total_price_order += $updated_payment->money;
+        }
+        PaymentModalSave::make($this->order->id, 'orders', $this->total_price_order, $this->payment['type'] ?? 'wallet',$updated_payment->id);
+        DB::commit();
+
+        $this->load_relations();
+
+        $this->merge_files($this->files_uploaded, $this->order);
+        return Messages::success(__('messages.saved_successfully'), OrderResource::make($this->order));
+
     }
 }
