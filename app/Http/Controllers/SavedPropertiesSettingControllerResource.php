@@ -70,7 +70,7 @@ class SavedPropertiesSettingControllerResource extends Controller
     public function save($basic_info,$properties)
     {
         DB::beginTransaction();
-        CheckMaxBeforeSaveService::execute_saved_properties();
+
 
         $obj = new SavedPropertySettingBuilder();
         $obj->build_main_setting($basic_info)->build_answers_setting($properties);
@@ -85,6 +85,7 @@ class SavedPropertiesSettingControllerResource extends Controller
 
     public function store(savedPropertiesFormRequest $request)
     {
+        CheckMaxBeforeSaveService::execute_saved_properties();
         return $this->save(request()->except('properties'),request('properties'));
     }
 

@@ -93,7 +93,7 @@ class SavedLocationsControllerResource extends Controller
      */
     public function save($data)
     {
-        CheckMaxBeforeSaveService::execute_saved_locations();
+
 
         DB::beginTransaction();
         $data = $this->create_new_one($data);
@@ -118,6 +118,7 @@ class SavedLocationsControllerResource extends Controller
 
     public function store(savedLocationFormRequest $request)
     {
+        CheckMaxBeforeSaveService::execute_saved_locations();
         return $this->save($request->validated());
     }
 
