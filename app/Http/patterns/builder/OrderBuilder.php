@@ -146,7 +146,7 @@ class OrderBuilder
     public function load_relations()
     {
         $this->order->load('location');
-        $this->order->load('items.properties');
+        $this->order->load('items.properties.property');
         $this->order->load('user');
         $this->order->load('payment');
         $this->order->load('coupon_info');

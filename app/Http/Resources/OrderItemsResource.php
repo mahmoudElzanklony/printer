@@ -17,6 +17,7 @@ class OrderItemsResource extends JsonResource
         return [
           'id'=>$this->id,
           'service'=>ServiceResource::make($this->service),
+          'properties'=>OrderItemPropertiesResource::collection($this->whenLoaded('properties')),
           'is_cancelled'=>$this->is_cancelled,
           'file'=>'orders_files/'.$this->file,
           'price'=>$this->price,
