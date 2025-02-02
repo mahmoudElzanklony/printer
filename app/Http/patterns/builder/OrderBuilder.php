@@ -102,7 +102,7 @@ class OrderBuilder
                 $item['properties'] = saved_properties_settings_answers::query()
                     ->where('saved_properties_settings_id',$item['saved_properties'])->select('property_id')->get()->toArray();
             }
-            dd($item['properties']);
+
             foreach($item['properties'] as $property){
 
                 $property_item = $this->create_item_property($property,$order_item);
