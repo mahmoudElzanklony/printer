@@ -104,8 +104,9 @@ class OrderBuilder
                         return $q['property_id'] = $q->property_id;
                     });
             }
+            dd($item['properties']);
             foreach($item['properties'] as $property){
-                dd($property);
+
                 $property_item = $this->create_item_property($property,$order_item);
                 $total_properties_price += $property_item->price;
             }
