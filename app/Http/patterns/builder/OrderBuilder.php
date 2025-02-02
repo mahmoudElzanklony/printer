@@ -100,9 +100,7 @@ class OrderBuilder
             // get properties that related to this order
             if(array_key_exists('saved_properties',$item)){
                 $item['properties'] = saved_properties_settings_answers::query()
-                    ->where('saved_properties_settings_id',$item['saved_properties'])->get()->map(function($q){
-                        return $q['property_id'] = $q->property_id;
-                    });
+                    ->where('saved_properties_settings_id',$item['saved_properties'])->select('property_id')->get()->toArray();
             }
             dd($item['properties']);
             foreach($item['properties'] as $property){
