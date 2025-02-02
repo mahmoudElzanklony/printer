@@ -208,7 +208,7 @@ class OrderBuilder
             $updated_payment = payments::query()->where('paymentable_id','=',$this->order->id)->first();
             $this->total_price_order += $updated_payment->money;
         }
-        PaymentModalSave::make($this->order->id, 'orders', $this->total_price_order, $this->payment['type'] ?? 'wallet',$updated_payment->id);
+        PaymentModalSave::make($this->order->id, 'orders', $this->total_price_order, $this->payment['type'] ?? 'wallet',$updated_payment->id ?? null);
         DB::commit();
 
         $this->load_relations();
