@@ -13,7 +13,7 @@ class CheckMaxBeforeSaveService
                 ->where('user_id',auth()->id())
                 ->count();
             if($check_len >= 5){
-                abort(Messages::error('errors.max_value'));
+                abort(Messages::error(__('errors.max_value')));
             }
         }
     }
@@ -24,7 +24,7 @@ class CheckMaxBeforeSaveService
                 ->where('user_id',auth()->id())
                 ->count();
             if($check_len >= 5){
-                abort(Messages::error('errors.max_value'));
+                abort(Messages::error(__('errors.max_value')));
             }
         }
     }
