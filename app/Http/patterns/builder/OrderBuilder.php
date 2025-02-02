@@ -16,6 +16,7 @@ use App\Models\orders_items_properties;
 use App\Models\orders_tracking;
 use App\Models\payments;
 use App\Models\properties;
+use App\Models\saved_properties_settings_answers;
 use App\Models\services;
 use App\Services\Messages;
 use Illuminate\Support\Facades\DB;
@@ -97,10 +98,18 @@ class OrderBuilder
             // init properties price
             $total_properties_price = 0;
             // get properties that related to this order
+            if(array_key_exists('saved_properties',$item)){
+                $item['properties'] = saved_properties_settings_answers::query()
+                    ->where('saved_properties_settings_id',$item['saved_properties'])->get()->map(function($q){
+                        return $q['property_id'] = $q->property_id;
+                    });
+            }
             foreach($item['properties'] as $property){
+                dd($property);
                 $property_item = $this->create_item_property($property,$order_item);
                 $total_properties_price += $property_item->price;
             }
+
             $this->total_price_order += ($total_properties_price + $order_item->price) * $order_item->paper_number * $order_item->copies_number;
         }
 

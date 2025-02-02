@@ -33,8 +33,9 @@ class ordersFormRequest extends FormRequest
             'items.*.file'=>'required|file|mimes:pdf',
             'items.*.paper_number'=>'required|numeric',
             'items.*.copies_number'=>'required|numeric',
-            'items.*.properties'=>'required|array',
-            'items.*.properties.*.property_id'=>'required|exists:properties,id',
+            'items.*.saved_properties'=>'filled|numeric|exists:saved_properties_settings,id',
+            'items.*.properties'=>'filled|array',
+            'items.*.properties.*.property_id'=>'filled|exists:properties,id',
         ];
     }
 
