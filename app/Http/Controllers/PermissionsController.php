@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\PermissionResource;
+use App\Http\Resources\PermissionDataResource;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 
@@ -14,6 +14,7 @@ class PermissionsController extends Controller
     public function __invoke(Request $request)
     {
         $permissions = Permission::query()->get();
-        return PermissionResource::collection($permissions);
+
+        return PermissionDataResource::collection($permissions);
     }
 }
