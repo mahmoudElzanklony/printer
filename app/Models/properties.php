@@ -11,14 +11,15 @@ class properties extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['user_id','property_id_heading','name','price'];
+    protected $fillable = ['user_id', 'property_id_heading', 'name', 'price'];
 
     public function heading()
     {
-        return $this->belongsTo(properties_heading::class,'property_id_heading');
+        return $this->belongsTo(properties_heading::class, 'property_id_heading')->withTrashed();
     }
 
-    public function icon_info(){
-        return $this->hasOne(properties_icons::class,'property_id');
+    public function icon_info()
+    {
+        return $this->hasOne(properties_icons::class, 'property_id');
     }
 }
