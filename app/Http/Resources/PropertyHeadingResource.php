@@ -17,21 +17,24 @@ class PropertyHeadingResource extends JsonResource
     public function toArray(Request $request): array
     {
         $init = [
-            'id'=>$this->id,
-            'user_id'=>$this->user_id,
-            'properties'=>PropertyResource::collection($this->whenLoaded('properties')),
-            'created_at'=>$this->created_at->format('Y-m-d H:i:s'),
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'properties' => PropertyResource::collection($this->whenLoaded('properties')),
+            'image' => ImageResource::collection($this->whenLoaded('image')),
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
-        if(request()->hasHeader('AllLangs')){
+        if (request()->hasHeader('AllLangs')) {
             $langs = languages::query()->select('prefix')->get();
             // data
-            $name = FormRequestHandleInputs::handle_output_column_for_all_lang('name',$this->name,$langs);
-            return array_merge($init,$name);
-        }else{
+            $name = FormRequestHandleInputs::handle_output_column_for_all_lang('name', $this->name, $langs);
+
+            return array_merge($init, $name);
+        } else {
             $data = [
-                'name'=>FormRequestHandleInputs::handle_output_column($this->name),
+                'name' => FormRequestHandleInputs::handle_output_column($this->name),
             ];
-            return array_merge($init,$data);
+
+            return array_merge($init, $data);
         }
     }
 }
