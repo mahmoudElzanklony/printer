@@ -44,6 +44,8 @@ class SavedPropertySettingBuilder
 
     private function delete_all()
     {
-        saved_properties_settings_answers::query()->where('saved_properties_settings_id', $this->main_obj->id)->delete();
+        dd($this->main_obj->id);
+        saved_properties_settings_answers::query()
+            ->where('saved_properties_settings_id', $this->main_obj->id)->delete();
     }
 }
