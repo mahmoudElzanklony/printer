@@ -20,7 +20,7 @@ class PropertyHeadingResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user_id,
             'properties' => PropertyResource::collection($this->whenLoaded('properties')),
-            'image' => ImageResource::collection($this->whenLoaded('image')),
+            'image' => ImageResource::make($this->whenLoaded('image')),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
         if (request()->hasHeader('AllLangs')) {
