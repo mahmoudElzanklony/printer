@@ -9,12 +9,12 @@ class SavedPropertySettingBuilder
 {
     private $main_obj = null;
 
-    private $overwire = null;
+    private $overwrite = null;
 
     public function build_main_setting($data)
     {
-        if (isset($data['overwire'])) {
-            $this->overwire = 1;
+        if (isset($data['overwrite'])) {
+            $this->overwrite = 1;
         }
         $this->main_obj = saved_properties_settings::query()->updateOrCreate([
             'id' => $data['id'] ?? null,
@@ -25,7 +25,7 @@ class SavedPropertySettingBuilder
 
     public function build_answers_setting($data)
     {
-        if ($this->overwire) {
+        if ($this->overwrite) {
             $this->delete_all();
         }
         foreach ($data as $answer) {
