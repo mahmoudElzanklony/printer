@@ -30,7 +30,7 @@ class PropertiesHeadingControllerResource extends Controller
         //
         VerifyAccess::execute('pi pi-palette|/properties-headings|read');
         $data = properties_heading::query()
-            ->with('properties')
+            ->with('properties.icon_info')
             ->with('image')->orderBy('id', 'DESC')->get();
 
         return PropertyHeadingResource::collection($data);
