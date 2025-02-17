@@ -29,7 +29,7 @@ class SavedPropertiesSettingControllerResource extends Controller
     {
         $data = saved_properties_settings::query()
             ->where('user_id', auth()->id())
-            ->with(['answers.property.properties_heading'])
+            ->with(['answers.property.heading'])
             ->get();
 
         return SavedPropertiesSettingResource::collection($data);
