@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use App\Actions\AdminAuthorization;
 use App\Services\FormRequestHandleInputs;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
 
 class propertiesHeadingFormRequest extends FormRequest
 {
@@ -24,10 +23,12 @@ class propertiesHeadingFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        $arr =  [
-            'id'=>'filled',
+        $arr = [
+            'id' => 'filled',
+            'image' => 'filled|image|mimes:jpeg,png,jpg,gif,svg',
         ];
-        $arr = FormRequestHandleInputs::handle($arr,['name']);
+        $arr = FormRequestHandleInputs::handle($arr, ['name']);
+
         return $arr;
     }
 }
