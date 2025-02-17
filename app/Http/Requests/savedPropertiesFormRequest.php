@@ -22,12 +22,13 @@ class savedPropertiesFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'=>'filled|integer',
-            'name'=>'required|string',
-            'category_id'=>'required|integer|exists:categories,id',
-            'properties'=>'required|array',
-            'properties.*.id'=>'filled|integer',
-            'properties.*.property_id'=>'required|integer|exists:properties,id',
+            'id' => 'filled|integer',
+            'name' => 'required|string',
+            'category_id' => 'required|integer|exists:categories,id',
+            'overwrite' => 'filled|boolean',
+            'properties' => 'required|array',
+            'properties.*.id' => 'filled|integer',
+            'properties.*.property_id' => 'required|integer|exists:properties,id',
         ];
     }
 }
