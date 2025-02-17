@@ -30,7 +30,9 @@ class PropertiesHeadingControllerResource extends Controller
         //
         VerifyAccess::execute('pi pi-palette|/properties-headings|read');
         $data = properties_heading::query()
-            ->with('properties.icon_info')
+            ->with('properties', function ($query) {
+                $query->with('icon_info')->with('image');
+            })
             ->with('image')->orderBy('id', 'DESC')->get();
 
         return PropertyHeadingResource::collection($data);
@@ -75,7 +77,11 @@ class PropertiesHeadingControllerResource extends Controller
     public function show(string $id)
     {
         //
-        $data = properties_heading::query()->with('image')
+        $data = properties_heading::query()
+            ->with('properties', function ($query) {
+                $query->with('icon_info')->with('image');
+            })
+            ->with('image')
             ->where('id', $id)->FailIfNotFound(__('errors.not_found_data'));
 
         return PropertyHeadingResource::make($data);
