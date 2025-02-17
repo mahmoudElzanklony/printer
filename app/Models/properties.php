@@ -22,4 +22,9 @@ class properties extends Model
     {
         return $this->hasOne(properties_icons::class, 'property_id');
     }
+
+    public function image()
+    {
+        return $this->morphOne(images::class, 'imageable');
+    }
 }
