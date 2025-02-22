@@ -197,7 +197,7 @@ class OrderBuilder
     public function create_item_property($property, $order_item)
     {
         $property_item = properties::query()->find($property['property_id']);
-        ($property_item);
+        dd($property_item);
         $property_obj = orders_items_properties::query()->create([
             'order_item_id' => $order_item->id,
             'property_id' => $property['property_id'],
