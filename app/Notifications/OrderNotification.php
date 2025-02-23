@@ -29,7 +29,6 @@ class OrderNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        dd($this->order->user->email, strlen($this->order->user->email), strlen($this->order->user->email) == 0);
         if (env('MAIL_STATUS') == 'local' || strlen($this->order->user->email) == 0) {
             return ['database'];
         }
@@ -55,7 +54,7 @@ class OrderNotification extends Notification
      */
     public function toMail(object $notifiable)
     {
-
+        dd('abc');
         SendEmail::send('تم انشاء طلب جديد في '.env('APP_NAME'), 'تم القيام بأنشاء طلب جديد من قبلك و هذه رسالة تأكيدية بذلك و الطلب تحت مراجعه الادارة الان من فضلك راجع اشعارات النظام بشكل مستمر لتحصل علي كل جديد', '', '', $this->order->user->email);
 
         return (new MailMessage)
