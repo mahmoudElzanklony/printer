@@ -14,7 +14,7 @@ class SendEmail
             'link' => $link,
             'link_msg' => $link_msg,
         ];
-        dd('aa');
+        dd('email send');
         if (env('MAIL_STATUS') != 'local') {
             \Mail::to($to)->send(new Myemail($details));
         }
