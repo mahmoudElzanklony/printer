@@ -30,6 +30,8 @@ class OrderNotification extends Notification
     public function via(object $notifiable): array
     {
         if (env('MAIL_STATUS') == 'local' || strlen($this->order->user->email) == 0) {
+            dd('aa');
+
             return ['database'];
         }
 
