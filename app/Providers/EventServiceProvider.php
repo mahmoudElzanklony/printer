@@ -7,15 +7,14 @@ use App\Listeners\ValidatePriceEvent;
 use App\Models\orders;
 use App\Models\orders_items;
 use App\Models\orders_tracking;
-use App\Models\User;
+use App\Models\payments;
 use App\Observers\OrderItemObserver;
 use App\Observers\OrderObserver;
 use App\Observers\OrderStatusObserver;
-use App\Observers\UserObserver;
+use App\Observers\PaymentObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -29,8 +28,8 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         ProceedCartEvent::class => [
-            ValidatePriceEvent::class
-        ]
+            ValidatePriceEvent::class,
+        ],
     ];
 
     /**
@@ -43,6 +42,7 @@ class EventServiceProvider extends ServiceProvider
         orders_tracking::observe(OrderStatusObserver::class);
         orders::observe(OrderObserver::class);
         orders_items::observe(OrderItemObserver::class);
+        payments::observe(PaymentObserver::class);
     }
 
     /**

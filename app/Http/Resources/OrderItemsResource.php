@@ -15,15 +15,15 @@ class OrderItemsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-          'id'=>$this->id,
-          'service'=>ServiceResource::make($this->service),
-          'properties'=>OrderItemPropertiesResource::collection($this->whenLoaded('properties')),
-          'is_cancelled'=>$this->is_cancelled,
-          'file'=>'orders_files/'.$this->file,
-          'price'=>$this->price,
-          'paper_number'=>$this->paper_number,
-          'copies_number'=>$this->copies_number,
-          'created_at'=>$this->created_at->format('Y-m-d H:i:s'),
+            'id' => $this->id,
+            'service' => ServiceResource::make($this->service),
+            'properties' => OrderItemPropertiesResource::collection($this->whenLoaded('properties')),
+            'is_cancelled' => $this->is_cancelled != null ? json_decode($this->is_cancelled, true) : $this->is_cancelled,
+            'file' => 'orders_files/'.$this->file,
+            'price' => $this->price,
+            'paper_number' => $this->paper_number,
+            'copies_number' => $this->copies_number,
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }
 }

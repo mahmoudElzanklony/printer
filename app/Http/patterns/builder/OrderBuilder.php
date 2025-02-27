@@ -53,9 +53,7 @@ class OrderBuilder
     public function initOrder($type = 'order')
     {
         DB::beginTransaction();
-        if (array_key_exists('note', $this->base_order_info)) {
-            $this->base_order_info['note'] = json_encode(['system_refund' => '', 'client' => $this->base_order_info['note']], JSON_UNESCAPED_UNICODE);
-        }
+        $this->base_order_info['note'] = json_encode(['system_refund' => '', 'client' => $this->base_order_info['note'] ?? ''], JSON_UNESCAPED_UNICODE);
         // create new order
         if ($type == 'order') {
             $this->base_order_info['status'] = 'working';
