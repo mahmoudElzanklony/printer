@@ -18,7 +18,7 @@ class OrderResource extends JsonResource
             'id' => $this->id,
             'location' => SavedLocationResource::make($this->whenLoaded('location')),
             'phone_number' => $this->phone_number,
-            //'status' => $this->status ?? 'working',
+            'status' => OrderStatusResource::make($this->whenLoaded('last_status')),
             'note' => $this->note != null ? json_decode($this->note, true) : $this->note,
             'user' => UserResource::make($this->whenLoaded('user')),
             'rate' => OrderRateResource::make($this->whenLoaded('rate')),

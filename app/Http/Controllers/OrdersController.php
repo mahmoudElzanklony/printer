@@ -43,7 +43,7 @@ class OrdersController extends Controller
     public function index(Request $request)
     {
         VerifyAccess::execute('pi pi-cart-plus|/orders|read');
-        $data = OrdersWithAllDataAction::get();
+        $data = OrdersWithAllDataAction::get()->with('last_status');
         $output = app(Pipeline::class)
             ->send($data)
             ->through([
