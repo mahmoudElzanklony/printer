@@ -158,6 +158,7 @@ class OrderBuilder
         $this->order->load('user');
         $this->order->load('payment');
         $this->order->load('coupon_info');
+        $this->order->load('last_status');
     }
 
     public function save_payment($type = 'order')
