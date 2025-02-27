@@ -12,7 +12,7 @@ class wallet_history extends Model
 
     protected $fillable = ['user_id', 'amount', 'type', 'status'];
 
-    public function activeScope(Builder $query)
+    public function scopeActive(Builder $query)
     {
         $query->where('user_id', auth()->id());
     }
