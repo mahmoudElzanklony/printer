@@ -33,10 +33,13 @@ class PaymentObserver
             // Ensure the note is an array
             if (! is_array($noteData)) {
                 $noteData = [];
+                // Update the system_refund key
+                $noteData['system_refund'] = (string) ($originalMoney - $updatedMoney);
+            } else {
+                if (is_numeric($noteData['system_refund'])) {
+                    $noteData['system_refund'] = $noteData['system_refund'] + ($originalMoney - $updatedMoney);
+                }
             }
-
-            // Update the system_refund key
-            $noteData['system_refund'] = (string) ($originalMoney - $updatedMoney);
 
             // Update the orders table
             $order->update(['note' => json_encode($noteData, JSON_UNESCAPED_UNICODE)]);
