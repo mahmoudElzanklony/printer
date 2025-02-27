@@ -27,6 +27,7 @@ use App\Http\Controllers\ServicesControllerResource;
 use App\Http\Controllers\ShipmentPricesControllerResource;
 use App\Http\Controllers\SmsHistoryControllerResource;
 use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\WalletHistoryController;
 use App\Http\Controllers\ZohoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -98,6 +99,12 @@ Route::group(['middleware' => 'changeLang'], function () {
     // permissions
     Route::group(['prefix' => '/permissions', 'middleware' => 'auth:sanctum'], function () {
         Route::get('/', PermissionsController::class);
+    });
+
+    // wallet history
+    Route::group(['prefix' => '/wallet', 'middleware' => 'auth:sanctum'], function () {
+        Route::get('/history', [WalletHistoryController::class, 'index']);
+        Route::get('/charge', [WalletHistoryController::class, 'charge']);
     });
 
     // admin panel
