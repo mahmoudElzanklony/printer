@@ -16,8 +16,6 @@ class HandleRefundMoneyAction
             } else {
                 $noteData['system_refund'] = (string) ($refund_money);
             }
-            dd($order, $noteData);
-
             // Update the orders table
             $order->update(['note' => json_encode($noteData, JSON_UNESCAPED_UNICODE)]);
         }
