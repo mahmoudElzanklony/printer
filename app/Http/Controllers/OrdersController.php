@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\HandleRefundMoneyAction;
 use App\Actions\OrdersWithAllDataAction;
 use App\Actions\UserVerficationCheck;
 use App\Actions\ValidateCouponAction;
@@ -141,6 +142,8 @@ class OrdersController extends Controller
                 // cancel current order
                 $order->status = OrderStatuesEnum::cancelled;
                 $order->save();
+                // handle refund order
+                HandleRefundMoneyAction::handle($order, $order->payment->money);
                 // return success message
                 DB::commit();
 
