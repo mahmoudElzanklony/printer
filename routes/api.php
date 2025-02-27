@@ -104,7 +104,7 @@ Route::group(['middleware' => 'changeLang'], function () {
     // wallet history
     Route::group(['prefix' => '/wallet', 'middleware' => 'auth:sanctum'], function () {
         Route::get('/history', [WalletHistoryController::class, 'index']);
-        Route::get('/charge', [WalletHistoryController::class, 'charge']);
+        Route::post('/charge', [WalletHistoryController::class, 'charge']);
     });
 
     // admin panel
