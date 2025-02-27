@@ -9,7 +9,7 @@ class HandleRefundMoneyAction
         if ($order) {
             // Decode the existing note JSON
             $noteData = json_decode($order->note, true);
-
+            dd($order, $noteData);
             // Ensure the note is an array
             if (! is_array($noteData)) {
                 $noteData = [];
