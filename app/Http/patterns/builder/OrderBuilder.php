@@ -3,6 +3,7 @@
 namespace App\Http\patterns\builder;
 
 use App\Actions\AddFirstPageToPdfAction;
+use App\Actions\AddToWalletHistoryAction;
 use App\Actions\PaymentModalSave;
 use App\Actions\ValidateCouponAction;
 use App\Http\Enum\OrderStatuesEnum;
@@ -231,7 +232,7 @@ class OrderBuilder
         }
         PaymentModalSave::make($this->order->id, 'orders', $this->total_price_order, $this->payment['type'] ?? 'wallet', $updated_payment->id ?? null);
         DB::commit();
-
+        AddToWalletHistoryAction::save($this->total_price_order,'min','order',auth()->id());
         $this->load_relations();
 
         $this->merge_files($this->files_uploaded, $this->order);
