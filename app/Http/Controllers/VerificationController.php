@@ -13,14 +13,19 @@ use App\Services\Messages;
 
 class VerificationController extends Controller
 {
-    public function __construct(protected VerificationInterface $verification){}
+    public function __construct(protected VerificationInterface $verification)
+    {
+    }
+
     public function send_verification()
     {
 
-        if(request()->filled('verifiable')){
-            $code = $this->verification->verify(request()->verifiable,request('continue_process') ?? false);
+        if (request()->filled('verifiable')) {
+            $code = $this->verification->verify(request()->verifiable, request('continue_process') ?? false);
+
             return Messages::success(__('messages.sending_verification'), ['code' => $code]);
         }
+
         return Messages::error('verifiable should be sent to request');
     }
 
@@ -33,8 +38,8 @@ class VerificationController extends Controller
         // start chain process
         $check_verification->handle($request->validated());
         $user = LoginByPhoneOrEmailAction::login($request->email ?? $request->phone);
-        array_merge($user->toArray(),DefaultInfoWithUser::execute($user)->toArray());
+        array_merge($user->toArray(), DefaultInfoWithUser::execute($user)->toArray());
 
-        return Messages::success(__('messages.activation_done'),UserResource::make($user));
+        return Messages::success(__('messages.activation_done'), UserResource::make($user));
     }
 }

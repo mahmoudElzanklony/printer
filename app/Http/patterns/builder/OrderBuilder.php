@@ -232,8 +232,8 @@ class OrderBuilder
         }
         PaymentModalSave::make($this->order->id, 'orders', $this->total_price_order, $this->payment['type'] ?? 'wallet', $updated_payment->id ?? null);
         DB::commit();
-        if($this->payment['type'] == 'wallet'){
-            AddToWalletHistoryAction::save($this->total_price_order,'min','order',auth()->id());
+        if ($this->payment['type'] == 'wallet') {
+            AddToWalletHistoryAction::save($this->total_price_order, 'min', 'order', auth()->id());
         }
         $this->load_relations();
 
