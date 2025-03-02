@@ -39,6 +39,7 @@ class userFormRequest extends FormRequest
                 //'phone' => 'filled|unique:users,phone,'. auth()->id(),
                 'password' => 'filled|confirmed|min:6',
                 'old_password' => 'filled',
+                'image' => 'filled|mimes:jpeg,png,jpg,gif,svg',
             ];
         } else {
             return [
