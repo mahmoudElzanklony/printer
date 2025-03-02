@@ -46,6 +46,8 @@ class ProfileController extends Controller
             auth()->user()->assignRole(roles::query()->find($data['role_id'])->name);
         }
         $user = auth()->user()->load('image');
+
+        return $user;
         $user = array_merge($user->toArray(), DefaultInfoWithUser::execute($user)->toArray());
 
         return Messages::success(__('messages.updated_successfully'), UserResource::make($user));
