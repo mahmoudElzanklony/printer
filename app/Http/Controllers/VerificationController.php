@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\DefaultInfoWithUser;
 use App\Actions\LoginByPhoneOrEmailAction;
 use App\Http\patterns\ChainResponsabilites\verification\UpdateVerifiedTimeRes;
 use App\Http\patterns\ChainResponsabilites\verification\VerifyOtpRes;
@@ -32,6 +33,7 @@ class VerificationController extends Controller
         // start chain process
         $check_verification->handle($request->validated());
         $user = LoginByPhoneOrEmailAction::login($request->email ?? $request->phone);
+        array_merge($user->toArray(),DefaultInfoWithUser::execute($user)->toArray());
 
         return Messages::success(__('messages.activation_done'),UserResource::make($user));
     }
