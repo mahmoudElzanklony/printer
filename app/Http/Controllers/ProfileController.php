@@ -47,9 +47,8 @@ class ProfileController extends Controller
         }
         $user = auth()->user()->load('image');
 
-        return $user;
-        $user = array_merge($user->toArray(), DefaultInfoWithUser::execute($user)->toArray());
+        $final = array_merge($user->toArray(), DefaultInfoWithUser::execute($user)->toArray());
 
-        return Messages::success(__('messages.updated_successfully'), UserResource::make($user));
+        return Messages::success(__('messages.updated_successfully'), UserResource::make($final));
     }
 }
