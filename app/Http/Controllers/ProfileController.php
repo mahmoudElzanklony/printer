@@ -7,9 +7,11 @@ use App\Actions\VerifyAccess;
 use App\Http\Requests\userFormRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Traits\upload_image;
+use App\Models\ads;
 use App\Models\orders;
 use App\Models\orders_items;
 use App\Models\roles;
+use App\Models\saved_locations;
 use App\Services\Messages;
 use Illuminate\Support\Facades\Hash;
 
@@ -61,9 +63,26 @@ class ProfileController extends Controller
             $query->where('user_id', auth()->id());
         })->count();
 
-        return Messages::success('', [
+        return [
             'orders' => $orders,
             'files' => $files,
+        ];
+    }
+
+    public function home()
+    {
+        $statistics = $this->statistics();
+        $default_location = saved_locations::query()
+            ->where('user_id', auth()->id())
+            ->where('is_default', 1)
+            ->first();
+        $ads = ads::query()->get();
+
+        return Messages::success('', [
+            'statistics' => $statistics,
+            'default_location' => $default_location,
+            'ads' => $ads,
         ]);
+
     }
 }
