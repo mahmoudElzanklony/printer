@@ -91,6 +91,7 @@ Route::group(['middleware' => 'changeLang'], function () {
     // profile
     Route::group(['prefix' => '/profile', 'middleware' => 'auth:sanctum'], function () {
         Route::post('/update-info', [ProfileController::class, 'update_info']);
+        Route::get('/statistics', [ProfileController::class, 'statistics']);
     });
     // zoho
     Route::group(['prefix' => '/zoho'], function () {

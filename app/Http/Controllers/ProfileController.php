@@ -7,6 +7,8 @@ use App\Actions\VerifyAccess;
 use App\Http\Requests\userFormRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Traits\upload_image;
+use App\Models\orders;
+use App\Models\orders_items;
 use App\Models\roles;
 use App\Services\Messages;
 use Illuminate\Support\Facades\Hash;
@@ -50,5 +52,18 @@ class ProfileController extends Controller
         array_merge($user->toArray(), DefaultInfoWithUser::execute($user)->toArray());
 
         return Messages::success(__('messages.updated_successfully'), UserResource::make($user));
+    }
+
+    public function statistics()
+    {
+        $orders = orders::query()->where('user_id', auth()->id())->count();
+        $files = orders_items::query()->whereHas('order', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->count();
+
+        return Messages::success('', [
+            'orders' => $orders,
+            'files' => $files,
+        ]);
     }
 }
