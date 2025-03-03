@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\DefaultInfoWithUser;
 use App\Actions\VerifyAccess;
 use App\Http\Requests\userFormRequest;
+use App\Http\Resources\AdResource;
 use App\Http\Resources\UserResource;
 use App\Http\Traits\upload_image;
 use App\Models\ads;
@@ -81,7 +82,7 @@ class ProfileController extends Controller
         return Messages::success('', [
             'statistics' => $statistics,
             'default_location' => $default_location,
-            'ads' => $ads,
+            'ads' => AdResource::collection($ads),
         ]);
 
     }
