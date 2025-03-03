@@ -36,7 +36,7 @@ class userFormRequest extends FormRequest
             return [
                 'email' => 'filled|unique:users,email,'.auth()->id(),
                 'username' => 'filled',
-                //'phone' => 'filled|unique:users,phone,'. auth()->id(),
+                'phone' => 'filled|unique:users,phone,'.auth()->id(),
                 'password' => 'filled|confirmed|min:6',
                 'old_password' => 'filled',
                 'image' => 'filled|mimes:jpeg,png,jpg,gif,svg',
