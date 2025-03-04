@@ -9,7 +9,7 @@ class OrdersWithAllDataAction
 {
     public static function get($is_order = true)
     {
-        return orders::query()->with('payment')
+        return orders::query()->with('payment')->with('last_status')
             ->when($is_order == false, function ($query) {
                 $query->where('status', OrderStatuesEnum::cart);
             })
