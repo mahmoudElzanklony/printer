@@ -73,7 +73,7 @@ class ProfileController extends Controller
     public function home()
     {
         $statistics = $this->statistics();
-        $default_location = saved_locations::query()
+        $default_location = saved_locations::query()->with('area')
             ->where('user_id', auth()->id())
             ->where('is_default', 1)
             ->first();
