@@ -82,7 +82,7 @@ class ProfileController extends Controller
 
         return Messages::success('', [
             'statistics' => $statistics,
-            'default_location' => SavedLocationResource::make($default_location),
+            'default_location' => SavedLocationResource::make($default_location) ?? null,
             'ads' => AdResource::collection($ads),
         ]);
 
