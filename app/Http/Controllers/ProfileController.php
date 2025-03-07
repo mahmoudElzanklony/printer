@@ -79,7 +79,7 @@ class ProfileController extends Controller
             ->where('is_default', 1)
             ->first();
         $ads = ads::query()->get();
-
+        return $default_location;
         return Messages::success('', [
             'statistics' => $statistics,
             'default_location' => SavedLocationResource::make($default_location) ?? null,
