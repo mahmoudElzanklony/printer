@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Actions\DefaultInfoWithUser;
+use App\Actions\VerificationCodeAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SocialAuth;
 use App\Http\Resources\UserResource;
@@ -18,7 +19,7 @@ class SocialAuthController extends Controller
 
         $provider = $request['provider'];
         $accessToken = $request['access_token'];
-
+        $otp = VerificationCodeAction::generateCode();
         // Validate token with Google or Facebook API
         $socialUser = $this->verifySocialToken($provider, $accessToken);
 
@@ -41,6 +42,8 @@ class SocialAuthController extends Controller
                 $user = User::create([
                     'name' => $socialUser['name'],
                     'email' => $socialUser['email'],
+                    'otp_secret' => $otp['otp_secret'],
+
                 ]);
             }
 
