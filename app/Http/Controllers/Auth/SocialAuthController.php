@@ -75,6 +75,7 @@ class SocialAuthController extends Controller
         }
 
         $socialUser = $response->json();
+        dd($socialUser);
 
         return [
             'id' => $socialUser['id'],
