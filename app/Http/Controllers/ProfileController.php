@@ -83,11 +83,12 @@ class ProfileController extends Controller
             'statistics' => $statistics,
             'ads' => AdResource::collection($ads),
         ];
-        if($default_location){
+        if ($default_location) {
             $output['default_location'] = SavedLocationResource::make($default_location);
-        }else{
+        } else {
             $output['default_location'] = null;
         }
+
         return Messages::success('', $output);
 
     }
