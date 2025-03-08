@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\ActivationAccountController;
 use App\Http\Controllers\Auth\ForgetPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoriesControllerResource;
 use App\Http\Controllers\CitiesControllerResource;
@@ -53,6 +54,7 @@ Route::group(['middleware' => 'changeLang'], function () {
         Route::post('/send-verification', [VerificationController::class, 'send_verification']);
         Route::post('/verify', [VerificationController::class, 'verify']);
         Route::post('/login', [LoginController::class, 'login']);
+        Route::post('/social', [SocialAuthController::class, 'socialLogin']);
         Route::post('/activate-account', [ActivationAccountController::class, 'index']);
         Route::post('/register', [RegisterController::class, 'register']);
         Route::post('/forget-password', [ForgetPasswordController::class, 'index']);

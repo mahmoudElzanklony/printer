@@ -71,6 +71,11 @@ class User extends Authenticatable
         return $this->hasManyThrough(orders_items::class, orders::class, 'user_id', 'order_id');
     }
 
+    public function socialAccounts()
+    {
+        return $this->hasMany(social_accounts::class, 'user_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
