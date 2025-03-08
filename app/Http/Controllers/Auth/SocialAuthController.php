@@ -75,12 +75,11 @@ class SocialAuthController extends Controller
         }
 
         $socialUser = $response->json();
-        dd($socialUser);
 
         return [
             'id' => $socialUser['id'],
-            'name' => $socialUser['name'],
-            'email' => $socialUser['email'] ?? null,
+            'name' => $socialUser['name'] ?? null,
+            'email' => $socialUser['email'],
             'avatar' => $socialUser['picture']['data']['url'] ?? null,
         ];
     }
