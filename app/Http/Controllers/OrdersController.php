@@ -57,7 +57,7 @@ class OrdersController extends Controller
     public function show($id)
     {
         $data = OrdersWithAllDataAction::get()->where('id', $id)
-            > firstOrFailWithCustomError(__('errors.not_found'));
+            ->firstOrFailWithCustomError(__('errors.not_found'));
 
         return OrderResource::make($data);
     }
