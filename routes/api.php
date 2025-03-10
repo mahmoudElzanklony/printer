@@ -65,6 +65,7 @@ Route::group(['middleware' => 'changeLang'], function () {
     // orders
     Route::group(['prefix' => '/orders', 'middleware' => 'auth:sanctum'], function () {
         Route::get('/', [OrdersController::class, 'index']);
+        Route::get('/{id}', [OrdersController::class, 'show']);
         Route::post('/create', [OrdersController::class, 'create']);
         Route::post('/update-status', [OrdersController::class, 'update_status'])
             ->middleware('admin');

@@ -54,6 +54,14 @@ class OrdersController extends Controller
         return OrderResource::collection($output);
     }
 
+    public function show($id)
+    {
+        $data = OrdersWithAllDataAction::get()->where('id', $id)
+            > firstOrFailWithCustomError(__('errors.not_found'));
+
+        return OrderResource::make($data);
+    }
+
     public function create(ordersFormRequest $request)
     {
         // check if user acc is verified or not
