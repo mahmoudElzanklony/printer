@@ -57,7 +57,7 @@ class OrdersController extends Controller
     public function show($id)
     {
         $data = OrdersWithAllDataAction::get()->where('id', $id)
-            ->firstOrFailWithCustomError(__('errors.not_found'));
+            ->firstOrFailWithCustomError(__('errors.not_found_data'));
 
         return OrderResource::make($data);
     }
@@ -65,7 +65,7 @@ class OrdersController extends Controller
     public function create(ordersFormRequest $request)
     {
         // check if user acc is verified or not
-        if (! (UserVerficationCheck::check())) {
+        if (!(UserVerficationCheck::check())) {
             return Messages::error(__('errors.account_not_verified'), 401);
         }
         // get data after validation
@@ -120,7 +120,7 @@ class OrdersController extends Controller
             // get order info
             $order = OrdersWithAllDataAction::get()
                 ->when(auth()->user()->roleName() == 'client',
-                    fn ($e) => $e->where('user_id', '=', auth()->id())
+                    fn($e) => $e->where('user_id', '=', auth()->id())
                 )
                 ->where('id', '=', request('order_id'))
                 ->with('last_status')
