@@ -65,7 +65,7 @@ class OrdersController extends Controller
     public function create(ordersFormRequest $request)
     {
         // check if user acc is verified or not
-        if (!(UserVerficationCheck::check())) {
+        if (! (UserVerficationCheck::check())) {
             return Messages::error(__('errors.account_not_verified'), 401);
         }
         // get data after validation
@@ -91,7 +91,10 @@ class OrdersController extends Controller
     {
         $data = $request->validated();
         // check order doesn't have status before
-        $check = orders_tracking::query()->where('status', '=', $data['status'])->failWhenFoundResult(__('errors.status_exist_select_another'));
+        $check = orders_tracking::query()
+            ->where('status', '=', $data['status'])
+            ->where('order_id', '=', $data['order_id'])
+            ->failWhenFoundResult(__('errors.status_exist_select_another'));
         if (is_bool($check)) {
             $status = orders_tracking::query()->create($data);
 
@@ -120,7 +123,7 @@ class OrdersController extends Controller
             // get order info
             $order = OrdersWithAllDataAction::get()
                 ->when(auth()->user()->roleName() == 'client',
-                    fn($e) => $e->where('user_id', '=', auth()->id())
+                    fn ($e) => $e->where('user_id', '=', auth()->id())
                 )
                 ->where('id', '=', request('order_id'))
                 ->with('last_status')
