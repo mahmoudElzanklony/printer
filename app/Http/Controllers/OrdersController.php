@@ -96,7 +96,9 @@ class OrdersController extends Controller
             ->where('order_id', '=', $data['order_id'])
             ->failWhenFoundResult(__('errors.status_exist_select_another'));
         // get last status
-        $completed_check = orders_tracking::query()->where('order_id', '=', $data['order_id'])->orderBy('id', 'DESC')->first();
+        $completed_check = orders_tracking::query()->where('order_id', '=', $data['order_id'])
+            ->where('status', '=', 'completed')
+            ->first();
         if ($completed_check) {
             return Messages::error(__('errors.saved_successfully'));
         }
