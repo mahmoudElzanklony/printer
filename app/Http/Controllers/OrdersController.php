@@ -100,7 +100,7 @@ class OrdersController extends Controller
             ->where('status', '=', 'completed')
             ->first();
         if ($completed_check) {
-            return Messages::error(__('errors.saved_successfully'));
+            return Messages::error(__('errors.cant_change_status_after_completed'));
         }
         if (is_bool($check)) {
             $status = orders_tracking::query()->create($data);
