@@ -19,7 +19,7 @@ class OrderItemPropertiesResource extends JsonResource
             //'order_item_id'=>$this->order_item_id,
             'user_id' => auth()->id(),
             'property_id' => $this->property_id,
-            //'price'=>$this->price,
+            'price' => $this->price,
             'property' => PropertyResource::make($this->whenLoaded('property')),
         ];
     }
