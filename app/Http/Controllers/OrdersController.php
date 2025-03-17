@@ -39,7 +39,7 @@ class OrdersController extends Controller
 
     public function index()
     {
-        $data = OrdersWithAllDataAction::get();
+        $data = OrdersWithAllDataAction::get()->with('items');
         $output = app(Pipeline::class)
             ->send($data)
             ->through([

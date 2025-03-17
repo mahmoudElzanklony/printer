@@ -21,6 +21,7 @@ class OrderItemsResource extends JsonResource
             'is_cancelled' => $this->is_cancelled != null ? json_decode($this->is_cancelled, true) : $this->is_cancelled,
             'file' => 'orders_files/'.$this->file,
             'price' => $this->price,
+            'price_include_properties' => $this->price + $this->whenLoaded('properties', fn () => $this->properties->sum('price'), 0),
             'paper_number' => $this->paper_number,
             'copies_number' => $this->copies_number,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
