@@ -24,9 +24,12 @@ class UserResource extends JsonResource
             'otp' => $this->otp_secret,
             'has_password' => strlen($this->password) > 0 ? true : false,
             'wallet' => $this->wallet,
+            'city_id' => $this->city_id,
+            'birth_date' => $this->birth_date,
             'role' => $this->roles->pluck('name')[0] ?? 'client',
             'saved_properties_count' => saved_properties_settings::query()->where('user_id', $this->id)->count(),
             'image' => ImageResource::make($this->whenLoaded('image')),
+            'city' => CityResource::make($this->whenLoaded('city')),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
         if (isset($this->default_location)) {

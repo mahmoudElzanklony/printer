@@ -17,6 +17,8 @@ class User extends Authenticatable
     use HasRoles;
     use softDeletes;
 
+    protected $with = ['city'];
+
     protected $guard_name = 'sanctum';
 
     /**
@@ -74,6 +76,11 @@ class User extends Authenticatable
     public function socialAccounts()
     {
         return $this->hasMany(social_accounts::class, 'user_id');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(cities::class, 'city_id')->withTrashed();
     }
 
     /**
