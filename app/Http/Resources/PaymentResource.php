@@ -18,7 +18,8 @@ class PaymentResource extends JsonResource
             'id' => $this->id,
             'money' => $this->money,
             'tax' => $this->tax,
-            'tax_money' => $this->money - ($this->money * $this->tax / 100),
+            'tax_money' => ($this->money * $this->tax / 100),
+            'money_with_tax' => $this->money + ($this->money * $this->tax / 100),
             'type' => $this->type,
         ];
     }
