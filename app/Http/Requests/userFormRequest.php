@@ -21,6 +21,7 @@ class userFormRequest extends FormRequest
      */
     public function rules(): array
     {
+        dd(auth()->user());
         if (auth()->check()) {
 
             if (auth()->user()->roleName() != 'client') {
