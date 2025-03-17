@@ -30,6 +30,8 @@ class userFormRequest extends FormRequest
                     'phone' => 'filled|unique:users,phone,'.auth()->id(),
                     'password' => 'filled|confirmed|min:6',
                     'role_id' => 'filled|exists:roles,id',
+                    'city_id' => 'filled|exists:cities,id',
+                    'birth_date' => 'filled|date',
                 ];
             }
 
@@ -40,6 +42,8 @@ class userFormRequest extends FormRequest
                 'password' => 'filled|confirmed|min:6',
                 'old_password' => 'filled',
                 'image' => 'filled|mimes:jpeg,png,jpg,gif,svg',
+                'city_id' => 'filled|exists:cities,id',
+                'birth_date' => 'filled|date',
             ];
         } else {
             return [

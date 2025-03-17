@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone');
             $table->string('otp_secret');
+            $table->date('birth_date');
+            $table->unsignedBigInteger('city_id');
             $table->integer('wallet')->default(0);
             $table->rememberToken();
             $table->softDeletes();
