@@ -45,8 +45,9 @@ class ProfileController extends Controller
             $image = request()->file('image');
             $this->check_upload_image($image, 'users', auth()->user()->id, 'User');
         }
-
+        auth()->user()->update($data);
         $user = User::query()->find(auth()->id());
+
         $user->update($data);
         if (isset($data['role_id'])) {
             auth()->user()->syncRoles([]); // Remove all existing roles from the user
