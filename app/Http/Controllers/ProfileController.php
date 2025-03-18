@@ -14,6 +14,7 @@ use App\Models\orders;
 use App\Models\orders_items;
 use App\Models\roles;
 use App\Models\saved_locations;
+use App\Models\User;
 use App\Services\Messages;
 use Illuminate\Support\Facades\Hash;
 
@@ -45,12 +46,14 @@ class ProfileController extends Controller
             $this->check_upload_image($image, 'users', auth()->user()->id, 'User');
         }
 
-        $user = auth()->user()->update($data);
+        $user = User::query()->find(auth()->id());
+        $user->update($data);
         if (isset($data['role_id'])) {
             auth()->user()->syncRoles([]); // Remove all existing roles from the user
             // Assign the new role
             auth()->user()->assignRole(roles::query()->find($data['role_id'])->name);
         }
+        $user->load('image');
 
         array_merge($user->toArray(), DefaultInfoWithUser::execute($user)->toArray());
 
