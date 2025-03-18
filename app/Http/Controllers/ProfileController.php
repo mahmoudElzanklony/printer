@@ -51,7 +51,6 @@ class ProfileController extends Controller
             // Assign the new role
             auth()->user()->assignRole(roles::query()->find($data['role_id'])->name);
         }
-        $user->load('image');
 
         array_merge($user->toArray(), DefaultInfoWithUser::execute($user)->toArray());
 
