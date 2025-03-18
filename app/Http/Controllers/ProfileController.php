@@ -45,13 +45,13 @@ class ProfileController extends Controller
             $this->check_upload_image($image, 'users', auth()->user()->id, 'User');
         }
 
-        auth()->user()->update($data);
+        $user = auth()->user()->update($data);
         if (isset($data['role_id'])) {
             auth()->user()->syncRoles([]); // Remove all existing roles from the user
             // Assign the new role
             auth()->user()->assignRole(roles::query()->find($data['role_id'])->name);
         }
-        $user = auth()->user()->load('image');
+        $user->load('image');
 
         array_merge($user->toArray(), DefaultInfoWithUser::execute($user)->toArray());
 
