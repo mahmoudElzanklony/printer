@@ -21,8 +21,8 @@ class PaymentResource extends JsonResource
             'id' => $this->id,
             'money' => $money,
             'tax' => $this->tax,
-            'tax_money' => ($money * $tax),
-            'money_without_tax' => $money - ($money * $tax),
+            'tax_money' => number_format((float) ($money * $tax), 2, '.', ''),
+            'money_without_tax' => number_format((float) ($money - ($money * $tax)), 2, '.', ''),
             'type' => $this->type,
         ];
     }
