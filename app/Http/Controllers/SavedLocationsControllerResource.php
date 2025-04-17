@@ -8,7 +8,6 @@ use App\Filters\LimitFilter;
 use App\Http\patterns\ChainResponsabilites\savedLocation\CreateAreaRes;
 use App\Http\patterns\ChainResponsabilites\savedLocation\CreateCityRes;
 use App\Http\Requests\savedLocationFormRequest;
-use App\Http\Resources\CityResource;
 use App\Http\Resources\SavedLocationResource;
 use App\Http\Traits\upload_image;
 use App\Models\saved_locations;
@@ -49,17 +48,6 @@ class SavedLocationsControllerResource extends Controller
             ->get();
 
         return SavedLocationResource::collection($output);
-    }
-
-    public function show($id)
-    {
-        $data = saved_locations::query()->with(['area'])
-            ->when(auth()->user()->roleName() == 'client', function ($query) {
-                $query->where('user_id', auth()->id());
-            })->findOrFail($id);
-
-        return SavedLocationResource::make($data);
-
     }
 
     public function create_new_one($data)
@@ -121,11 +109,13 @@ class SavedLocationsControllerResource extends Controller
     public function show(string $id)
     {
         //
-        $obj = saved_locations::query()->where('id', $id)
-            ->with(['user', 'area'])
+        $obj = saved_locations::query()->with(['area'])
+            ->when(auth()->user()->roleName() == 'client', function ($query) {
+                $query->where('user_id', auth()->id());
+            })
             ->firstOrFailWithCustomError(__('errors.not_found_data'));
 
-        return CityResource::make($obj);
+        return SavedLocationResource::make($obj);
     }
 
     /**
