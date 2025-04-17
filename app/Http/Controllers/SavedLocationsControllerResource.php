@@ -113,6 +113,7 @@ class SavedLocationsControllerResource extends Controller
             ->when(auth()->user()->roleName() == 'client', function ($query) {
                 $query->where('user_id', auth()->id());
             })
+            ->where('id', $id)
             ->firstOrFailWithCustomError(__('errors.not_found_data'));
 
         return SavedLocationResource::make($obj);
