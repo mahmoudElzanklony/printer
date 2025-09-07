@@ -31,13 +31,23 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'sms'=>[
-        'msegat'=>[
-            'username'=>env('MSEGAT_USERNAME'),
-            'api_key'=>env('MSEGAT_API_KEY'),
-            'sender'=>env('MSEGAT_SENDER'),
-            'base_url'=>env('MSEGAT_BASE_URL'),
-            'timeout'=>env('MSEGAT_TIMEOUT',10),
+    'sms' => [
+        'msegat' => [
+            'username' => env('MSEGAT_USERNAME'),
+            'api_key' => env('MSEGAT_API_KEY'),
+            'sender' => env('MSEGAT_SENDER'),
+            'base_url' => env('MSEGAT_BASE_URL'),
+            'timeout' => env('MSEGAT_TIMEOUT', 10),
+        ]
+    ],
+
+    'payments' => [
+        'hyperpay' => [
+            'base_url'      => env('HYPERPAY_BASE_URL', 'https://test.oppwa.com/v1'),
+            'access_token'  => env('HYPERPAY_ACCESS_TOKEN', ''),
+            'entity_id'     => env('HYPERPAY_ENTITY_ID', ''),
+            'currency'      => env('HYPERPAY_CURRENCY', 'SAR'),
+            'timeout'       => env('HYPERPAY_TIMEOUT', 15),
         ]
     ]
 

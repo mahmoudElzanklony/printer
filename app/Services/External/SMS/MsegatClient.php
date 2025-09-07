@@ -48,7 +48,7 @@ class MsegatClient
                 ->timeout($this->timeout)
                 ->post($this->baseUrl, $payload);
             $body = json_decode($response->body(), true);
-            if ($body['code'] ==='M0000') { // M000 is success code in msegat service
+            if ($body['code'] === 'M0000') { // M000 is success code in msegat service
                 return true;
             }
             return false;

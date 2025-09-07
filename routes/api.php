@@ -32,6 +32,7 @@ use App\Http\Controllers\WalletHistoryController;
 use App\Http\Controllers\ZohoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HyperpayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,12 @@ Route::group(['middleware' => 'changeLang'], function () {
         Route::post('/logout', [LoginController::class, 'logout']);
         Route::post('/me', [LoginController::class, 'get_user_by_token']);
     });
+
+    // payments
+    Route::group(['prefix' => '/payments'], function () {
+        Route::match(['get','post'], '/hyperpay/callback', [HyperpayController::class, 'callback'])->name('hyperpay.callback');
+    });
+
     // orders
     Route::group(['prefix' => '/orders', 'middleware' => 'auth:sanctum'], function () {
         Route::get('/', [OrdersController::class, 'index']);
