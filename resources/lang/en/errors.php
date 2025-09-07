@@ -23,5 +23,6 @@ return [
     'err_old_password' => 'Error at old password',
     'max_value' => 'You have reached the maximum possible value. You cannot add anything anymore. You may need to delete one to be able to add something new.',
     'cant_change_status_after_completed' => 'You cannot change status after completed',
+    'sending_message_failed' => 'Sending message failed, please try again later',
 
 ];

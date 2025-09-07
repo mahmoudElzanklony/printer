@@ -31,4 +31,14 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'sms'=>[
+        'msegat'=>[
+            'username'=>env('MSEGAT_USERNAME'),
+            'api_key'=>env('MSEGAT_API_KEY'),
+            'sender'=>env('MSEGAT_SENDER'),
+            'base_url'=>env('MSEGAT_BASE_URL'),
+            'timeout'=>env('MSEGAT_TIMEOUT',10),
+        ]
+    ]
+
 ];

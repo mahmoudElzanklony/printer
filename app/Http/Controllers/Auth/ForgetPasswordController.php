@@ -37,20 +37,30 @@ class ForgetPasswordController extends Controller
         if (request()->filled('email')) {
             $data['title'] = __('keywords.recovery_password');
         }
-        $this->messageObj->send($data);
+        $res = $this->messageObj->send($data);
+        if ($res === false) {
+            return Messages::error(__('errors.sending_message_failed'));
+        }
 
         return Messages::success(__('messages.operation_done_successfully'));
 
     }
 
-    public function get_user($data)
+    public function get_user($data, $isCreatingNewPassword = false)
     {
+        if ($isCreatingNewPassword && !array_key_exists('otp_secret', $data) && array_key_exists('phone', $data)) {
+            return Messages::error(__('errors.phone_or_otp_error'));
+        }
+
         if (array_key_exists('email', $data)) {
-            $user = User::query()->where('email', '=', $data['email'])->firstOrFailWithCustomError(__('errors.not_found_user_with_this_email'));
+            $user = User::query()->where('email', '=',
+                $data['email'])->firstOrFailWithCustomError(__('errors.not_found_user_with_this_email'));
         } elseif (array_key_exists('phone', $data)) {
-            $user = User::query()->where('phone', '=', $data['phone'])
-                ->where('otp_secret', '=', $data['otp_secret'])
-                ->firstOrFailWithCustomError(__('errors.phone_or_otp_error'));
+            $user = User::query()->where('phone', '=', $data['phone']);
+            if ($isCreatingNewPassword) {
+                $user->where('otp_secret', '=', $data['otp_secret']);
+            }
+            $user = $user->firstOrFailWithCustomError(__('errors.phone_or_otp_error'));
         }
 
         return $user;
@@ -66,7 +76,7 @@ class ForgetPasswordController extends Controller
     {
         $data = $request->validated();
         if (request()->anyFilled('email', 'phone')) {
-            $user = $this->get_user($request->validated());
+            $user = $this->get_user($request->validated(), true);
             $user->password = request('password');
             $user->save();
             $user['token'] = $user->createToken($data['email'] ?? $data['phone'])->plainTextToken;
