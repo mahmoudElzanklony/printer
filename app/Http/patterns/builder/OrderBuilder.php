@@ -152,6 +152,12 @@ class OrderBuilder
         ]);
     }
 
+    public function add_shipment_price()
+    {
+        $this->total_price_order += $this?->order?->location?->area?->price ?? 0;
+        return $this;
+    }
+
     public function load_relations()
     {
         $this->order->load('location');
