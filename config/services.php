@@ -43,9 +43,10 @@ return [
 
     'payments' => [
         'hyperpay' => [
-            'base_url'      => env('HYPERPAY_BASE_URL', 'https://test.oppwa.com/v1'),
-            'access_token'  => env('HYPERPAY_ACCESS_TOKEN', ''),
-            'entity_id'     => env('HYPERPAY_ENTITY_ID', ''),
+            'base_url'      => env('HYPERPAY_BASE_URL', 'https://test.oppwa.com'),
+            'api_base_url'      => env('HYPERPAY_API_BASE_URL', 'https://test.oppwa.com/v1'),
+            'access_token'  => env('HYPERPAY_ACCESS_TOKEN'),
+            'entity_id'     => env('HYPERPAY_ENTITY_ID'),
             'currency'      => env('HYPERPAY_CURRENCY', 'SAR'),
             'timeout'       => env('HYPERPAY_TIMEOUT', 15),
         ]

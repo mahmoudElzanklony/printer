@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 class HyperpayClient
 {
     protected string $baseUrl;
+    protected string $apiBaseUrl;
     protected string $accessToken;
     protected string $entityId;
     protected string $currency;
@@ -16,9 +17,10 @@ class HyperpayClient
     public function __construct()
     {
         $cfg = config('services.payments.hyperpay');
-        $this->baseUrl = $cfg['baseUrl'];
-        $this->accessToken = $cfg['accessToken'];
-        $this->entityId = $cfg['entityId'];
+        $this->apiBaseUrl = $cfg['api_base_url'];
+        $this->baseUrl = $cfg['base_url'];
+        $this->accessToken = $cfg['access_token'];
+        $this->entityId = $cfg['entity_id'];
         $this->currency = $cfg['currency'] ?? 'SAR';
         $this->timeout = $cfg['timeout'] ?? 15;
     }
@@ -28,21 +30,26 @@ class HyperpayClient
         $payload = array_merge([
             'entityId'     => $this->entityId,
             'amount'       => $params['amount'] ?? '0.00',
-            'currency'     => $params['currency'] ?? $this->currency,
+            'currency'     => $params['currency'],
             'paymentType'  => $params['paymentType'] ?? 'DB',
             'merchantTransactionId' => $params['merchantTransactionId'] ?? '',
             'merchantInvoiceId'     => $params['merchantInvoiceId'] ?? '',
         ], $params['extra'] ?? []);
 
+//        dd($payload);
+
+
         try {
-            $res = Http::withHeaders([
+            $headers = [
                 'Authorization' => 'Bearer '.$this->accessToken,
-            ])->asForm()
+                'entityId'      => $this->entityId,
+            ];
+            $res = Http::withHeaders($headers)->asForm()
                 ->timeout($this->timeout)
                 ->post($this->baseUrl.'/checkouts', $payload);
-
             if ($res->successful()) {
                 $json = $res->json();
+//                dd($json);
                 if (isset($json['id'])) {
                     return $json;
                 }
@@ -65,7 +72,7 @@ class HyperpayClient
             $res = Http::withHeaders([
                 'Authorization' => 'Bearer '.$this->accessToken,
             ])->timeout($this->timeout)
-                ->get($this->baseUrl.'/payments/'.$paymentId, [
+                ->get($this->apiBaseUrl.'/payments/'.$paymentId, [
                     'entityId' => $this->entityId,
                 ]);
 
@@ -94,10 +101,10 @@ class HyperpayClient
                     'entityId' => $this->entityId,
                 ]);
 
-            if ($res->successful()) {
+//            dd($res->json(),isSucc($res['result']['code'] ?? ''));
+            if ($this->isSuccessful($res['result']['code'] ?? '')) {
                 return $res->json();
             }
-
             Log::error('Hyperpay getPaymentResultByResourcePath error', [
                 'status' => $res->status(),
                 'body'   => $res->body(),
@@ -109,24 +116,12 @@ class HyperpayClient
         return false;
     }
 
-    public static function isSuccessful(?string $code): bool
+    private function isSuccessful(?string $code): bool
     {
-        if (! $code) {
+        if (empty($code)) {
             return false;
         }
-        // Common Hyperpay success result codes
-        $successPrefixes = [
-            '000.000.',      // Request successfully processed
-            '000.100.110',   // Request successfully processed in 'Merchant in Integrator Test Mode'
-            '000.100.111',
-            '000.300.000',
-        ];
-        foreach ($successPrefixes as $p) {
-            if (str_starts_with($code, $p)) {
-                return true;
-            }
-        }
-        return false;
+        return preg_match('/^(000.000.|000.100.1|000.[36]|000.400.[1][12]0)/', $code) === 1;
     }
 
 }

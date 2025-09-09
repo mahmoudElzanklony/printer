@@ -164,11 +164,11 @@ class OrderBuilder
 
     public function save_payment($type = 'order')
     {
-        if ($this != 'order') {
+        if ($type != 'order') {
             return $this->continue_payment();
         } else {
             $validate_payment = $this->payment_strategy->validate($this->total_price_order);
-            if ($validate_payment === true) {
+            if ($validate_payment === true || (is_array($validate_payment)&& isset($validate_payment['checkoutId']))) {
                 return $this->continue_payment();
             } else {
                 return $validate_payment;

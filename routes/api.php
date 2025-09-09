@@ -33,6 +33,7 @@ use App\Http\Controllers\ZohoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HyperpayController;
+use App\Http\Controllers\WalletRechargeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,6 +118,8 @@ Route::group(['middleware' => 'changeLang'], function () {
     Route::group(['prefix' => '/wallet', 'middleware' => 'auth:sanctum'], function () {
         Route::get('/history', [WalletHistoryController::class, 'index']);
         Route::post('/charge', [WalletHistoryController::class, 'charge']);
+        Route::post('/charge/init', [WalletRechargeController::class, 'initCheckoutTransaction']);
+        Route::post('/charge/validate_payment', [WalletRechargeController::class, 'validate_payment']);
     });
 
     // admin panel
