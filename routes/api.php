@@ -34,6 +34,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HyperpayController;
 use App\Http\Controllers\WalletRechargeController;
+use App\Http\Controllers\WebsiteVisitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -158,6 +159,7 @@ Route::group(['middleware' => 'changeLang'], function () {
 
     ]);
 
+    Route::get('/visits/total', [WebsiteVisitController::class, 'index']);
     Route::post('/deleteitem', [GeneralServiceController::class, 'delete_item']);
 
 });
