@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Http\patterns\strategy\Messages\SMSMessages;
+use App\Jobs\CreateZohoCustomerJob;
 use App\Models\User;
 use App\Notifications\UserRegisteryNotification;
 use App\Http\Traits\AdminTrait;
@@ -18,6 +19,7 @@ class UserObserver
     {
          // $this->currentAdmin()->notify(new UserRegisteryNotification($user,false));
          $user->notify(new UserRegisteryNotification($user,true,true));
+        CreateZohoCustomerJob::dispatch($user);
     }
 
     /**

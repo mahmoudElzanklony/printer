@@ -85,6 +85,11 @@ class User extends Authenticatable
         return $this->belongsTo(cities::class, 'city_id')->withTrashed();
     }
 
+    public function zohoAccount()
+    {
+        return $this->hasOne(ZohoCustomer::class,'user_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

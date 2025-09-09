@@ -8,10 +8,12 @@ use App\Models\orders;
 use App\Models\orders_items;
 use App\Models\orders_tracking;
 use App\Models\payments;
+use App\Models\User;
 use App\Observers\OrderItemObserver;
 use App\Observers\OrderObserver;
 use App\Observers\OrderStatusObserver;
 use App\Observers\PaymentObserver;
+use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -38,7 +40,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        //User::observe(UserObserver::class);
+        User::observe(UserObserver::class);
         orders_tracking::observe(OrderStatusObserver::class);
         orders::observe(OrderObserver::class);
         orders_items::observe(OrderItemObserver::class);

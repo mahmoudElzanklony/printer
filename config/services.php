@@ -50,6 +50,17 @@ return [
             'currency'      => env('HYPERPAY_CURRENCY', 'SAR'),
             'timeout'       => env('HYPERPAY_TIMEOUT', 15),
         ]
+    ],
+
+    'zohobooks'=>[
+        'client_id'     => env('ZOHO_CLIENT_ID'),
+        'client_secret' => env('ZOHO_CLIENT_SECRET'),
+        'redirect_uri'  => env('ZOHO_REDIRECT_URI',''),
+        'refresh_token' => env('ZOHO_BOOKS_REFRESH_TOKEN'),
+        'region'        => env('ZOHO_BOOKS_REGION', 'sa'),
+        'accounts_base'=> env('ZOHO_BOOKS_AUTH_URI'),
+        'books_base'   => env('ZOHO_BOOKS_API_URI'),
+        'timeout'      => env('ZOHO_BOOKS_TIMEOUT', 20),
     ]
 
 ];

@@ -117,9 +117,11 @@ Route::group(['middleware' => 'changeLang'], function () {
     // wallet history
     Route::group(['prefix' => '/wallet', 'middleware' => 'auth:sanctum'], function () {
         Route::get('/history', [WalletHistoryController::class, 'index']);
-        Route::post('/charge', [WalletHistoryController::class, 'charge']);
-        Route::post('/charge/init', [WalletRechargeController::class, 'initCheckoutTransaction']);
-        Route::post('/charge/validate_payment', [WalletRechargeController::class, 'validate_payment']);
+        Route::prefix('/charge')->group(function () {
+            Route::post('/', [WalletHistoryController::class, 'charge']);
+            Route::post('/init', [WalletRechargeController::class, 'initCheckoutTransaction']);
+            Route::post('/validate_payment', [WalletRechargeController::class, 'validate_payment']);
+        });
     });
 
     // admin panel

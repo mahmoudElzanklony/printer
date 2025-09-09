@@ -43,7 +43,7 @@ class WalletRechargeController extends Controller
                 'customer.email' => $email,
                 'customer.givenName' => $user?->username,
                 'testMode' => 'EXTERNAL',
-                'customParameters' => [
+                'customParameters' => [   // TODO:: Remove These In production
                     '3DS2_enrolled' => true
                 ],
                 'integrity' => true

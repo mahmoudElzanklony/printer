@@ -23,7 +23,6 @@ class OrderItemObserver
      */
     public function updated(orders_items $orders_items): void
     {
-        //
         $this->currentAdmin()->notify(new OrderItemNotification($orders_items));
     }
 

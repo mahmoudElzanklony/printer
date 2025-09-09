@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Http\Enum\OrderStatuesEnum;
+use App\Jobs\CreateZohoInvoiceJob;
 use App\Models\orders_tracking;
 use App\Notifications\OrderStatusNotification;
 use App\Notifications\UserRegisteryNotification;
@@ -22,6 +23,10 @@ class OrderStatusObserver
                 'تم ارجاع مبلغ قدرة '.$orders_tracking->order->payment->money.' الخاص بالطلب رقم '.$orders_tracking->order->id,
                 '','',$orders_tracking->order->user->email
             );
+        }
+
+        if ($orders_tracking->status == OrderStatuesEnum::completed->value) {
+            CreateZohoInvoiceJob::dispatch($orders_tracking->order_id);
         }
     }
 
