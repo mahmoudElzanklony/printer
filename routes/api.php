@@ -125,6 +125,12 @@ Route::group(['middleware' => 'changeLang'], function () {
         });
     });
 
+    // website visits
+    Route::group(['prefix' => '/visits'], function () {
+        Route::get('/', [WebsiteVisitController::class, 'index']);
+        Route::post('/', [WebsiteVisitController::class, 'store']);
+    });
+
     // admin panel
     Route::group(['prefix' => '/dashboard', 'middleware' => 'auth:sanctum'], function () {
         Route::get('/users', [DashboardController::class, 'users']);
@@ -159,7 +165,6 @@ Route::group(['middleware' => 'changeLang'], function () {
 
     ]);
 
-    Route::get('/visits/total', [WebsiteVisitController::class, 'index']);
     Route::post('/deleteitem', [GeneralServiceController::class, 'delete_item']);
 
 });

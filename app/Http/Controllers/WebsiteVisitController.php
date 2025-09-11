@@ -14,4 +14,12 @@ class WebsiteVisitController extends Controller
             'total_visits'=>WebsiteVisit::query()->count(),
         ]);
     }
+    public function store(Request $request)
+    {
+        $visit= WebsiteVisit::create([
+            'user_id' => optional($request->user())->id,
+            'user_agent' => $request->userAgent(),
+        ]);
+        return Messages::success(__('messages.operation_done_successfully'),$visit->toArray());
+    }
 }

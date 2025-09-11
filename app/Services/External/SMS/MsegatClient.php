@@ -41,7 +41,6 @@ class MsegatClient
         if (!empty($option)) {
             $payload = array_merge($payload, $options);
         }
-
         try {
             $response = Http::asForm()
                 ->accept('application/json')
