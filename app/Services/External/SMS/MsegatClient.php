@@ -30,24 +30,28 @@ class MsegatClient
             return false;
         }
 
+//        $message = "رمز التحقق: 1234";
         $payload = [
             'userName' => $this->username,
+            'apiKey' => $this->apiKey,
             'numbers' => $to,
             'userSender' => $this->sender,
-            'apiKey' => $this->apiKey,
             'msg' => $message,
+            'lang' => 'Ar',
+            'msgEncoding'=>'UTF8',
         ];
 
         if (!empty($option)) {
             $payload = array_merge($payload, $options);
         }
         try {
-            $response = Http::asForm()
+            $response = Http::asJson()
                 ->accept('application/json')
                 ->timeout($this->timeout)
                 ->post($this->baseUrl, $payload);
-            $body = json_decode($response->body(), true);
-            if ($body['code'] === 'M0000') { // M000 is success code in msegat service
+
+            $body = $response->json();
+            if ($body['code'] === 'M0000' || $body['code'] === '1') { // M000 is success code in msegat service
                 return true;
             }
             return false;
