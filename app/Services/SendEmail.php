@@ -14,8 +14,16 @@ class SendEmail
             'link' => $link,
             'link_msg' => $link_msg,
         ];
-        if ($to != '' && env('MAIL_STATUS') != 'local') {
-            \Mail::to($to)->send(new Myemail($details));
+        try {
+            if ($to != '' && env('MAIL_STATUS') != 'local') {
+                \Mail::to($to)->send(new Myemail($details));
+            }
+        } catch (\Throwable $e) {
+            \Log::error('Failed to send email', [
+                'to' => $to,
+                'title' => $title,
+                'error' => $e->getMessage(),
+            ]);
         }
 
     }
