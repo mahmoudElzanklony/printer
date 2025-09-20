@@ -49,6 +49,7 @@ class WalletRechargeController extends Controller
                 'integrity' => true
             ],
         ]);
+
         if ($checkout === false || empty($checkout['id'])) {
             return Messages::error(__('errors.payment_failed'));
         }
