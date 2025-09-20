@@ -28,9 +28,8 @@ class CreateZohoInvoiceJob implements ShouldQueue
     public function handle(): void
     {
         $order = orders::query()
-            ->with(['user', 'payment'])
+            ->with(['user', 'payment','items'])
             ->find($this->orderId);
-
         $client  = new ZohoBooksClient();
         $invoice = $client->createInvoiceForOrder($order);
 

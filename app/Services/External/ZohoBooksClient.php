@@ -7,6 +7,7 @@ use App\Models\orders;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ZohoBooksClient
 {
@@ -40,8 +41,11 @@ class ZohoBooksClient
         $order->loadMissing([
             'user',
             'payment',
+            'items',
             'items.properties.property',
             'items.service',
+            'location.area',
+            'coupon_order',
         ]);
         $token = $this->getAccessToken();
         if (!$token) {
@@ -49,13 +53,13 @@ class ZohoBooksClient
         }
         $contactId = $this->findOrCreateContact($token, $order);
         $payload = $this->buildInvoicePayload($order, $contactId);
-
-        $res = Http::withToken($token)
+        $res = Http::withHeaders([
+            'Authorization' => 'Zoho-oauthtoken '.$token,
+            'Content-Type' => 'application/json',
+        ])
             ->timeout($this->timeout)
-            ->post($this->booksBase.'/invoices', [
-                'JSONString' => json_encode($payload, JSON_UNESCAPED_UNICODE),
-                'organization_id' => $this->orgId,
-            ]);
+            ->withBody(json_encode($payload, JSON_UNESCAPED_UNICODE), 'application/json')
+            ->post($this->booksBase.'/invoices');
 
         if ($res->successful()) {
             $json = $res->json();
@@ -67,6 +71,8 @@ class ZohoBooksClient
     protected function buildInvoicePayload(orders $order, string $contactId): array
     {
         $lineItems = [];
+        $subtotal = 0.0;
+
         foreach ($order->items as $item) {
             if (!is_null($item->is_cancelled)) {
                 continue;
@@ -79,32 +85,71 @@ class ZohoBooksClient
                 $propsTotal += (float) ($prop->price ?? 0);
             }
 
-            $unit = $base + $propsTotal;
-            $quantity = max(1, (int) ($item->paper_number ?? 1) * (int) ($item->copies_number ?? 1));
+            $unit = $base + $propsTotal; // service price + sum(properties)
+            $paperNumber = (int) ($item->paper_number ?? 1);
+            $copiesNumber = (int) ($item->copies_number ?? 1);
+            $quantity = max(1, $paperNumber * $copiesNumber); // matches OrderBuilder multiplier
             $serviceStr = $this->getLocalizedLabel($item->service->name ?? null) ?: 'Service #'.$item->service_id;
 
-            $li = [
+            $lineItems[] = [
                 'name' => $serviceStr,
                 'rate' => round($unit, 2),
                 'quantity' => $quantity,
             ];
 
-            $lineItems[] = $li;
+            $subtotal += $unit * $quantity;
         }
 
+        // fallback if no items
         if (empty($lineItems)) {
             $lineItems[] = [
                 'name' => 'Order #'.$order->id,
                 'rate' => (float) ($order->payment->money ?? 0),
                 'quantity' => 1,
             ];
+            $subtotal = (float) ($order->payment->money ?? 0);
         }
 
-        return [
+        // Coupon discount
+        $couponDiscount = (float) ($order->coupon_order->coupon_value ?? 0);
+        if ($couponDiscount > $subtotal) {
+            $couponDiscount = $subtotal; // guard
+        }
+
+        // Shipping
+        $shipping = (float) ($order->location->area->price ?? 0);
+
+        // Expected total
+        $expectedTotal = round(($subtotal - $couponDiscount) + $shipping, 2);
+
+        // If there's any tiny difference with stored payment
+        $recordedTotal = round((float) ($order->payment->money ?? $expectedTotal), 2);
+        $adjustment = round($recordedTotal - $expectedTotal, 2);
+
+        $payload = [
             'customer_id' => $contactId,
             'reference_number' => (string) $order->id,
             'line_items' => $lineItems,
         ];
+
+        // Apply discount (coupon)
+        if ($couponDiscount > 0) {
+            $payload['discount'] = round($couponDiscount, 2);
+            $payload['is_discount_before_tax'] = true;
+        }
+
+        // Apply shipping
+        if ($shipping > 0) {
+            $payload['shipping_charge'] = round($shipping, 2);
+        }
+
+        // fixing any remaining delta
+        if (abs($adjustment) >= 0.01) {
+            $payload['adjustment'] = $adjustment;
+            $payload['adjustment_description'] = 'Reconciliation';
+        }
+
+        return $payload;
     }
 
     protected function getLocalizedLabel($value): string
@@ -130,13 +175,16 @@ class ZohoBooksClient
 
         $contactPayload = [
             'contact_name' => $user->username,
+            'contact_type' => 'customer',
         ];
 
-        $res = Http::withToken($token)->timeout($this->timeout)
-            ->post($this->booksBase.'/contacts', [
-                'JSONString' => json_encode($contactPayload, JSON_UNESCAPED_UNICODE),
-                'organization_id' => $this->orgId,
-            ]);
+        $res = Http::withHeaders([
+            'Authorization' => 'Zoho-oauthtoken '.$token,
+            'Content-Type' => 'application/json',
+        ])
+            ->timeout($this->timeout)
+            ->withBody(json_encode($contactPayload, JSON_UNESCAPED_UNICODE), 'application/json')
+            ->post($this->booksBase.'/contacts');
 
         if ($res->successful()) {
             $json = $res->json();

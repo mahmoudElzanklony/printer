@@ -119,7 +119,6 @@ class OrderBuilder
 
             $this->total_price_order += ($total_properties_price + $order_item->price) * $order_item->paper_number * $order_item->copies_number;
         }
-
         return $this;
     }
 

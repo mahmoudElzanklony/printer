@@ -36,7 +36,6 @@ class HyperpayClient
             'merchantInvoiceId'     => $params['merchantInvoiceId'] ?? '',
         ], $params['extra'] ?? []);
 
-//        dd($payload);
 
 
         try {
@@ -44,12 +43,12 @@ class HyperpayClient
                 'Authorization' => 'Bearer '.$this->accessToken,
                 'entityId'      => $this->entityId,
             ];
+
             $res = Http::withHeaders($headers)->asForm()
                 ->timeout($this->timeout)
-                ->post($this->baseUrl.'/checkouts', $payload);
+                ->post($this->apiBaseUrl.'/checkouts', $payload);
             if ($res->successful()) {
                 $json = $res->json();
-//                dd($json);
                 if (isset($json['id'])) {
                     return $json;
                 }
@@ -101,7 +100,6 @@ class HyperpayClient
                     'entityId' => $this->entityId,
                 ]);
 
-//            dd($res->json(),isSucc($res['result']['code'] ?? ''));
             if ($this->isSuccessful($res['result']['code'] ?? '')) {
                 return $res->json();
             }

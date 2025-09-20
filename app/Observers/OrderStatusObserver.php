@@ -17,7 +17,7 @@ class OrderStatusObserver
     public function created(orders_tracking $orders_tracking): void
     {
         auth()->user()->notify(new OrderStatusNotification($orders_tracking));
-        // check if order tracking is cancelled
+//         check if order tracking is cancelled
         if($orders_tracking->status == OrderStatuesEnum::cancelled->value){
             SendEmail::send('تم ارجاع المبلغ الخاص بالطلب الي محفظتك في '.env('APP_NAME'),
                 'تم ارجاع مبلغ قدرة '.$orders_tracking->order->payment->money.' الخاص بالطلب رقم '.$orders_tracking->order->id,
@@ -25,7 +25,7 @@ class OrderStatusObserver
             );
         }
 
-        if ($orders_tracking->status == OrderStatuesEnum::completed->value) {
+        if ($orders_tracking->status->value == OrderStatuesEnum::completed->value) {
             CreateZohoInvoiceJob::dispatch($orders_tracking->order_id);
         }
     }
