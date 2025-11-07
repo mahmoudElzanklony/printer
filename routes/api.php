@@ -90,6 +90,9 @@ Route::group(['middleware' => 'changeLang'], function () {
         Route::post('/proceed-cart', [CartController::class, 'proceed_cart']);
     });
     // rates
+    Route::group(['prefix' => '/rates'], function () {
+        Route::get('/all', [RatesController::class, 'getAllRates']);
+    });
     Route::group(['prefix' => '/rates', 'middleware' => 'auth:sanctum'], function () {
         Route::get('/', [RatesController::class, 'index']);
         Route::post('/create', [RatesController::class, 'create']);

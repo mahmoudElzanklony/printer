@@ -20,7 +20,20 @@ use Spatie\Permission\Models\Role;
 
 class RatesController extends Controller
 {
-    //
+    public function getAllRates()
+    {
+        $data = orders_rates::query()->with('order.user');
+        $output  = app(Pipeline::class)
+            ->send($data)
+            ->through([
+                StartDateFilter::class,
+                EndDateFilter::class,
+            ])
+            ->thenReturn()
+            ->paginate(request('limit') ?? 10);
+        return OrderRateResource::collection($output);
+    }
+
     public function index()
     {
         $data = orders_rates::query()->with('order.user')->when(auth()->user()->hasRole('client'),
