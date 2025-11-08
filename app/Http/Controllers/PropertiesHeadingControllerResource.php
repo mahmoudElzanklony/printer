@@ -33,7 +33,7 @@ class PropertiesHeadingControllerResource extends Controller
             ->with('properties', function ($query) {
                 $query->with('icon_info')->with('image');
             })
-            ->with('image')->orderBy('id', 'DESC')->get();
+            ->with('image')->orderBy('id', 'DESC')->paginate(request('limit') ?? 10);
 
         return PropertyHeadingResource::collection($data);
     }
