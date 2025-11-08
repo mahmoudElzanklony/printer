@@ -83,7 +83,7 @@ class DashboardController extends Controller
 
     public function money_wallet($data, $type = 'plus')
     {
-        VerifyAccess::execute('pi pi-users|/users|update');
+        VerifyAccess::execute('pi pi-wallet|/wallet|update');
         $user = User::query()->find($data['user_id']);
         // add wallet to user
         if ($type == 'plus') {
