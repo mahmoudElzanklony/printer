@@ -41,11 +41,21 @@ class WalletChargingNotification extends Notification
     public function toDatabase(object $notifiable)
     {
 
+        $difference = $this->user->wallet - $this->old_wallet;
+        $amount = abs($difference);
+        if ($difference >= 0) {
+            $ar = 'تم شحن رصيد المحفظة بقيمة ' . $amount . ' و اصبح الرصيد الحالي هو ' . $this->user->wallet;
+            $en = 'The wallet balance has been charged ' . $amount . '. The current balance is ' . $this->user->wallet;
+        } else {
+            $ar = 'تم خصم رصيد المحفظة بقيمة ' . $amount . ' و اصبح الرصيد الحالي هو ' . $this->user->wallet;
+            $en = 'The wallet balance has been deducted ' . $amount . '. The current balance is ' . $this->user->wallet;
+        }
+
         return [
             'data'=>json_encode(
                 [
-                    'ar'=>'تم شحن رصيد المحفظه بقيمه '.$this->user->wallet - $this->old_wallet.' و اصبح الرصيد الحالي هو '.$this->user->wallet,
-                    'en'=>'The wallet balance has been charged '.$this->user->wallet - $this->old_wallet.' The current balance becomes '.$this->user->wallet,
+                    'ar'=>$ar,
+                    'en'=>$en,
                 ],JSON_UNESCAPED_UNICODE),
             'sender'=>auth()->id()
         ];
@@ -56,10 +66,25 @@ class WalletChargingNotification extends Notification
     public function toMail(object $notifiable)
     {
 
-        SendEmail::send('تم شحن رصيد المحفظه في '.env('APP_NAME'),'تم شحن رصيد المحفظه بقيمه '.$this->user->wallet - $this->old_wallet.' و اصبح الرصيد الحالي هو '.$this->user->wallet,'','',$this->user->email);
+        $difference = $this->user->wallet - $this->old_wallet;
+        $amount = abs($difference);
+        if ($difference >= 0) {
+            $arBody = 'تم شحن رصيد المحفظة بقيمة ' . $amount . ' و اصبح الرصيد الحالي هو ' . $this->user->wallet;
+            $enBody = 'The wallet balance has been charged ' . $amount . '. The current balance is ' . $this->user->wallet;
+            $subjectEn = 'The wallet balance has been charged at ' . env('APP_NAME');
+            $subjectAr = 'تم شحن رصيد المحفظة في ' . env('APP_NAME');
+        } else {
+            $arBody = 'تم خصم رصيد المحفظة بقيمة ' . $amount . ' و اصبح الرصيد الحالي هو ' . $this->user->wallet;
+            $enBody = 'The wallet balance has been deducted ' . $amount . '. The current balance is ' . $this->user->wallet;
+            $subjectEn = 'The wallet balance has been deducted at ' . env('APP_NAME');
+            $subjectAr = 'تم خصم رصيد المحفظة في ' . env('APP_NAME');
+        }
+
+        SendEmail::send($subjectAr, $arBody, '', '', $this->user->email);
+
         return (new MailMessage)
-            ->subject('The wallet balance has been charged at '.env('APP_NAME'))
-            ->view( 'emails.email', ['details' => ['title'=>'The wallet balance has been charged at '.env('APP_NAME'),'body'=>'The wallet balance has been charged '.$this->user->wallet - $this->old_wallet.' The current balance becomes '.$this->user->wallet,'link'=>'','link_msg'=>'']]);
+            ->subject($subjectEn)
+            ->view( 'emails.email', ['details' => ['title'=>$subjectEn,'body'=>$enBody,'link'=>'','link_msg'=>'']]);
 
     }
 
