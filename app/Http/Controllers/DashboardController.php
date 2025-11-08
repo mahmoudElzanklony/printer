@@ -6,6 +6,7 @@ use App\Actions\AddToWalletHistoryAction;
 use App\Actions\VerifyAccess;
 use App\Filters\EndDateFilter;
 use App\Filters\StartDateFilter;
+use App\Filters\users\PhoneFilter;
 use App\Filters\users\UserNameFilter;
 use App\Filters\users\WalletFilter;
 use App\Http\Enum\OrderStatuesEnum;
@@ -43,6 +44,7 @@ class DashboardController extends Controller
                 EndDateFilter::class,
                 WalletFilter::class,
                 UserNameFilter::class,
+                PhoneFilter::class,
             ])
             ->thenReturn()
             ->paginate(request('limit') ?? 10);
