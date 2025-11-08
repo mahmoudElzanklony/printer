@@ -30,7 +30,7 @@ class PropertiesControllerResource extends Controller
     {
         //
         VerifyAccess::execute('pi pi-wrench|/properties|read');
-        $data = properties::query()->with(['heading.image', 'image', 'icon_info'])->orderBy('id', 'DESC')->get();
+        $data = properties::query()->with(['heading.image', 'image', 'icon_info'])->orderBy('id', 'DESC')->paginate(request('limit') ?? 10);
 
         return PropertyResource::collection($data);
     }
