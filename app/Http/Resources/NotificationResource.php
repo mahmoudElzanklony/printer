@@ -15,16 +15,20 @@ class NotificationResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $data = json_decode($this->data['data'],true);
-        if(array_key_exists('sender',$this->data)) {
+        $tz = 'Asia/Riyadh';
+        $data = json_decode($this->data['data'], true);
+
+        $sender = null;
+        if (array_key_exists('sender', $this->data)) {
             $sender = json_decode($this->data['sender'], true);
         }
+
         return [
-            'id'=>$this->id,
-            'content'=>$data[app()->getLocale()],
-            'read_at'=>$this->read_at != null ? $this->read_at->format('Y-m-d H:i:s') : null,
-            'created_at'=>$this->created_at->format('Y-m-d H:i:s'),
-            'sender'=>isset($sender) && $sender != null ?  UserResource::make(User::query()->find($sender)):null,
+            'id' => $this->id,
+            'content' => $data[app()->getLocale()] ?? null,
+            'read_at' => $this->read_at ? $this->read_at->copy()->setTimezone($tz)->format('Y-m-d H:i:s') : null,
+            'created_at' => $this->created_at ? $this->created_at->copy()->setTimezone($tz)->format('Y-m-d H:i:s') : null,
+            'sender' => isset($sender) && $sender != null ? UserResource::make(User::query()->find($sender)) : null,
         ];
     }
 }
