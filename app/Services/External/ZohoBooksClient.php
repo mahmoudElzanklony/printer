@@ -118,6 +118,13 @@ class ZohoBooksClient
 
         // Shipping
         $shipping = (float) ($order->location->area->price ?? 0);
+        if ($shipping > 0) {
+            $lineItems[] = [
+                'name' => 'Shipping',
+                'rate' => round($shipping, 2),
+                'quantity' => 1,
+            ];
+        }
 
         // Expected total
         $expectedTotal = round(($subtotal - $couponDiscount) + $shipping, 2);
@@ -138,10 +145,6 @@ class ZohoBooksClient
             $payload['is_discount_before_tax'] = true;
         }
 
-        // Apply shipping
-        if ($shipping > 0) {
-            $payload['shipping_charge'] = round($shipping, 2);
-        }
 
         // fixing any remaining delta
         if (abs($adjustment) >= 0.01) {
