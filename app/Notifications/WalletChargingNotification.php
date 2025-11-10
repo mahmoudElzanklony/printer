@@ -18,7 +18,8 @@ class WalletChargingNotification extends Notification
      */
     private $user;
     private $old_wallet;
-    public function __construct($user , $old_wallet)
+
+    public function __construct($user, $old_wallet)
     {
         //
         $this->user = $user;
@@ -32,7 +33,12 @@ class WalletChargingNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database','mail'];
+        $channels = ['database', 'mail'];
+
+        if (app()->environment('local')) {
+            $channels = ['database'];
+        }
+        return $channels;
     }
 
     /**
@@ -44,22 +50,23 @@ class WalletChargingNotification extends Notification
         $difference = $this->user->wallet - $this->old_wallet;
         $amount = abs($difference);
         if ($difference >= 0) {
-            $ar = 'تم شحن رصيد المحفظة بقيمة ' . $amount . ' و اصبح الرصيد الحالي هو ' . $this->user->wallet;
-            $en = 'The wallet balance has been charged ' . $amount . '. The current balance is ' . $this->user->wallet;
+            $ar = 'تم شحن رصيد المحفظة بقيمة '.$amount.' و اصبح الرصيد الحالي هو '.$this->user->wallet;
+            $en = 'The wallet balance has been charged '.$amount.'. The current balance is '.$this->user->wallet;
         } else {
-            $ar = 'تم خصم رصيد المحفظة بقيمة ' . $amount . ' و اصبح الرصيد الحالي هو ' . $this->user->wallet;
-            $en = 'The wallet balance has been deducted ' . $amount . '. The current balance is ' . $this->user->wallet;
+            $ar = 'تم خصم رصيد المحفظة بقيمة '.$amount.' و اصبح الرصيد الحالي هو '.$this->user->wallet;
+            $en = 'The wallet balance has been deducted '.$amount.'. The current balance is '.$this->user->wallet;
         }
 
         return [
-            'data'=>json_encode(
+            'data' => json_encode(
                 [
-                    'ar'=>$ar,
-                    'en'=>$en,
-                ],JSON_UNESCAPED_UNICODE),
-            'sender'=>auth()->id()
+                    'ar' => $ar,
+                    'en' => $en,
+                ], JSON_UNESCAPED_UNICODE),
+            'sender' => auth()->id()
         ];
     }
+
     /**
      * Get the mail representation of the notification.
      */
@@ -69,22 +76,23 @@ class WalletChargingNotification extends Notification
         $difference = $this->user->wallet - $this->old_wallet;
         $amount = abs($difference);
         if ($difference >= 0) {
-            $arBody = 'تم شحن رصيد المحفظة بقيمة ' . $amount . ' و اصبح الرصيد الحالي هو ' . $this->user->wallet;
-            $enBody = 'The wallet balance has been charged ' . $amount . '. The current balance is ' . $this->user->wallet;
-            $subjectEn = 'The wallet balance has been charged at ' . env('APP_NAME');
-            $subjectAr = 'تم شحن رصيد المحفظة في ' . env('APP_NAME');
+            $arBody = 'تم شحن رصيد المحفظة بقيمة '.$amount.' و اصبح الرصيد الحالي هو '.$this->user->wallet;
+            $enBody = 'The wallet balance has been charged '.$amount.'. The current balance is '.$this->user->wallet;
+            $subjectEn = 'The wallet balance has been charged at '.env('APP_NAME');
+            $subjectAr = 'تم شحن رصيد المحفظة في '.env('APP_NAME');
         } else {
-            $arBody = 'تم خصم رصيد المحفظة بقيمة ' . $amount . ' و اصبح الرصيد الحالي هو ' . $this->user->wallet;
-            $enBody = 'The wallet balance has been deducted ' . $amount . '. The current balance is ' . $this->user->wallet;
-            $subjectEn = 'The wallet balance has been deducted at ' . env('APP_NAME');
-            $subjectAr = 'تم خصم رصيد المحفظة في ' . env('APP_NAME');
+            $arBody = 'تم خصم رصيد المحفظة بقيمة '.$amount.' و اصبح الرصيد الحالي هو '.$this->user->wallet;
+            $enBody = 'The wallet balance has been deducted '.$amount.'. The current balance is '.$this->user->wallet;
+            $subjectEn = 'The wallet balance has been deducted at '.env('APP_NAME');
+            $subjectAr = 'تم خصم رصيد المحفظة في '.env('APP_NAME');
         }
 
         SendEmail::send($subjectAr, $arBody, '', '', $this->user->email);
 
         return (new MailMessage)
             ->subject($subjectEn)
-            ->view( 'emails.email', ['details' => ['title'=>$subjectEn,'body'=>$enBody,'link'=>'','link_msg'=>'']]);
+            ->view('emails.email',
+                ['details' => ['title' => $subjectEn, 'body' => $enBody, 'link' => '', 'link_msg' => '']]);
 
     }
 
