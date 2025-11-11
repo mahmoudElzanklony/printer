@@ -176,8 +176,12 @@ class ZohoBooksClient
             return $zohoAccount->contact_id;
         }
 
+        $contactName = !empty($user->username)
+            ? $user->username
+            : ($user?->phone ?: $user?->email ?: 'Customer #' . $user->id);
+
         $contactPayload = [
-            'contact_name' => $user->username,
+            'contact_name' => $contactName,
             'contact_type' => 'customer',
         ];
 
