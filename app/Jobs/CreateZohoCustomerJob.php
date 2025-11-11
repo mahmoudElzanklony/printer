@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 
 class CreateZohoCustomerJob implements ShouldQueue
 {
@@ -27,7 +28,10 @@ class CreateZohoCustomerJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $client = new ZohoBooksClient();
-        $client->findOrCreateContact($this->user);
+        if(Auth::check()){
+            $client = new ZohoBooksClient();
+            $client->findOrCreateContact($this->user);
+        }
     }
 }
+
