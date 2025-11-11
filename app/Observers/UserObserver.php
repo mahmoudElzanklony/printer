@@ -19,7 +19,7 @@ class UserObserver
     {
          // $this->currentAdmin()->notify(new UserRegisteryNotification($user,false));
          $user->notify(new UserRegisteryNotification($user,true,true));
-        CreateZohoCustomerJob::dispatch($user);
+//        CreateZohoCustomerJob::dispatch($user);
     }
 
     /**
