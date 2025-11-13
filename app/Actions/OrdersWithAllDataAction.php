@@ -13,7 +13,7 @@ class OrdersWithAllDataAction
             ->when($is_order == false, function ($query) {
                 $query->where('status', OrderStatuesEnum::cart);
             })
-            ->with(['coupon_order.coupon', 'statues', 'items.properties.property', 'rate'])
+            ->with(['coupon_order.coupon', 'statues', 'items.properties.property', 'rate','location'])
             //->when($is_order == false, function ($query) {$query->with('payment');})
             ->when(auth()->user()->roleName() != 'client',
                 fn ($e) => $e->with('user'))
