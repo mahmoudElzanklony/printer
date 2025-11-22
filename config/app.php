@@ -215,4 +215,5 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    'logo_url' => env('APP_LOGO_URL'),
 ];

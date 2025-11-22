@@ -22,7 +22,7 @@
                 </div>
                 <div class="mt-3 mb-3">
                     <div class="p-2">
-                        <img class="d-block m-auto" style="width: 150px;" src="{{ env('APP_LOGO_URL') }}">
+                        <img class="d-block m-auto" style="width: 150px;" src="{{ config('app.logo_url') }}" alt="{{ config('app.name') }} logo">
                         <p class="mt-3 mb-2 font-weight-bold">
                             Bill Number{{--{{ __('keywords.bill_no') }}--}}
                             #{{ $order->id }}
