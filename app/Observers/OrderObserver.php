@@ -16,7 +16,7 @@ class OrderObserver
     public function created(orders $order): void
     {
         // this will send notification to admin and email confirmation to client
-//        $this->currentAdmin()->notify(new OrderNotification($order));
+        $this->currentAdmin()->notify(new OrderNotification($order));
     }
 
     /**

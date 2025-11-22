@@ -17,8 +17,8 @@ class UserObserver
      */
     public function created(User $user): void
     {
-         // $this->currentAdmin()->notify(new UserRegisteryNotification($user,false));
-         $user->notify(new UserRegisteryNotification($user,true,true));
+          $this->currentAdmin()->notify(new UserRegisteryNotification($user,false));
+         $user->notify(new UserRegisteryNotification($user,true));
 //        CreateZohoCustomerJob::dispatch($user);
     }
 

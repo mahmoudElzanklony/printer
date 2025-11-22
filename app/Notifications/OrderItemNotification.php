@@ -29,10 +29,7 @@ class OrderItemNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        if(env('MAIL_STATUS') == 'local'){
-            return ['database'];
-        }
-        return ['database','mail'];
+        return ['database', 'broadcast'];
     }
 
 
@@ -48,18 +45,22 @@ class OrderItemNotification extends Notification
             'sender'=>auth()->id()
         ];
     }
+
     /**
-     * Get the mail representation of the notification.
+     * Get the broadcast representation of the notification.
+     *
+     * @return array<string, mixed>
      */
-    public function toMail(object $notifiable)
+    public function toBroadcast(object $notifiable): array
     {
-        SendEmail::send('تم الغاء الخدمه في  '.env('APP_NAME'),'لقد قمت بالغاء الخدمة رقم  '.$this->order->id.' من الاوردر التابع له رقم '.$this->order->order->id,'','',$this->order->order->user->email);
-        return (new MailMessage)
-            ->subject('Service cancelled successfully at '.env('APP_NAME'))
-            ->view( 'emails.email', ['details' => ['title'=>'Service cancelled successfully at '.env('APP_NAME'),
-                'body'=>'You cancel service successfully and its id is '.$this->order->id.' from order that id is'.$this->order->order->id,'link'=>'','link_msg'=>'']]);
-
-
+        return [
+            'data'=>json_encode(
+                [
+                    'ar'=>$this->order->order->user->username.'قام بالغاء خدمه رقم '.$this->order->id.' بنجاح من الاوردر التابع له رقم '.$this->order->order->id,
+                    'en'=>$this->order->order->user->username.'cancel service successfully and its id is '.$this->order->id.' from order that id is'.$this->order->order->id,
+                ],JSON_UNESCAPED_UNICODE),
+            'sender'=>auth()->id()
+        ];
     }
 
     /**
@@ -70,7 +71,12 @@ class OrderItemNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'data'=>json_encode(
+                [
+                    'ar'=>$this->order->order->user->username.'قام بالغاء خدمه رقم '.$this->order->id.' بنجاح من الاوردر التابع له رقم '.$this->order->order->id,
+                    'en'=>$this->order->order->user->username.'cancel service successfully and its id is '.$this->order->id.' from order that id is'.$this->order->order->id,
+                ],JSON_UNESCAPED_UNICODE),
+            'sender'=>auth()->id()
         ];
     }
 }

@@ -13,6 +13,7 @@
         "laravel/telescope": "^5.15",
         "laravel/tinker": "^2.8",
         "ordinary9843/ghostscript": "^2.2",
+        "pusher/pusher-php-server": "^7.2",
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.6",
         "spatie/laravel-permission": "^6.7"

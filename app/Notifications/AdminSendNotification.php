@@ -29,7 +29,7 @@ class AdminSendNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
 
@@ -45,10 +45,23 @@ class AdminSendNotification extends Notification
             'sender'=>auth()->id()
         ];
     }
-    /**
-     * Get the mail representation of the notification.
-     */
 
+    /**
+     * Get the broadcast representation of the notification.
+     *
+     * @return array<string, mixed>
+     */
+    public function toBroadcast(object $notifiable): array
+    {
+        return [
+            'data'=>json_encode(
+                [
+                    'ar'=>$this->data['message'],
+                    'en'=>$this->data['message'],
+                ],JSON_UNESCAPED_UNICODE),
+            'sender'=>auth()->id()
+        ];
+    }
 
     /**
      * Get the array representation of the notification.
@@ -58,7 +71,12 @@ class AdminSendNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'data'=>json_encode(
+                [
+                    'ar'=>$this->data['message'],
+                    'en'=>$this->data['message'],
+                ],JSON_UNESCAPED_UNICODE),
+            'sender'=>auth()->id()
         ];
     }
 }
