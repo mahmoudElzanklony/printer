@@ -8,6 +8,7 @@ use App\Actions\PaymentModalSave;
 use App\Actions\ValidateCouponAction;
 use App\Http\Enum\OrderStatuesEnum;
 use App\Http\Resources\OrderResource;
+use App\Jobs\AddFirstPageToPdfJob;
 use App\Models\orders;
 use App\Models\orders_coupons;
 use App\Models\orders_items;
@@ -223,7 +224,7 @@ class OrderBuilder
                     'order' => $info,
                 ])->render();
 
-                AddFirstPageToPdfAction::addFirstPageToPdf($existingPdfPath, $newPageHtml, $file);
+                AddFirstPageToPdfJob::dispatch($existingPdfPath, $newPageHtml, $file);
             }
         }
     }

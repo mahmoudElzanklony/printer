@@ -48,7 +48,7 @@
                         </p>
                         <p>
                             <span class="font-weight-bold">{{--{{ __('keywords.phone') }}--}}Phone</span>:
-                            <span>{{ $order->house_number }}</span>
+                            <span>{{ $order->phone_number }}</span>
                         </p>
                         @if($order->user->email)
                             <p>

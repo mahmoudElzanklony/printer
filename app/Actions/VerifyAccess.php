@@ -9,7 +9,6 @@ class VerifyAccess
     public static function execute($name)
     {
 
-
         if(auth()->check() && auth()->user()->roleName() != 'client') {
 
             if(!(auth()->user()->can($name))){
