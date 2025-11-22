@@ -5,11 +5,12 @@ namespace App\Notifications;
 use App\Mail\Myemail;
 use App\Services\SendEmail;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class WalletChargingNotification extends Notification
+class WalletChargingNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 

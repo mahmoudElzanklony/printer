@@ -4,10 +4,11 @@ namespace App\Notifications;
 
 use App\Services\SendEmail;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OrderNotification extends Notification
+class OrderNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
