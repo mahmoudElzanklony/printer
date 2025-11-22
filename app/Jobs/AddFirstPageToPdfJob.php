@@ -16,7 +16,7 @@ class AddFirstPageToPdfJob implements ShouldQueue
     /**
      * The number of seconds the job can run before timing out.
      */
-    public int $timeout = 120;
+    public int $timeout = 600;
 
     /**
      * Create a new job instance.
