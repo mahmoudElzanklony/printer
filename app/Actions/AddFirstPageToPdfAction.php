@@ -36,7 +36,9 @@ class AddFirstPageToPdfAction
             'mode' => 'utf-8',
             'format' => 'A4',
             'orientation' => 'P',
-            'rtl' => true,
+            'rtl' => false,
+            'useSubstitutions' => true,
+            'default_font' => 'dejavusans',
             'autoScriptToLang' => true,
             'autoLangToFont' => true,
         ]);
