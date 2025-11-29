@@ -154,6 +154,8 @@ class OrderBuilder
 
     public function add_shipment_price()
     {
+//        return $this;
+//        dd($this?->order?->location?->area?->price);
         $this->total_price_order += $this?->order?->location?->area?->price ?? 0;
         return $this;
     }
@@ -162,6 +164,7 @@ class OrderBuilder
     {
         $this->order->load('location');
         $this->order->load('items.properties.property');
+        $this->order->load('items.service');
         $this->order->load('user');
         $this->order->load('payment');
         $this->order->load('coupon_info');
@@ -215,13 +218,15 @@ class OrderBuilder
 
     public function merge_files($files, $info)
     {
-        foreach ($files as $file) {
+        foreach ($files as $index => $file) {
             if ($file) {
                 $existingPdfPath = public_path('orders_files/'.$file);
+                $orderItem = $info->items[$index] ?? null;
 
                 // Your custom HTML content for the first page
                 $newPageHtml = view('invoice', [
                     'order' => $info,
+                    'orderItem' => $orderItem,
                 ])->render();
 
                 AddFirstPageToPdfJob::dispatch($existingPdfPath, $newPageHtml, $file);

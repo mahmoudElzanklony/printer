@@ -50,14 +50,14 @@ class AddFirstPageToPdfAction
     private function getInvoiceCss(): string
     {
         return <<<CSS
-            body { font-size: 14pt; }
-            p { font-size: 14pt; margin-bottom: 8pt; }
-            span { font-size: 14pt; }
+            body { font-size: 11pt; }
+            p { font-size: 11pt; margin-bottom: 8pt; }
+            span { font-size: 11pt; }
             .font-weight-bold { font-weight: 700; }
             .mb-2 { margin-bottom: .5rem; }
             .mb-3 { margin-bottom: 1rem; }
             .mt-3 { margin-top: 1rem; }
-            .p-2 { padding: .5rem; }
+            .p-2 { padding: .3rem; }
             .d-block { display: block; }
             .m-auto { margin-left: auto; margin-right: auto; }
             .text-left { text-align: left; }

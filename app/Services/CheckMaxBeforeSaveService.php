@@ -25,7 +25,7 @@ class CheckMaxBeforeSaveService
             $check_len = saved_properties_settings::query()
                 ->where('user_id', auth()->id())
                 ->count();
-            if ($check_len >= 2) {
+            if ($check_len >= 6) {
                 abort(Messages::error(__('errors.max_value')));
             }
         }
