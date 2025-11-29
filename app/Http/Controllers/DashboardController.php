@@ -7,6 +7,8 @@ use App\Actions\VerifyAccess;
 use App\Filters\EndDateFilter;
 use App\Filters\StartDateFilter;
 use App\Filters\users\PhoneFilter;
+use App\Filters\users\RoleIdFilter;
+use App\Filters\users\RoleNameFilter;
 use App\Filters\users\UserNameFilter;
 use App\Filters\users\WalletFilter;
 use App\Http\Enum\OrderStatuesEnum;
@@ -45,6 +47,8 @@ class DashboardController extends Controller
                 WalletFilter::class,
                 UserNameFilter::class,
                 PhoneFilter::class,
+                RoleIdFilter::class,
+                RoleNameFilter::class, // one for filtering by role name and one by id
             ])
             ->thenReturn()
             ->paginate(request('limit') ?? 10);
