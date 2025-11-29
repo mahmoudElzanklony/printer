@@ -38,7 +38,7 @@ class MsegatClient
             'userSender' => $this->sender,
             'msg' => $message,
             'lang' => 'Ar',
-            'msgEncoding'=>'UTF8',
+            'msgEncoding' => 'UTF8',
         ];
 
         if (!empty($option)) {
