@@ -166,6 +166,7 @@ class OrderBuilder
     public function load_relations()
     {
         $this->order->load('location');
+        $this->order->load('location.area.city');
         $this->order->load('items.properties.property');
         $this->order->load('items.service');
         $this->order->load('user');
