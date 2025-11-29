@@ -93,15 +93,13 @@
                         <p>{{--{{ __('keywords.file_details') }}--}}Properties</p>
                     </div>
                     <div class="card-body p-2">
-                            <div>
-                                <ul class="p-0 m-0">
-                                    @foreach($orderItem->properties as $itemProperty)
-                                        <li style="padding: 5px 0; {{ $loop->last ? 'border-bottom: none;' : 'border-bottom: 1px solid #eee;' }}">
-                                            <span>{{ FormRequestHandleInputs::handle_output_column($itemProperty->property->name ?? 'N/A') }}</span>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                        <ul style="display: flex; flex-wrap: wrap; gap: 10px; padding-left: 20px; margin: 0;">
+                            @foreach($orderItem->properties as $itemProperty)
+                                <li style="flex: 1 1 50%; min-width: 200px; padding: 5px 0;">
+                                    <span>{{ FormRequestHandleInputs::handle_output_column($itemProperty->property->name ?? 'N/A') }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             @endif
