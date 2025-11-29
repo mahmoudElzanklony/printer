@@ -43,6 +43,8 @@ class OrderBuilder
 
     private $files_uploaded = [];
 
+    private $shipment_price = 0;
+
     public function __construct($base_order_info, $items, $payment, $coupon_number, $payment_strategy)
     {
         $this->base_order_info = collect($base_order_info)->toArray();
@@ -154,9 +156,10 @@ class OrderBuilder
 
     public function add_shipment_price()
     {
-//        return $this;
-//        dd($this?->order?->location?->area?->price);
-        $this->total_price_order += $this?->order?->location?->area?->price ?? 0;
+        // Store shipment price separately, don't add to total_price_order yet
+        $this->shipment_price = $this?->order?->location?->area?->price ?? 0;
+        // Add shipment to total for final amount
+        $this->total_price_order += $this->shipment_price;
         return $this;
     }
 
@@ -241,7 +244,7 @@ class OrderBuilder
             $updated_payment = payments::query()->where('paymentable_id', '=', $this->order->id)->first();
             $this->total_price_order += $updated_payment->money;
         }
-        PaymentModalSave::make($this->order->id, 'orders', $this->total_price_order, $this->payment['type'] ?? 'wallet', $updated_payment->id ?? null);
+        PaymentModalSave::make($this->order->id, 'orders', $this->total_price_order, $this->payment['type'] ?? 'wallet', $updated_payment->id ?? null, $this->shipment_price);
         DB::commit();
         if ($this->payment['type'] == 'wallet') {
             AddToWalletHistoryAction::save($this->total_price_order, 'min', 'order', auth()->id());

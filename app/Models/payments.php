@@ -9,7 +9,7 @@ class payments extends Model
 {
     use HasFactory;
     // type ==========> visa or wallet
-    protected $fillable = ['paymentable_id','paymentable_type','money','tax','type'];
+    protected $fillable = ['paymentable_id','paymentable_type','money','shipment_price','tax','type'];
 
     public function paymentable()
     {

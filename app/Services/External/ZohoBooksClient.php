@@ -117,7 +117,7 @@ class ZohoBooksClient
         }
 
         // Shipping
-        $shipping = (float) ($order->location->area->price ?? 0);
+        $shipping = (float) ($order->payment->shipment_price ?? 0);
         if ($shipping > 0) {
             $lineItems[] = [
                 'name' => 'Shipping',
