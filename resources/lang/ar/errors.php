@@ -25,4 +25,7 @@ return [
     'cant_change_status_after_completed' => 'لا يمكنك تغيير الحاله بعد وصولها للأكتمال',
     'sending_message_failed' => 'لا يمكن ارسال الرسالة الان من فضلك حاول مرة اخري في وقت لاحق',
     'payment_failed'=>'عملية الدفع فشلت من فضلك حاول مرة اخري في وقت لاحق',
+    'username_not_found' => 'اسم المستخدم غير موجود',
+    'username_login_not_allowed_for_clients' => 'تسجيل الدخول باسم المستخدم مسموح للموظفين فقط',
+    'username_already_taken_by_employee' => 'اسم المستخدم هذا مستخدم بالفعل من قبل موظف آخر',
 ];

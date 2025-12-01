@@ -18,6 +18,22 @@ class LoginController extends Controller
         if (request()->filled('email')) {
             $data = ['email' => request('email')];
             $user = User::query()->where('email', $data['email'])->first();
+        } elseif (request()->filled('username')) {
+            // login by username for employees
+            $data = ['username' => request('username')];
+            $user = User::query()
+                ->whereHas('roles', function ($query) {
+                    $query->where('name', '!=', 'client');
+                })
+                ->where('username', $data['username'])
+                ->whereNotNull('username')
+                ->where('username', '!=', '')
+                ->first();
+            if ($user) {
+                $user->load('image');
+            } else {
+                return Messages::error(__('errors.username_not_found'));
+            }
         } elseif (request()->filled('phone') && request()->filled('password')) {
 
             $data = ['phone' => request('phone'), 'password' => request('password')];
@@ -37,7 +53,7 @@ class LoginController extends Controller
             $user = null;
         }
         if ($user) {
-            $user['token'] = $user->createToken($data['email'] ?? $data['phone'])->plainTextToken;
+            $user['token'] = $user->createToken($data['email'] ?? $data['phone'] ?? $data['username'])->plainTextToken;
 
             array_merge($user->toArray(), DefaultInfoWithUser::execute($user)->toArray());
 
@@ -77,7 +93,8 @@ class LoginController extends Controller
             }
 
             return Messages::error('not valid token', 401);
-
         }
+
+        return Messages::error('not valid token', 401);
     }
 }

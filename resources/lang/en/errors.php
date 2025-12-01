@@ -25,5 +25,8 @@ return [
     'cant_change_status_after_completed' => 'You cannot change status after completed',
     'sending_message_failed' => 'Sending message failed, please try again later',
     'payment_failed'=>'Payment process failed please try again later',
+    'username_not_found' => 'Username not found',
+    'username_login_not_allowed_for_clients' => 'Username login is only allowed for employees',
+    'username_already_taken_by_employee' => 'This username is already taken by another employee',
 
 ];

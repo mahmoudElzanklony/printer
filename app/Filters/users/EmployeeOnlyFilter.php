@@ -17,4 +17,3 @@ class EmployeeOnlyFilter
         return $next($request);
     }
 }
-

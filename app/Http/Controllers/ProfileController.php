@@ -28,6 +28,25 @@ class ProfileController extends Controller
         VerifyAccess::execute('pi pi-users|/users|update');
         $data = $request->validated();
 
+        // validate if employee is updating username to one that already exists for another employee
+        if (isset($data['username']) && auth()->user()->roleName() != 'client') {
+            if (auth()->user()->username != $data['username']) {
+                $existingEmployee = User::query()
+                    ->where('username', $data['username'])
+                    ->whereNotNull('username')
+                    ->where('username', '!=', '')
+                    ->where('id', '!=', auth()->id())
+                    ->whereHas('roles', function ($query) {
+                        $query->where('name', '!=', 'client');
+                    })
+                    ->first();
+
+                if ($existingEmployee) {
+                    return Messages::error(__('errors.username_already_taken_by_employee'));
+                }
+            }
+        }
+
         if (isset($data['phone'])) {
             if (auth()->user()->phone != $data['phone']) {
                 $data['phone_verified_at'] = null;
