@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Actions;
+
 use setasign\Fpdi\Fpdi;
 use Mpdf\Mpdf;
 use Illuminate\Support\Facades\Log;
 
 class AddFirstPageToPdfAction
 {
-    public static function addFirstPageToPdf($existingPdfPath, $newPageHtml , $filename)
+    public static function addFirstPageToPdf($existingPdfPath, $newPageHtml, $filename)
     {
         $action = new self();
         $newPagePdfPath = storage_path('app/temp_first_page.pdf');
@@ -37,7 +38,8 @@ class AddFirstPageToPdfAction
                 'trace' => $e->getTraceAsString(),
             ]);
             throw $e;
-        } finally {
+        }
+        finally {
             $action->cleanupTemporaryFiles($newPagePdfPath, $processedPdfPath);
         }
     }
@@ -56,13 +58,7 @@ class AddFirstPageToPdfAction
         // Verify temp directory is writable
         if (!is_writable($tempDir)) {
             Log::warning('generateFirstPagePdf: Temp directory is not writable', ['temp_dir' => $tempDir]);
-        } else {
-            Log::info('generateFirstPagePdf: Temp directory is writable', ['temp_dir' => $tempDir]);
         }
-
-        // Check for Arabic content
-        $hasArabic = $this->containsArabic($newPageHtml);
-        Log::info('generateFirstPagePdf: Arabic content check', ['has_arabic' => $hasArabic]);
 
         try {
             $mpdf = new Mpdf([
@@ -77,28 +73,13 @@ class AddFirstPageToPdfAction
                 'tempDir' => $tempDir,
             ]);
 
-            Log::info('generateFirstPagePdf: mPDF instance created successfully');
-
             $css = $this->getInvoiceCss();
-            Log::debug('generateFirstPagePdf: CSS prepared', ['css_length' => strlen($css)]);
 
             $mpdf->WriteHTML($css, \Mpdf\HTMLParserMode::HEADER_CSS);
-            Log::debug('generateFirstPagePdf: CSS written to mPDF');
 
             $mpdf->WriteHTML($newPageHtml, \Mpdf\HTMLParserMode::HTML_BODY);
-            Log::debug('generateFirstPagePdf: HTML body written to mPDF', ['html_length' => strlen($newPageHtml)]);
 
             $mpdf->Output($outputPath, \Mpdf\Output\Destination::FILE);
-
-            if (file_exists($outputPath)) {
-                $fileSize = filesize($outputPath);
-                Log::info('generateFirstPagePdf: PDF generated successfully', [
-                    'output_path' => $outputPath,
-                    'file_size' => $fileSize,
-                ]);
-            } else {
-                Log::error('generateFirstPagePdf: PDF file was not created', ['output_path' => $outputPath]);
-            }
         } catch (\Exception $e) {
             Log::error('generateFirstPagePdf: Exception occurred', [
                 'error' => $e->getMessage(),
@@ -108,11 +89,6 @@ class AddFirstPageToPdfAction
             ]);
             throw $e;
         }
-    }
-
-    private function containsArabic(string $html): bool
-    {
-        return (bool) preg_match('/[\x{0600}-\x{06FF}\x{0750}-\x{077F}\x{08A0}-\x{08FF}]/u', $html);
     }
 
     private function getInvoiceCss(): string
