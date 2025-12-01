@@ -18,9 +18,9 @@ class LoginController extends Controller
         if (request()->filled('email')) {
             $data = ['email' => request('email')];
             $user = User::query()->where('email', $data['email'])->first();
-        } elseif (request()->filled('username')) {
+        } elseif (request()->filled('username') && request()->filled('password')) {
             // login by username for employees
-            $data = ['username' => request('username')];
+            $data = ['username' => request('username'), 'password' => request('password')];
             $user = User::query()
                 ->whereHas('roles', function ($query) {
                     $query->where('name', '!=', 'client');
@@ -31,8 +31,11 @@ class LoginController extends Controller
                 ->first();
             if ($user) {
                 $user->load('image');
+                if (! Hash::check($data['password'], $user->password)) {
+                    return Messages::error(__('errors.username_or_password_is_not_correct'));
+                }
             } else {
-                return Messages::error(__('errors.username_not_found'));
+                return Messages::error(__('errors.username_or_password_is_not_correct'));
             }
         } elseif (request()->filled('phone') && request()->filled('password')) {
 
