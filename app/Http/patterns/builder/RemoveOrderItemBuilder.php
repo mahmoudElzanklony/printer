@@ -5,6 +5,7 @@ namespace App\Http\patterns\builder;
 use App\Actions\HandleRefundMoneyAction;
 use App\Http\Enum\OrderStatuesEnum;
 use App\Models\orders_items;
+use App\Models\taxes;
 use App\Services\Messages;
 
 class RemoveOrderItemBuilder
@@ -41,12 +42,22 @@ class RemoveOrderItemBuilder
 
     public function detect_full_cost()
     {
-        //
+        // Calculate base cost (service price + properties prices)
         $base_cost = $this->order_item->price;
         foreach ($this->order_item->properties as $property) {
             $base_cost += $property->price;
         }
-        $this->total_price_item = $base_cost * $this->order_item->paper_number * $this->order_item->copies_number;
+
+        // Calculate total without tax
+        $total_without_tax = $base_cost * $this->order_item->paper_number * $this->order_item->copies_number;
+
+        // Get tax percentage and calculate tax amount
+        $tax_percentage = taxes::query()->first()->percentage ?? 0;
+        $tax_rate = $tax_percentage / 100;
+        $tax_amount = $total_without_tax * $tax_rate;
+
+        // Total refund includes tax
+        $this->total_price_item = $total_without_tax + $tax_amount;
 
         return $this;
     }

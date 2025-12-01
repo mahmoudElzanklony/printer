@@ -82,6 +82,7 @@ class OrdersController extends Controller
                 ->save_items()
                 ->validate_coupon()
                 ->add_shipment_price()
+                ->apply_tax()
                 ->save_payment();
 
             return $order_action;

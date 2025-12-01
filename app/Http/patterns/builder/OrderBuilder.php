@@ -18,6 +18,7 @@ use App\Models\payments;
 use App\Models\properties;
 use App\Models\saved_properties_settings_answers;
 use App\Models\services;
+use App\Models\taxes;
 use App\Services\Messages;
 use Illuminate\Support\Facades\DB;
 
@@ -160,6 +161,24 @@ class OrderBuilder
         $this->shipment_price = $this?->order?->location?->area?->price ?? 0;
         // Add shipment to total for final amount
         $this->total_price_order += $this->shipment_price;
+        return $this;
+    }
+
+    public function apply_tax()
+    {
+        // Get tax percentage from database
+        $tax_percentage = taxes::query()->first()->percentage ?? 0;
+        $tax_rate = $tax_percentage / 100;
+
+        // Separate product price and shipment price
+        $product_price = $this->total_price_order - $this->shipment_price;
+
+        // Calculate tax only on product price (not on shipment)
+        $tax_amount = $product_price * $tax_rate;
+
+        // Add tax to total price (shipment is already in total_price_order)
+        $this->total_price_order = $product_price + $tax_amount + $this->shipment_price;
+
         return $this;
     }
 
