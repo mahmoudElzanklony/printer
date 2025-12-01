@@ -76,7 +76,7 @@ class ServicesControllerResource extends Controller
     {
         //
 
-        $data = services::query()->with('category')
+        $data = services::query()->with('category.properties')
             ->where('id', $id)->FailIfNotFound(__('errors.not_found_data'));
         return ServiceResource::make($data);
     }
