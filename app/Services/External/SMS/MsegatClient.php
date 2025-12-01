@@ -26,7 +26,7 @@ class MsegatClient
     public function send(string $to, string $message, array $options = [])
     {
         $to = $this->normalize_number($to);
-        if ($to == '' || $message == '') {
+        if ($to == '' || $message == '' || !str_starts_with($to, '966')) {
             return false;
         }
 

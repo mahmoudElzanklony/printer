@@ -12,9 +12,11 @@ class HistorySmsDynamicBuilder
     private $users;
 
     public function __construct(private $basic_info)
-    {}
+    {
+    }
 
-    public function get_users_number(){
+    public function get_users_number()
+    {
         $this->users = orders::query()->with('user')
             ->selectRaw('count(user_id) as orders , user_id')
             ->groupBy('user_id')
@@ -22,19 +24,21 @@ class HistorySmsDynamicBuilder
             ->get();
         // create at db
         $this->basic_info['users_no'] = sizeof($this->users);
-
-
         // send sms message
         $obj = new SMSMessages();
-        foreach($this->users as $user){
-            // TO DO SMS
-            //$obj->send();
+        foreach ($this->users as $user) {
+            $data = [
+                'user' => $user->user,
+                'message' => $this->basic_info[app()->getLocale().'_message'],
+            ];
+            $obj->send($data);
         }
         return $this;
     }
 
-    public function save_DB(){
-        $data =  FormRequestHandleInputs::handle_inputs_langs($this->basic_info,['name','message']);
+    public function save_DB()
+    {
+        $data = FormRequestHandleInputs::handle_inputs_langs($this->basic_info, ['name', 'message']);
         $result = sms_history::query()->create($data);
         $result->load('user');
         return $result;
