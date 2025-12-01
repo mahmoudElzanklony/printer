@@ -30,7 +30,7 @@ class ServicesControllerResource extends Controller
     public function index()
     {
         VerifyAccess::execute('pi pi-cogpi-cog|/services|read');
-        $data = services::query()->with('category')->orderBy('id','DESC')
+        $data = services::query()->with('category.properties')->orderBy('id','DESC')
             ->orderBy('id','DESC')->paginate(request('limit') ?? 10);
         return ServiceResource::collection($data);
     }
@@ -55,6 +55,7 @@ class ServicesControllerResource extends Controller
         }
         // Load the category with the associated image
         $service->load('image');
+        $service->load('category.properties');
 
         DB::commit();
         // return response
