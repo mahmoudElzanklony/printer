@@ -6,6 +6,7 @@ use App\Actions\AddToWalletHistoryAction;
 use App\Actions\VerifyAccess;
 use App\Filters\EndDateFilter;
 use App\Filters\StartDateFilter;
+use App\Filters\users\EmployeeOnlyFilter;
 use App\Filters\users\PhoneFilter;
 use App\Filters\users\RoleIdFilter;
 use App\Filters\users\RoleNameFilter;
@@ -48,7 +49,8 @@ class DashboardController extends Controller
                 UserNameFilter::class,
                 PhoneFilter::class,
                 RoleIdFilter::class,
-                RoleNameFilter::class, // one for filtering by role name and one by id
+                RoleNameFilter::class,
+                EmployeeOnlyFilter::class,
             ])
             ->thenReturn()
             ->paginate(request('limit') ?? 10);
