@@ -15,12 +15,13 @@ class ContactResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-          'id'=>$this->id,
-          'username'=>$this->username,
-          'phone'=>$this->phone,
-          'message'=>$this->message,
-          'status'=>$this->status,
-          'created_at'=>$this->created_at->format('Y-m-d H:i:s'),
+            'id' => $this->id,
+            'username' => $this->username,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'message' => $this->message,
+            'status' => $this->status,
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }
 }
