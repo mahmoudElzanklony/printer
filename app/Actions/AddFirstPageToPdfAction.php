@@ -28,8 +28,6 @@ class AddFirstPageToPdfAction
             // Merge PDFs
             $outputPath = public_path('orders_files/'.$filename);
             $action->mergePdfs($newPagePdfPath, $pdfToUse, $outputPath);
-
-            Log::info('AddFirstPageToPdf completed successfully', ['output_path' => $outputPath]);
         } catch (\Exception $e) {
             Log::error('AddFirstPageToPdf failed', [
                 'error' => $e->getMessage(),
@@ -46,16 +44,12 @@ class AddFirstPageToPdfAction
 
     private function generateFirstPagePdf(string $newPageHtml, string $outputPath): void
     {
-        Log::info('generateFirstPagePdf: Starting PDF generation', ['output_path' => $outputPath]);
-
         // Setup temp directory
         $tempDir = storage_path('app/mpdf_temp');
         if (!is_dir($tempDir)) {
             @mkdir($tempDir, 0775, true);
             Log::info('generateFirstPagePdf: Created temp directory', ['temp_dir' => $tempDir]);
         }
-
-        // Verify temp directory is writable
         if (!is_writable($tempDir)) {
             Log::warning('generateFirstPagePdf: Temp directory is not writable', ['temp_dir' => $tempDir]);
         }
