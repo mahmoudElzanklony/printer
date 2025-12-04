@@ -65,19 +65,25 @@ class MsegatClient
 
     function normalize_number(string $number)
     {
-        $number = trim($number);
-        $number = preg_replace('/[^\d\+]/', '', $number);
+        $numbers = explode(',', $number);
+        $normalized = array_filter(array_map(function ($num) {  // msegat supports bulk sending with comma separation
+            $num = trim($num);
+            $num = preg_replace('/[^\d\+]/', '', $num);
 
-        // convert leading 00 to +
-        if (str_starts_with($number, '00')) {
-            $number = '+'.substr($number, 2);
-        }
+            // convert leading 00 to +
+            if (str_starts_with($num, '00')) {
+                $num = '+'.substr($num, 2);
+            }
 
+            if (str_starts_with($num, '+')) {
+                $num = substr($num, 1);
+            }
 
-        if (str_starts_with($number, '+')) {
-            $number = substr($number, 1);
-        }
+            return $num;
+        }, $numbers), function ($num) {
+            return str_starts_with($num, '966');
+        });
 
-        return $number;
+        return implode(',', $normalized);
     }
 }

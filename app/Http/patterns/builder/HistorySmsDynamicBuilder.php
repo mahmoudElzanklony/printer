@@ -26,13 +26,15 @@ class HistorySmsDynamicBuilder
         $this->basic_info['users_no'] = sizeof($this->users);
         // send sms message
         $obj = new SMSMessages();
+        $phones = [];
         foreach ($this->users as $user) {
-            $data = [
-                'user' => $user->user,
-                'message' => $this->basic_info[app()->getLocale().'_message'],
-            ];
-            $obj->send($data);
+            $phones[] = $user->user->phone;
         }
+        $data = [
+            'to' => implode(',', $phones),
+            'message' => $this->basic_info[app()->getLocale().'_message'],
+        ];
+        $obj->send($data);
         return $this;
     }
 
