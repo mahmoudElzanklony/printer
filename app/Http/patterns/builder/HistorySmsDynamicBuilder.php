@@ -20,7 +20,7 @@ class HistorySmsDynamicBuilder
         $this->users = orders::query()->with('user')
             ->selectRaw('count(user_id) as orders , user_id')
             ->groupBy('user_id')
-            ->havingRaw('count(orders) >= '.$this->basic_info['limit_orders'])
+            ->havingRaw('count(user_id) >= '.$this->basic_info['limit_orders'])
             ->get();
         // create at db
         $this->basic_info['users_no'] = sizeof($this->users);
