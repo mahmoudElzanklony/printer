@@ -69,7 +69,7 @@ class CouponsControllerResource extends Controller
      */
     public function show(string $id)
     {
-        //
+        VerifyAccess::execute('pi pi-bookmark-fill|/coupons|read');
         $data = coupons::query()->where('id', $id)
             ->FailIfNotFound(__('errors.not_found_data'));
         return CouponResource::make($data);

@@ -81,7 +81,7 @@ class CategoriesControllerResource extends Controller
      */
     public function show(string $id)
     {
-        //
+        VerifyAccess::execute('pi pi-sitemap|/categories|read');
         $cat  = categories::query()->where('id', $id)->FailIfNotFound(__('errors.not_found_data'));
 
 
@@ -107,7 +107,7 @@ class CategoriesControllerResource extends Controller
     public function update(categoriesFormRequest $request , $id)
     {
         VerifyAccess::execute('pi pi-sitemap|/categories|update');
-        return 123;
+//        return 123;
         $data = $request->validated();
         $data['id'] = $id;
         return $this->save($data,request()->file('image'));

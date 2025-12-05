@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\CheckForUploadImage;
 
 
+use App\Actions\VerifyAccess;
 use App\Filters\EndDateFilter;
 use App\Filters\IsDefaultFilter;
 use App\Filters\LimitFilter;
@@ -39,6 +40,7 @@ class SmsHistoryControllerResource extends Controller
     }
     public function index()
     {
+        VerifyAccess::execute('fa-solid fa-comment-sms|/dynamic-sms|read');
         $data = sms_history::query()->with('user')
             ->orderBy('id','DESC');
 
@@ -75,6 +77,7 @@ class SmsHistoryControllerResource extends Controller
 
     public function store(smsHistoryFormRequest $request)
     {
+        VerifyAccess::execute('fa-solid fa-comment-sms|/dynamic-sms|create');
         return $this->save($request->validated());
     }
 
@@ -83,7 +86,7 @@ class SmsHistoryControllerResource extends Controller
      */
     public function show(string $id)
     {
-        //
+        VerifyAccess::execute('fa-solid fa-comment-sms|/dynamic-sms|read');
         $data = sms_history::query()->with('user')
             ->where('id', $id)
             ->firstOrFailWithCustomError(__('errors.not_found_data'));

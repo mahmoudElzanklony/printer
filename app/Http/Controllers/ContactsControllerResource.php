@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\ChangeDefaultLocationToNonAction;
 use App\Actions\CheckForUploadImage;
+use App\Actions\VerifyAccess;
 use App\Filters\EndDateFilter;
 use App\Filters\IsDefaultFilter;
 use App\Filters\LimitFilter;
@@ -46,6 +47,7 @@ class ContactsControllerResource extends Controller
 
     public function index()
     {
+        VerifyAccess::execute('pi pi-send|/contacts|read');
         $data = contacts::query()
             ->get();
 
@@ -70,6 +72,7 @@ class ContactsControllerResource extends Controller
 
     public function store(contactFormReqest $request)
     {
+        VerifyAccess::execute('pi pi-send|/contacts|create');
         return $this->save($request->validated());
     }
 
@@ -78,7 +81,7 @@ class ContactsControllerResource extends Controller
      */
     public function show(string $id)
     {
-        //
+        VerifyAccess::execute('pi pi-send|/contacts|read');
         $data = contacts::query()
             ->where('id', $id)
             ->firstOrFailWithCustomError(__('errors.not_found_data'));
@@ -92,6 +95,7 @@ class ContactsControllerResource extends Controller
      */
     public function update(contactFormReqest $request, $id)
     {
+        VerifyAccess::execute('pi pi-send|/contacts|update');
         $data = $request->validated();
         $data['id'] = $id;
         return $this->save($data);

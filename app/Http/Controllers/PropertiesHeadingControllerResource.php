@@ -76,7 +76,7 @@ class PropertiesHeadingControllerResource extends Controller
      */
     public function show(string $id)
     {
-        //
+        VerifyAccess::execute('pi pi-palette|/properties-headings|read');
         $data = properties_heading::query()
             ->with('properties', function ($query) {
                 $query->with('icon_info')->with('image');

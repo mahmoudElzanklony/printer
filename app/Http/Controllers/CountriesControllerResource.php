@@ -71,7 +71,7 @@ class CountriesControllerResource extends Controller
      */
     public function show(string $id)
     {
-        //
+        VerifyAccess::execute('fa-solid fa-earth-americas|/countries|read');
         $obj  = countries::query()->where('id',$id)
             ->firstOrFailWithCustomError(__('errors.not_found_data'));
 

@@ -97,7 +97,7 @@ class ShipmentPricesControllerResource extends Controller
      */
     public function show(string $id)
     {
-        //
+        VerifyAccess::execute('fa-solid fa-hand-holding-dollar|/shipment|read');
         $obj  = shipment_prices::query()->where('id',$id)
             ->with(['user','city'])
             ->firstOrFailWithCustomError(__('errors.not_found_data'));

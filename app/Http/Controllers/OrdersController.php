@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\OrdersWithAllDataAction;
 use App\Actions\UserVerficationCheck;
 use App\Actions\ValidateCouponAction;
+use App\Actions\VerifyAccess;
 use App\Filters\EndDateFilter;
 use App\Filters\IdFilter;
 use App\Filters\orders\RateOrderFilter;
@@ -93,6 +94,7 @@ class OrdersController extends Controller
 
     public function update_status(orderStatusFormRequest $request)
     {
+        VerifyAccess::execute('pi pi-cart-plus|/orders|update');
         $data = $request->validated();
         // check order doesn't have status before
         $check = orders_tracking::query()

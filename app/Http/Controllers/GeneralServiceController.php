@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\VerifyAccess;
 use App\Http\Controllers\Controller;
 
 use App\Services\Messages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use App\Actions\GetPermissionForTable;
 
 class GeneralServiceController extends Controller
 {
@@ -15,6 +16,13 @@ class GeneralServiceController extends Controller
     public function delete_item(){
         $table = request('table');
         $id = request('id');
+
+        // Check delete permission
+        $permission = GetPermissionForTable::handle($table, 'delete');
+        if ($permission) {
+            VerifyAccess::execute($permission);
+        }
+
         try{
             $model =  '\\App\\Models\\'.$table;
             $model = new $model();

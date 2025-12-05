@@ -60,6 +60,7 @@ class DashboardController extends Controller
 
     public function orders()
     {
+        VerifyAccess::execute('pi pi-cart-plus|/orders|read');
         $data = [
             'pending' => orders::query()->whereHas('last_status', fn ($e) => $e->where('status', OrderStatuesEnum::pending))->count(),
             'delivery' => orders::query()->whereHas('last_status', fn ($e) => $e->where('status', OrderStatuesEnum::delivery))->count(),
@@ -74,6 +75,7 @@ class DashboardController extends Controller
 
     public function orders_summary()
     {
+        VerifyAccess::execute('pi pi-cart-plus|/orders|read');
         $output = [];
         for ($i = 0; $i < 12; $i++) {
             $month = Carbon::parse((request('year') ?? date('Y')).'-'.($i + 1).'-01')->firstOfMonth()->addDay();
@@ -145,6 +147,7 @@ class DashboardController extends Controller
 
     public function create_notification_content(notificationsScheduleFormRequest $request, MessagesInterface $messageObj)
     {
+        VerifyAccess::execute('fa-solid fa-comment-sms|/dynamic-sms|read'); // todo:: check on permission
         $data = $request->validated();
         DB::beginTransaction();
         // create content first

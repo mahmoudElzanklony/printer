@@ -94,7 +94,7 @@ class PropertiesControllerResource extends Controller
      */
     public function show(string $id)
     {
-        //
+        VerifyAccess::execute('pi pi-wrench|/properties|read');
         $data = properties::query()->with(['heading.image', 'icon_info', 'image'])
             ->where('id', $id)->FailIfNotFound(__('errors.not_found_data'));
 

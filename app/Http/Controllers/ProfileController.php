@@ -95,6 +95,7 @@ class ProfileController extends Controller
 
     public function home()
     {
+        VerifyAccess::execute('pi pi-fw pi-home|/|read');
         $statistics = $this->statistics();
         $default_location = saved_locations::query()->with('area')
             ->where('user_id', auth()->id())

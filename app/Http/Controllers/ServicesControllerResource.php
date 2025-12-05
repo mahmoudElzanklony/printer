@@ -75,7 +75,7 @@ class ServicesControllerResource extends Controller
     public function show(string $id)
     {
         //
-
+        VerifyAccess::execute('pi pi-cogpi-cog|/services|read');
         $data = services::query()->with('category.properties')
             ->where('id', $id)->FailIfNotFound(__('errors.not_found_data'));
         return ServiceResource::make($data);
