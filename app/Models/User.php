@@ -90,6 +90,16 @@ class User extends Authenticatable
         return $this->hasOne(ZohoCustomer::class,'user_id');
     }
 
+    public function fcmTokens()
+    {
+        return $this->hasMany(UserFcmToken::class);
+    }
+
+    public function routeNotificationForFcm()
+    {
+        return $this->fcmTokens()->pluck('device_id')->toArray();
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

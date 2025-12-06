@@ -9,6 +9,9 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Fcm\FcmChannel;
+use NotificationChannels\Fcm\FcmMessage;
+use NotificationChannels\Fcm\Resources\Notification as FcmNotification;
 
 class WalletChargingNotification extends Notification implements ShouldBroadcast
 {
@@ -34,7 +37,7 @@ class WalletChargingNotification extends Notification implements ShouldBroadcast
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'broadcast'];
+        return ['database', 'broadcast', FcmChannel::class];
     }
 
     /**
@@ -115,5 +118,29 @@ class WalletChargingNotification extends Notification implements ShouldBroadcast
                 ], JSON_UNESCAPED_UNICODE),
             'sender' => auth()->id()
         ];
+    }
+
+    public function toFcm($notifiable): FcmMessage
+    {
+        $difference = $this->user->wallet - $this->old_wallet;
+        $amount = abs($difference);
+        if ($difference >= 0) {
+            $body_ar = 'تم شحن رصيد المحفظة بقيمة ' . $amount . ' و اصبح الرصيد الحالي هو ' . $this->user->wallet;
+            $body_en = 'The wallet balance has been charged ' . $amount . '. The current balance is ' . $this->user->wallet;
+        } else {
+            $body_ar = 'تم خصم رصيد المحفظة بقيمة ' . $amount . ' و اصبح الرصيد الحالي هو ' . $this->user->wallet;
+            $body_en = 'The wallet balance has been deducted ' . $amount . '. The current balance is ' . $this->user->wallet;
+        }
+
+        return (new FcmMessage(
+            notification: new FcmNotification(
+                title: 'تحديث رصيد المحفظة',
+                body: $body_ar
+            )
+        ))
+            ->data([
+                'ar' => $body_ar,
+                'en' => $body_en,
+            ]);
     }
 }

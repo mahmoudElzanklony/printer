@@ -6,6 +6,7 @@ use App\Actions\DefaultInfoWithUser;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Models\UserFcmToken;
 use App\Services\Messages;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -58,6 +59,16 @@ class LoginController extends Controller
         if ($user) {
             $user['token'] = $user->createToken($data['email'] ?? $data['phone'] ?? $data['username'])->plainTextToken;
 
+            // save device id if provided (mobile login)
+            if (request()->filled('device_id')) {
+                UserFcmToken::updateOrCreate(
+                    [
+                        'user_id' => $user->id,
+                        'device_id' => request('device_id')
+                    ]
+                );
+            }
+
             array_merge($user->toArray(), DefaultInfoWithUser::execute($user)->toArray());
 
             return Messages::success(__('messages.login_successfully'), UserResource::make($user));
@@ -68,6 +79,15 @@ class LoginController extends Controller
 
     public function logout()
     {
+        // remove device id if provided (mobile logout)
+        if (request()->filled('device_id') && auth('sanctum')->check()) {
+            $user = auth('sanctum')->user();
+
+            UserFcmToken::where('user_id', $user->id)
+                ->where('device_id', request('device_id'))
+                ->delete();
+        }
+
         auth('web')->logout();
 
         return Messages::success(__('messages.logout_successfully'));

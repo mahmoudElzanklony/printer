@@ -8,6 +8,9 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Fcm\FcmChannel;
+use NotificationChannels\Fcm\FcmMessage;
+use NotificationChannels\Fcm\Resources\Notification as FcmNotification;
 
 class OrderStatusNotification extends Notification implements ShouldBroadcast
 {
@@ -30,7 +33,7 @@ class OrderStatusNotification extends Notification implements ShouldBroadcast
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'broadcast'];
+        return ['database', 'broadcast', FcmChannel::class];
     }
 
 
@@ -79,5 +82,22 @@ class OrderStatusNotification extends Notification implements ShouldBroadcast
                 ],JSON_UNESCAPED_UNICODE),
             'sender'=>auth()->id()
         ];
+    }
+
+    public function toFcm($notifiable): FcmMessage
+    {
+        $body_ar = 'حاله الطلب الخاصه بك رقم '.$this->order->order_id.' تم تحديث حالته الي '.__('keywords.'.$this->order->status->value);
+        $body_en = 'Order number '.$this->order->order_id.' changed its status to '.$this->order->status->value;
+
+        return (new FcmMessage(
+            notification: new FcmNotification(
+                title: 'تحديث حالة الطلب',
+                body: $body_ar
+            )
+        ))
+            ->data([
+                'ar' => $body_ar,
+                'en' => $body_en,
+            ]);
     }
 }

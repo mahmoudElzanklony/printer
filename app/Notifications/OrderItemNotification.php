@@ -8,6 +8,9 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Fcm\FcmChannel;
+use NotificationChannels\Fcm\FcmMessage;
+use NotificationChannels\Fcm\Resources\Notification as FcmNotification;
 
 class OrderItemNotification extends Notification implements ShouldBroadcast
 {
@@ -30,7 +33,7 @@ class OrderItemNotification extends Notification implements ShouldBroadcast
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'broadcast'];
+        return ['database', 'broadcast', FcmChannel::class];
     }
 
 
@@ -79,5 +82,22 @@ class OrderItemNotification extends Notification implements ShouldBroadcast
                 ],JSON_UNESCAPED_UNICODE),
             'sender'=>auth()->id()
         ];
+    }
+
+    public function toFcm($notifiable): FcmMessage
+    {
+        $body_ar = $this->order->order->user->username.' قام بالغاء خدمه رقم '.$this->order->id.' بنجاح من الاوردر التابع له رقم '.$this->order->order->id;
+        $body_en = $this->order->order->user->username.' cancel service successfully and its id is '.$this->order->id.' from order that id is '.$this->order->order->id;
+
+        return (new FcmMessage(
+            notification: new FcmNotification(
+                title: 'إلغاء خدمة',
+                body: $body_ar
+            )
+        ))
+            ->data([
+                'ar' => $body_ar,
+                'en' => $body_en,
+            ]);
     }
 }

@@ -8,6 +8,9 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Fcm\FcmChannel;
+use NotificationChannels\Fcm\FcmMessage;
+use NotificationChannels\Fcm\Resources\Notification as FcmNotification;
 
 class AdminSendNotification extends Notification implements ShouldBroadcast
 {
@@ -30,7 +33,7 @@ class AdminSendNotification extends Notification implements ShouldBroadcast
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'broadcast'];
+        return ['database', 'broadcast', FcmChannel::class];
     }
 
 
@@ -79,5 +82,19 @@ class AdminSendNotification extends Notification implements ShouldBroadcast
                 ],JSON_UNESCAPED_UNICODE),
             'sender'=>auth()->id()
         ];
+    }
+
+    public function toFcm($notifiable): FcmMessage
+    {
+        return (new FcmMessage(
+            notification: new FcmNotification(
+                title: 'إشعار من الإدارة',
+                body: $this->data['message']
+            )
+        ))
+            ->data([
+                'ar' => $this->data['message'],
+                'en' => $this->data['message'],
+            ]);
     }
 }
