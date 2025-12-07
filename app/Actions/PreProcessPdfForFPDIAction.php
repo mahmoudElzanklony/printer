@@ -15,8 +15,8 @@ class PreProcessPdfForFPDIAction
         $outputPdfPath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '_preprocessed.pdf';
         try {
             copy($inputPdfPath, $outputPdfPath);
-            $binPath = 'C:/PROGRA~1/gs/GS1006~1.0/bin/gswin64c.exe';
-//            $binPath = '/usr/bin/gs'; // for linux
+//            $binPath = 'C:/PROGRA~1/gs/GS1006~1.0/bin/gswin64c.exe';
+            $binPath = '/usr/bin/gs'; // for linux
             $tmpPath = sys_get_temp_dir();
             $ghostscript = new Ghostscript($binPath, $tmpPath);
             $ghostscript->convert($outputPdfPath, 1.4);
