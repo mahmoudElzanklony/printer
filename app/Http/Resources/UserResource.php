@@ -47,9 +47,21 @@ class UserResource extends JsonResource
         if (isset($this->token)) {
             $data['token'] = $this->token;
         }
-        if (isset($this->token)) {
-            $data['token'] = $this->token;
+
+
+        if (isset($this->current_device_id)) {
+            $data['device_id'] = $this->current_device_id;
+
+
+            $deviceToken = $this->whenLoaded('fcmTokens', function() {
+                return $this->fcmTokens->where('device_id', $this->current_device_id)->first();
+            });
+
+            if ($deviceToken) {
+                $data['fb_token'] = $deviceToken->fb_token;
+            }
         }
+
         if (! ($data['role'] == 'admin' || $data['role'] == 'client')) {
             $groupedPermissions = $this->getAllPermissions()->groupBy(function ($permission) {
                 // Extract the icon prefix (before "|/|")

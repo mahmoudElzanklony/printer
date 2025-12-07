@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('user_fcm_tokens', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->text('device_id'); // the fcm token
+            $table->string('device_id');
+            $table->text('fb_token')->nullable();
             $table->unique(['user_id', 'device_id']);
             $table->timestamps();
         });

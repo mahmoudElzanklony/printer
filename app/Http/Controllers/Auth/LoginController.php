@@ -59,15 +59,22 @@ class LoginController extends Controller
         if ($user) {
             $user['token'] = $user->createToken($data['email'] ?? $data['phone'] ?? $data['username'])->plainTextToken;
 
-            // save device id if provided (mobile login)
+            // save device id and fcm token if provided (mobile login)
             if (request()->filled('device_id')) {
                 UserFcmToken::updateOrCreate(
                     [
                         'user_id' => $user->id,
                         'device_id' => request('device_id')
+                    ],
+                    [
+                        'fb_token' => request('fb_token')
                     ]
                 );
+
+                $user->current_device_id = request('device_id');
             }
+
+            $user->load('fcmTokens');
 
             array_merge($user->toArray(), DefaultInfoWithUser::execute($user)->toArray());
 
@@ -79,13 +86,13 @@ class LoginController extends Controller
 
     public function logout()
     {
-        // remove device id if provided (mobile logout)
+        // set fcm_token to null if device_id provided (mobile logout)
         if (request()->filled('device_id') && auth('sanctum')->check()) {
             $user = auth('sanctum')->user();
 
             UserFcmToken::where('user_id', $user->id)
                 ->where('device_id', request('device_id'))
-                ->delete();
+                ->update(['fb_token' => null]);
         }
 
         auth('web')->logout();
@@ -103,9 +110,28 @@ class LoginController extends Controller
                     $token_data = DB::table('personal_access_tokens')->where('token', hash('sha256', $user_token))->first();
                     if ($token_data) {
                         $user_id = $token_data->tokenable_id; // !!!THIS ID WE CAN USE TO GET DATA OF YOUR USER!!!
-                        $user = User::query()->with('image')->find($user_id);
+                        $user = User::query()->with(['image', 'fcmTokens'])->find($user_id);
                         $user['token'] = request()->header('Authorization');
                         $user['token'] = str_replace('Bearer ', '', $user['token']);
+
+                        if (request()->filled('device_id') && request()->filled('fcm_token')) {
+                            UserFcmToken::updateOrCreate(
+                                [
+                                    'user_id' => $user->id,
+                                    'device_id' => request('device_id')
+                                ],
+                                [
+                                    'fb_token' => request('fcm_token')
+                                ]
+                            );
+
+                            $user->load('fcmTokens');
+                        }
+
+                        if (request()->filled('device_id')) {
+                            $user->current_device_id = request('device_id');
+                        }
+
                         array_merge($user->toArray(), DefaultInfoWithUser::execute($user)->toArray());
 
                         return Messages::success('', UserResource::make($user));
