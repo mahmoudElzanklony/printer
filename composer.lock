@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6e309ac1d75832b30c664ea092b93a66",
+    "content-hash": "8005547a91fc85ef3bacefbae0bba68b",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -2335,16 +2335,16 @@
         },
         {
             "name": "laravel-notification-channels/fcm",
-            "version": "4.5.0",
+            "version": "4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-notification-channels/fcm.git",
-                "reference": "292c482bd6318c95e167fa2dad63ca6ab32c9899"
+                "reference": "2685d4f092469f6d084d2d60ec7c43202f7061bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-notification-channels/fcm/zipball/292c482bd6318c95e167fa2dad63ca6ab32c9899",
-                "reference": "292c482bd6318c95e167fa2dad63ca6ab32c9899",
+                "url": "https://api.github.com/repos/laravel-notification-channels/fcm/zipball/2685d4f092469f6d084d2d60ec7c43202f7061bb",
+                "reference": "2685d4f092469f6d084d2d60ec7c43202f7061bb",
                 "shasum": ""
             },
             "require": {
@@ -2380,9 +2380,9 @@
             "homepage": "https://github.com/laravel-notification-channels/fcm",
             "support": {
                 "issues": "https://github.com/laravel-notification-channels/fcm/issues",
-                "source": "https://github.com/laravel-notification-channels/fcm/tree/4.5.0"
+                "source": "https://github.com/laravel-notification-channels/fcm/tree/4.4.0"
             },
-            "time": "2024-11-14T23:56:26+00:00"
+            "time": "2024-11-13T22:05:15+00:00"
         },
         {
             "name": "laravel/framework",
