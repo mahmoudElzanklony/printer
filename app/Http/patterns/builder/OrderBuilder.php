@@ -189,7 +189,7 @@ class OrderBuilder
         $this->order->load('items.properties.property');
         $this->order->load('items.service');
         $this->order->load('user');
-        $this->order->load('payment');
+        $this->order->load('coupon_order');
         $this->order->load('coupon_info');
         $this->order->load('last_status');
     }

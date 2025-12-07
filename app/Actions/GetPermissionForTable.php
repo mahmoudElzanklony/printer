@@ -15,7 +15,7 @@ class GetPermissionForTable
         'orders'=>'pi pi-cart-plus|/orders',
         'properties' => 'pi pi-wrench|/properties',
         'properties_heading' => 'pi pi-palette|/properties-headings',
-        'services' => 'pi pi-cogpi-cog|/services',
+        'services' => 'pi pi-cog|/services',
         'shipment_prices' => 'fa-solid fa-hand-holding-dollar|/shipment',
         'sms_histories' => 'fa-solid fa-comment-sms|/dynamic-sms',
     ];

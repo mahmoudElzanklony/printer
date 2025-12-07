@@ -24,7 +24,6 @@ class PaymentResource extends JsonResource
         $product_price_without_tax = round((float) ($product_price_with_tax / (1 + $tax_rate)), 2);
         $tax_money = round((float) ($product_price_with_tax - $product_price_without_tax), 2);
         $total_without_tax = round((float) ($product_price_without_tax + $shipment_price), 2);
-
         return [
             'id' => $this->id,
             'money' => $money,
