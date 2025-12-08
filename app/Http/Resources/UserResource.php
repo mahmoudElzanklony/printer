@@ -15,9 +15,6 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $roleNames = $this->roles ? $this->roles->pluck('name') : collect([]);
-        $role = $roleNames->first() ?? 'client';
-
         $data = [
             'id' => $this->id,
             'username' => $this->username,
@@ -29,7 +26,7 @@ class UserResource extends JsonResource
             'wallet' => $this->wallet,
             'city_id' => $this->city_id,
             'birth_date' => $this->birth_date,
-            'role' => $role,
+            'role' => $this->roles->pluck('name')[0] ?? 'client',
             'saved_properties_count' => saved_properties_settings::query()->where('user_id', $this->id)->count(),
             'image' => ImageResource::make($this->whenLoaded('image')),
             'city' => CityResource::make($this->whenLoaded('city')),
@@ -71,10 +68,13 @@ class UserResource extends JsonResource
                 return explode('|', $permission->name)[0];
             });
             $data['pages'] = $groupedPermissions->map(function ($permissions, $icon) {
+                $translation = __('admin_nav.'.$icon);
+                $isArray = is_array($translation);
+
                 return [
                     'icon' => $icon,
-                    'label' => __('admin_nav.'.$icon)['label'],
-                    'parent' => __('admin_nav.'.$icon)['parent'] ?? null,
+                    'label' => $isArray ? $translation['label'] : $icon,
+                    'parent' => $isArray ? ($translation['parent'] ?? null) : null,
                     'permissions' => PermissionResource::collection($permissions),
                 ];
             })->values();
