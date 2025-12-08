@@ -41,6 +41,7 @@ class OrdersController extends Controller
 
     public function index()
     {
+        VerifyAccess::execute('pi pi-cart-plus|/orders|read');
         $data = OrdersWithAllDataAction::get();
         $output = app(Pipeline::class)
             ->send($data)
@@ -119,6 +120,7 @@ class OrdersController extends Controller
 
     public function remove_item(orderItemsFormRequest $request)
     {
+        VerifyAccess::execute('pi pi-cart-plus|/orders|update');
         $data = $request->validated();
         $obj = new RemoveOrderItemBuilder($data);
         if (is_bool($obj->init())) {
@@ -130,6 +132,7 @@ class OrdersController extends Controller
 
     public function cancel(Request $request)
     {
+        VerifyAccess::execute('pi pi-cart-plus|/orders|update');
         $request->merge(['status' => OrderStatuesEnum::cancelled->value]);
         DB::beginTransaction();
         if (request()->filled('order_id')) {

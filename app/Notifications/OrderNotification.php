@@ -33,7 +33,8 @@ class OrderNotification extends Notification implements ShouldBroadcast
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'broadcast', FcmChannel::class];
+//        return ['database', 'broadcast', FcmChannel::class];
+        return ['database', 'broadcast'];
     }
 
     public function toDatabase(object $notifiable)
