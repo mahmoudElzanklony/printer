@@ -15,6 +15,9 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $roleNames = $this->roles ? $this->roles->pluck('name') : collect([]);
+        $role = $roleNames->first() ?? 'client';
+
         $data = [
             'id' => $this->id,
             'username' => $this->username,
@@ -26,7 +29,7 @@ class UserResource extends JsonResource
             'wallet' => $this->wallet,
             'city_id' => $this->city_id,
             'birth_date' => $this->birth_date,
-            'role' => $this->roles->pluck('name')[0] ?? 'client',
+            'role' => $role,
             'saved_properties_count' => saved_properties_settings::query()->where('user_id', $this->id)->count(),
             'image' => ImageResource::make($this->whenLoaded('image')),
             'city' => CityResource::make($this->whenLoaded('city')),
