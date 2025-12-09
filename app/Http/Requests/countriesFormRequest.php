@@ -28,6 +28,7 @@ class countriesFormRequest extends FormRequest
     {
         $arr = [
             'id'=>'filled',
+            'is_default'=>'nullable|boolean',
         ];
         $arr = FormRequestHandleInputs::handle($arr,['name']);
         return $arr;

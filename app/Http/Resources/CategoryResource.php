@@ -22,6 +22,7 @@ class CategoryResource extends JsonResource
             'parent_id'=>$this->parent_id,
             'parent'=>CategoryResource::make($this->whenLoaded('parent')),
             'properties'=>PropertyResource::collection($this->whenLoaded('properties')),
+            'is_default'=>$this->is_default,
             'created_at'=>$this->created_at->format('Y-m-d H:i:s'),
         ];
         if(request()->hasHeader('AllLangs')){

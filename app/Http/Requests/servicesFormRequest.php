@@ -30,6 +30,7 @@ class servicesFormRequest extends FormRequest
             'category_id'=>'required|exists:categories,id',
             'image'=>'filled|image|mimes:png,jpg,jpeg,gif,svg',
             'price'=>'required',
+            'is_default'=>'nullable|boolean',
         ];
         $arr = FormRequestHandleInputs::handle($arr,['info:filled','name']);
         return $arr;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CheckForUploadImage;
+use App\Actions\HandleDefaultRecordAction;
 use App\Actions\VerifyAccess;
 use App\Http\Requests\categoriesFormRequest;
 use App\Http\Requests\countriesFormRequest;
@@ -48,6 +49,10 @@ class CountriesControllerResource extends Controller
         // prepare data to be created or updated
         $data['user_id'] = auth()->id();
         $data =  FormRequestHandleInputs::handle_inputs_langs($data,['name']);
+
+        // Handle is_default
+        $data = HandleDefaultRecordAction::execute($data, countries::class, $data['id'] ?? null);
+
         // start save category data
         $obj = countries::query()->updateOrCreate([
             'id'=>$data['id'] ?? null

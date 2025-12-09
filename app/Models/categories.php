@@ -11,7 +11,7 @@ class categories extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['user_id','name','info','parent_id'];
+    protected $fillable = ['user_id','name','info','parent_id','is_default'];
 
     public function parent()
     {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CheckForUploadImage;
+use App\Actions\HandleDefaultRecordAction;
 use App\Actions\VerifyAccess;
 use App\Http\Requests\categoriesFormRequest;
 use App\Http\Resources\CategoryResource;
@@ -46,6 +47,10 @@ class CategoriesControllerResource extends Controller
         // prepare data to be created or updated
         $data['user_id'] = auth()->id();
         $data =  FormRequestHandleInputs::handle_inputs_langs($data,['name','info']);
+
+        // Handle is_default
+        $data = HandleDefaultRecordAction::execute($data, categories::class, $data['id'] ?? null);
+
         // start save category data
         $category = categories::query()->updateOrCreate([
             'id'=>$data['id'] ?? null

@@ -10,7 +10,7 @@ class countries extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['user_id','name'];
+    protected $fillable = ['user_id','name','is_default'];
 
     public function user()
     {

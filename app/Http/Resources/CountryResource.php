@@ -21,6 +21,7 @@ class CountryResource extends JsonResource
             'id'=>$this->id,
             'user_id'=>$this->user_id,
             'user'=>UserResource::make($this->whenLoaded('user')),
+            'is_default'=>$this->is_default,
             'created_at'=>$this->created_at->format('Y-m-d H:i:s'),
         ];
         if(request()->hasHeader('AllLangs')){

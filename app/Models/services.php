@@ -11,7 +11,7 @@ class services extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['user_id','category_id','name','info','price'];
+    protected $fillable = ['user_id','category_id','name','info','price','is_default'];
 
     public function category()
     {

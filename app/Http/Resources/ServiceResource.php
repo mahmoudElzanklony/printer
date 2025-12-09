@@ -21,6 +21,7 @@ class ServiceResource extends JsonResource
             'image'=>ImageResource::make($this->image),
             'category'=>CategoryResource::make($this->whenLoaded('category')),
             'price'=>$this->price,
+            'is_default'=>$this->is_default,
             'created_at'=>$this->created_at->format('Y-m-d H:i:s'),
         ];
         if(request()->hasHeader('AllLangs')){

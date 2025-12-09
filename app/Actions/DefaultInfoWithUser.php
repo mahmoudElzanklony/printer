@@ -11,9 +11,15 @@ class DefaultInfoWithUser
 {
     public static function execute($user)
     {
-        $user['default_category_id'] = categories::query()->first()->id;
-        $user['default_service_id'] = services::query()->first()->id;
-        $user['default_country_id'] = countries::query()->first()->id;
+        $defaultCategory = HandleDefaultRecordAction::getDefault(categories::class);
+        $user['default_category_id'] = $defaultCategory?->id;
+
+        $defaultService = HandleDefaultRecordAction::getDefault(services::class);
+        $user['default_service_id'] = $defaultService?->id;
+
+        $defaultCountry = HandleDefaultRecordAction::getDefault(countries::class);
+        $user['default_country_id'] = $defaultCountry?->id;
+
         $user['default_location'] = saved_locations::query()
             ->where("user_id", $user["id"])
             ->where("is_default", 1)

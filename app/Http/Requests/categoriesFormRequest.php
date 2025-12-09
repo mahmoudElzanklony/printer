@@ -32,6 +32,7 @@ class categoriesFormRequest extends FormRequest
             'image'=>'filled|image|mimes:png,jpg,jpeg,gif,svg',
             'properties'=>'required|array',
             'properties.*'=>'required|exists:properties,id',
+            'is_default'=>'nullable|boolean',
         ];
         $arr = FormRequestHandleInputs::handle($arr,['name','info:filled']);
         return $arr;
