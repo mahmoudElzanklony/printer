@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\VerifyAccess;
+use App\Filters\SerialFilter;
 use App\Http\Requests\categoriesFormRequest;
 use App\Http\Requests\couponFormRequest;
 use App\Http\Resources\CategoryResource;
@@ -13,6 +14,7 @@ use App\Services\FormRequestHandleInputs;
 use App\Services\Messages;
 use Illuminate\Http\Request;
 use App\Http\Traits\upload_image;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\DB;
 
 class CouponsControllerResource extends Controller
@@ -31,9 +33,17 @@ class CouponsControllerResource extends Controller
     {
         VerifyAccess::execute('pi pi-bookmark-fill|/coupons|read');
 
-        $data = coupons::query()->orderBy('id','DESC')->orderBy('id','DESC')
+        $data = coupons::query()->orderBy('id','DESC');
+
+        $output = app(Pipeline::class)
+            ->send($data)
+            ->through([
+                SerialFilter::class,
+            ])
+            ->thenReturn()
             ->paginate(request('limit') ?? 10);
-        return CouponResource::collection($data);
+
+        return CouponResource::collection($output);
     }
 
     /**

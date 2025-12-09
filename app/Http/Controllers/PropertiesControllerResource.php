@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Actions\VerifyAccess;
+use App\Filters\NameFilter;
+use App\Filters\properties\PropertyNameFilter;
 use App\Http\Requests\propertiesDataFormRequest;
 use App\Http\Resources\PropertyResource;
 use App\Http\Traits\upload_image;
@@ -10,6 +12,7 @@ use App\Models\properties;
 use App\Models\properties_icons;
 use App\Services\FormRequestHandleInputs;
 use App\Services\Messages;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\DB;
 
 class PropertiesControllerResource extends Controller
@@ -30,9 +33,18 @@ class PropertiesControllerResource extends Controller
     {
         //
         VerifyAccess::execute('pi pi-wrench|/properties|read');
-        $data = properties::query()->with(['heading.image', 'image', 'icon_info'])->orderBy('id', 'DESC')->paginate(request('limit') ?? 10);
 
-        return PropertyResource::collection($data);
+        $data = properties::query()->with(['heading.image', 'image', 'icon_info'])->orderBy('id', 'DESC');
+
+        $output = app(Pipeline::class)
+            ->send($data)
+            ->through([
+                PropertyNameFilter::class,
+            ])
+            ->thenReturn()
+            ->paginate(request('limit') ?? 10);
+
+        return PropertyResource::collection($output);
     }
 
     public function save_icon($data, $property_data)

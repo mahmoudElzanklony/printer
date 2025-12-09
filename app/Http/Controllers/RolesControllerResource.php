@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\VerifyAccess;
 use App\Http\Requests\roleFormRequest;
 use App\Http\Resources\RoleResource;
 use App\Services\Messages;
@@ -22,6 +23,8 @@ class RolesControllerResource extends Controller
     public function index()
     {
         //
+        VerifyAccess::execute('pi pi-shield|/roles|read');
+
         $data = Role::query()->whereNotIn('name', ['client', 'admin'])->get();
 
         return RoleResource::collection($data);
@@ -52,6 +55,8 @@ class RolesControllerResource extends Controller
     public function store(roleFormRequest $request)
     {
         //
+        VerifyAccess::execute('pi pi-shield|/roles|create');
+
         $data = $request->validated();
 
         return $this->save($data);
@@ -63,6 +68,8 @@ class RolesControllerResource extends Controller
     public function show(string $id)
     {
         //
+        VerifyAccess::execute('pi pi-shield|/roles|read');
+
         $data = Role::query()->findOrFail($id);
 
         return RoleResource::make($data);
@@ -74,6 +81,8 @@ class RolesControllerResource extends Controller
     public function update(roleFormRequest $request, string $id)
     {
         //
+        VerifyAccess::execute('pi pi-shield|/roles|update');
+
         $data = $request->validated();
         $data['id'] = $id;
 

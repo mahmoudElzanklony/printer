@@ -28,7 +28,7 @@ class couponFormRequest extends FormRequest
     {
         $arr = [
             'id'=>'filled',
-            'serial'=>'required',
+            'serial'=>'required|unique:coupons,serial,'.request()->segment(3),
             'expiration_at'=>'required|date',
             'max_number_of_users'=>'required|integer',
             'max_usage_per_user'=>'required|integer',
