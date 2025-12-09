@@ -63,7 +63,13 @@ class ZohoBooksClient
 
         if ($res->successful()) {
             $json = $res->json();
-            return $json['invoice'] ?? $json;
+            $invoice = $json['invoice'] ?? $json;
+
+            if (!empty($invoice['invoice_id'])) {
+                $this->markInvoiceAsPaid($token, $invoice, $order);
+            }
+
+            return $invoice;
         }
         return false;
     }
@@ -73,6 +79,7 @@ class ZohoBooksClient
         $lineItems = [];
         $subtotal = 0.0;
 
+        // Calculate items subtotal (matching OrderBuilder logic)
         foreach ($order->items as $item) {
             if (!is_null($item->is_cancelled)) {
                 continue;
@@ -85,10 +92,11 @@ class ZohoBooksClient
                 $propsTotal += (float) ($prop->price ?? 0);
             }
 
-            $unit = $base + $propsTotal; // service price + sum(properties)
+            // Matches OrderBuilder: (service_price + properties_total) * paper_number * copies_number
+            $unit = $base + $propsTotal;
             $paperNumber = (int) ($item->paper_number ?? 1);
             $copiesNumber = (int) ($item->copies_number ?? 1);
-            $quantity = max(1, $paperNumber * $copiesNumber); // matches OrderBuilder multiplier
+            $quantity = max(1, $paperNumber * $copiesNumber);
             $serviceStr = $this->getLocalizedLabel($item->service->name ?? null) ?: 'Service #'.$item->service_id;
 
             $lineItems[] = [
@@ -110,14 +118,31 @@ class ZohoBooksClient
             $subtotal = (float) ($order->payment->money ?? 0);
         }
 
-        // Coupon discount
+        // Apply coupon discount
         $couponDiscount = (float) ($order->coupon_order->coupon_value ?? 0);
         if ($couponDiscount > $subtotal) {
             $couponDiscount = $subtotal; // guard
         }
+        $subtotalAfterCoupon = $subtotal - $couponDiscount;
 
-        // Shipping
+        // Add shipping
         $shipping = (float) ($order->payment->shipment_price ?? 0);
+
+        // Apply tax to product price only
+        $taxPercentage = (float) ($order->payment->tax ?? 0);
+        $taxRate = $taxPercentage / 100;
+        $taxAmount = $subtotalAfterCoupon * $taxRate; // Tax only on product price (after coupon, before shipping)
+
+        // Add tax
+        if ($taxAmount > 0) {
+            $lineItems[] = [
+                'name' => 'Tax (' . round($taxPercentage, 2) . '%)',
+                'rate' => round($taxAmount, 2),
+                'quantity' => 1,
+            ];
+        }
+
+        // Add shipping
         if ($shipping > 0) {
             $lineItems[] = [
                 'name' => 'Shipping',
@@ -126,10 +151,10 @@ class ZohoBooksClient
             ];
         }
 
-        // Expected total
-        $expectedTotal = round(($subtotal - $couponDiscount) + $shipping, 2);
+        // expected total: subtotal - coupon + tax + shipping
+        $expectedTotal = round($subtotalAfterCoupon + $taxAmount + $shipping, 2);
 
-        // If there's any tiny difference with stored payment
+
         $recordedTotal = round((float) ($order->payment->money ?? $expectedTotal), 2);
         $adjustment = round($recordedTotal - $expectedTotal, 2);
 
@@ -139,7 +164,7 @@ class ZohoBooksClient
             'line_items' => $lineItems,
         ];
 
-        // Apply discount (coupon)
+        // discount
         if ($couponDiscount > 0) {
             $payload['discount'] = round($couponDiscount, 2);
             $payload['is_discount_before_tax'] = true;
@@ -205,6 +230,55 @@ class ZohoBooksClient
         }
 
         return false;
+    }
+
+    protected function markInvoiceAsPaid(string $token, array $invoice, $order): bool
+    {
+        $invoiceId = $invoice['invoice_id'] ?? '';
+
+        $paymentAmount = ($invoice['total'] ?? $order->payment->money ?? 0);
+
+        $paymentPayload = [
+            'customer_id' => $order->user->zohoAccount->contact_id ?? '',
+            'payment_mode' => $this->getPaymentMode($order->payment->type ?? 'wallet'),
+            'amount' => $paymentAmount,
+            'date' => $order->created_at->format('Y-m-d'),
+            'reference_number' => 'Order #' . $order->id,
+            'description' => 'Payment for Order #' . $order->id,
+            'invoices' => [
+                [
+                    'invoice_id' => $invoiceId,
+                    'amount_applied' => $paymentAmount,
+                ]
+            ]
+        ];
+
+        $res = Http::withHeaders([
+            'Authorization' => 'Zoho-oauthtoken ' . $token,
+            'Content-Type' => 'application/json',
+        ])
+            ->timeout($this->timeout)
+            ->withBody(json_encode($paymentPayload, JSON_UNESCAPED_UNICODE), 'application/json')
+            ->post($this->booksBase . '/customerpayments');
+
+        if (!$res->successful()) {
+            Log::warning('Failed to mark invoice as paid', [
+                'invoice_id' => $invoiceId,
+                'order_id' => $order->id,
+                'status' => $res->status(),
+                'response' => $res->json()
+            ]);
+        }
+
+        return $res->successful();
+    }
+
+    protected function getPaymentMode(string $type): string
+    {
+        return match(strtolower($type)) {
+            'visa', 'card' => 'creditcard',
+            default => 'cash',
+        };
     }
 
     public function getAccessToken(): string|false
