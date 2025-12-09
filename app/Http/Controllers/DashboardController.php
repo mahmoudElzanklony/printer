@@ -77,11 +77,14 @@ class DashboardController extends Controller
     {
         VerifyAccess::execute('pi pi-cart-plus|/orders|read');
         $output = [];
+        $year = request('year') ?? date('Y');
+
         for ($i = 0; $i < 12; $i++) {
-            $month = Carbon::parse((request('year') ?? date('Y')).'-'.($i + 1).'-01')->firstOfMonth()->addDay();
-            $value = payments::query()->where('paymentable_type', '=', 'App\Models\orders')
+            $month = Carbon::parse($year.'-'.($i + 1).'-01')->firstOfMonth()->addDay();
+            $value = payments::query()
+                ->where('paymentable_type', '=', 'App\Models\orders')
                 ->whereMonth('created_at', intval($i + 1))
-                //  ->whereYear('created_at',request('year') ?? date('Y'))
+                ->whereYear('created_at', $year)
                 ->sum('money');
             $output[$i] = ['placeholder' => $month, 'value' => floatval($value)];
         }
