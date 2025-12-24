@@ -52,12 +52,12 @@ class User extends Authenticatable
 
     public function password(): Attribute
     {
-        return Attribute::make(set: fn ($val) => bcrypt($val));
+        return Attribute::make(set: fn($val) => bcrypt($val));
     }
 
     public function otp_secret(): Attribute
     {
-        return Attribute::make(set: fn () => rand(1000, 9999));
+        return Attribute::make(set: fn() => rand(1000, 9999));
     }
 
     public function image()
@@ -87,7 +87,7 @@ class User extends Authenticatable
 
     public function zohoAccount()
     {
-        return $this->hasOne(ZohoCustomer::class,'user_id');
+        return $this->hasOne(ZohoCustomer::class, 'user_id');
     }
 
     public function fcmTokens()
@@ -97,7 +97,14 @@ class User extends Authenticatable
 
     public function routeNotificationForFcm()
     {
-        return $this->fcmTokens()->pluck('device_id')->toArray();
+        $res = $this->fcmTokens()
+            ->pluck('fb_token')
+            ->filter(function ($token) {
+                return !empty($token);
+            })
+            ->values()
+            ->toArray();
+        return $res;
     }
 
     /**

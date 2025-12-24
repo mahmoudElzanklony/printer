@@ -16,7 +16,8 @@ class OrderStatusObserver
      */
     public function created(orders_tracking $orders_tracking): void
     {
-        auth()->user()->notify(new OrderStatusNotification($orders_tracking));
+        $orders_tracking->load('order.user');
+        $orders_tracking->order->user->notify(new OrderStatusNotification($orders_tracking));
 //         check if order tracking is cancelled
 //        if($orders_tracking->status == OrderStatuesEnum::cancelled->value){
 //            SendEmail::send('تم ارجاع المبلغ الخاص بالطلب الي محفظتك في '.env('APP_NAME'),
